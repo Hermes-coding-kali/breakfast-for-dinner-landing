@@ -1,63 +1,111 @@
 /* src/components/CallToAction.css */
+
 .cta-section {
-    background-color: var(--river-blue);
-    padding: 60px 20px; /* More padding */
-    color: white;
-    position: relative; /* For potential decorative elements */
+    /* Keep the blue gradient background */
+    background: linear-gradient(
+        to bottom,
+        #2196F3 0%, /* Standard Material Blue 500 */
+        #42a5f5 100% /* Lighter Blue 400 for the bottom */
+      );
+  
+    padding: 80px 20px 90px 20px; /* Keep increased padding */
+    color: white; /* Default text color on blue */
+    position: relative;
+    overflow: hidden;
   }
   
-  /* Add simple decorative shape */
+  /* Decorative Shape */
   .cta-section::after {
       content: '';
       position: absolute;
-      top: -25px;
-      right: 15%;
+      top: 10%;
+      right: 10%;
       width: 60px;
       height: 60px;
-      background-color: var(--sky-pink);
-      transform: rotate(45deg);
+      background-color: var(--sky-blue);
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
       border: 3px solid var(--text-dark);
-      opacity: 0.8;
+      opacity: 0.7;
+      transform: rotate(-25deg);
+      z-index: 0;
   }
   
-  
+  /* --- Heading Style --- */
   .cta-section h2 {
-      color: white;
-      margin-bottom: 15px; /* More space */
-      text-shadow: 1px 1px 0 var(--text-dark);
+    /* Increase margin below heading to compensate for removed paragraph */
+    margin-bottom: 30px; /* Increased from 15px */
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    font-family: 'Lilita One', cursive;
+    font-weight: 400;
+    font-size: 2.5em;
+    color: var(--title-yellow);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    -webkit-text-stroke: 2px var(--text-dark);
+    text-stroke: 2px var(--text-dark);
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
   }
   
+  /* --- REMOVED Paragraph Style --- */
+  /*
   .cta-section p {
-      color: #eee; /* Slightly dimmer paragraph */
-      margin-bottom: 30px; /* More space */
-      max-width: 55ch;
+     // Styles removed
+  }
+  */
+  
+  /* Form Container */
+  .cta-form-container {
+      position: relative;
+      z-index: 1;
   }
   
+  
+  /* Form Input Style */
   .email-input {
-      padding: 12px 20px; /* More padding */
+      padding: 12px 20px;
       border-radius: 25px;
-      border: 3px solid var(--text-dark); /* Thicker border */
+      border: 3px solid var(--pants-purple);
       margin-right: 10px;
-      margin-bottom: 15px; /* Space below on mobile */
+      margin-bottom: 15px;
       font-family: 'Baloo 2', cursive, sans-serif;
-      font-size: 1.05em; /* Slightly larger */
+      font-size: 1.05em;
       min-width: 250px;
-      box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2); /* Inner shadow */
-  }
-  
-  @media (min-width: 500px) {
-      .email-input {
-          margin-bottom: 0; /* Remove bottom margin on wider screens */
-      }
+      box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2);
   }
   
   
-  .cta-illustration {
-      min-height: 120px; /* Larger */
-      width: 60%;
-      max-width: 300px;
-      background-color: var(--pants-purple);
-      border-color: white;
-      color: white;
-      margin-top: 40px; /* More space above */
+  /* Button style inherited */
+  
+  
+  /* --- Responsive Adjustments --- */
+  @media (max-width: 768px) {
+    .cta-section {
+      padding: 70px 15px 80px 15px;
+    }
+    .cta-section h2 {
+      font-size: 2.3em;
+      -webkit-text-stroke-width: 1.5px;
+      text-stroke-width: 1.5px;
+      text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
+      margin-bottom: 25px; /* Adjusted */
+    }
+    .cta-section::after {
+      width: 40px; height: 40px; right: 5%; top: 5%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .cta-section {
+       padding-bottom: 70px;
+    }
+    .cta-section h2 {
+      font-size: 2em;
+      margin-bottom: 20px; /* Adjusted */
+    }
+    .email-input {
+        min-width: 80%;
+        margin-right: 0;
+    }
   }

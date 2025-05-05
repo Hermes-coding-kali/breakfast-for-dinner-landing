@@ -1,40 +1,223 @@
 /* src/components/Header.css */
 .app-header {
-  padding: 15px 25px; /* Add more padding */
-  background-color: var(--river-blue); /* Use river blue for contrast */
-  color: white; /* White text on blue background */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow below */
-  position: sticky; /* Make it stick to the top on scroll */
+  padding: 15px 25px; /* Base padding */
+  background-color: var(--pants-purple);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(160, 210, 235, 0.15),
+    rgba(160, 210, 235, 0.15) 2px,
+    transparent 2px,
+    transparent 12px
+  );
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */ /* Shadow might look odd with fixed */
+
+  /* UPDATED: Fixed Position */
+  position: fixed;
   top: 0;
-  z-index: 10; /* Ensure it stays above other content */
-  text-align: center; /* Center the title for simplicity */
-  border-bottom: 4px solid var(--text-dark); /* Add a 'drawn' border */
+  left: 0;
+  width: 100%; /* Required for fixed position */
+  box-sizing: border-box; /* --- ADDED: Ensure padding is included in width --- */
+  z-index: 1000; /* High z-index */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline; /* Can change to 'center' if baseline causes issues with wrapping */
+  flex-wrap: wrap; /* Allow wrapping */
+  border-bottom: none;
+  /* Transition for background if needed */
+  transition: background-color 0.3s ease;
 }
 
-.header-title {
-  /* --- MODIFICATIONS --- */
-  font-family: 'Lilita One', cursive; /* Use the blocky font */
-  font-weight: 400; /* Lilita One is already bold, 400 is standard */
-  font-size: 1.8em; /* Adjust size if needed for this font */
-  color: white; /* Keep white for contrast with stroke/background */
-  /* OR try yellow: color: #ffeb3b; */
-  text-transform: uppercase; /* Match hero title style */
-  /* Apply thin text stroke */
+/* --- Header Title Style --- */
+.header-title a {
+  font-family: 'Lilita One', cursive;
+  font-weight: 400;
+  font-size: 1.8em;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.2s ease;
   -webkit-text-stroke: 1px var(--text-dark);
   text-stroke: 1px var(--text-dark);
-  /* Remove the previous basic text-shadow */
-  text-shadow: none;
-   /* Add slight spacing if needed */
-  letter-spacing: 1px;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+  display: inline-block; /* Important for wrapping context */
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  /* --- ADDED: Prevent title itself from breaking weirdly --- */
+  white-space: nowrap;
+}
+.header-title a:hover {
+  color: #eee;
 }
 
-/* Responsive adjustment if needed */
-@media (min-width: 768px) {
+/* --- Base Navigation Styles (Desktop) --- */
+.header-nav {
+  /* Desktop: nav itself is just a container */
+}
+.header-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex; /* Row layout for desktop */
+  gap: 20px;
+}
+.header-nav li {
+  margin: 0;
+}
+.header-nav a {
+  font-family: 'Baloo 2', cursive, sans-serif;
+  font-weight: 700;
+  font-size: 1.1em;
+  color: white;
+  text-decoration: none;
+  padding: 2px 0;
+  position: relative;
+  transition: color 0.2s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  display: inline-block;
+  line-height: 1.2;
+}
+.header-nav a:hover {
+  color: #ccc;
+}
+.header-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; width: 100%; height: 3px;
+  background-color: #ddd;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.header-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+/* --- Hamburger Button Styles --- */
+.hamburger-button {
+  display: none; /* Hidden by default */
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 1001; /* Above header content */
+}
+.hamburger-button span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 5px 0;
+  border-radius: 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* --- Mobile Navigation Styles --- */
+@media (max-width: 768px) {
   .app-header {
-    padding: 18px 40px; /* Adjusted padding slightly */
-    text-align: left; /* Align left on larger screens */
+    padding: 10px 15px; /* Adjust padding for mobile */
+    align-items: center; /* Center title and hamburger */
   }
-  .header-title {
-    font-size: 2em; /* Adjust size */
+
+  .header-title a {
+    font-size: 1.6em; /* Slightly smaller */
+    -webkit-text-stroke-width: 1px;
+    text-stroke-width: 1px;
+    line-height: 1.1;
+    /* --- ADDED: Allow title to wrap if absolutely needed on tablet sizes --- */
+    /* white-space: normal; */ /* Uncomment if wrapping is preferred over potential cutoff */
   }
+
+  /* Hide Desktop Nav Links */
+  .header-nav ul {
+     display: none; /* Hide the ul by default on mobile */
+  }
+
+  /* Show Hamburger Button */
+  .hamburger-button {
+    display: block; /* Show the button */
+  }
+
+  /* Style the Nav container for Mobile Overlay */
+  .header-nav {
+    /* Take full width below header when open */
+    position: absolute;
+    top: 100%; /* Position below the header */
+    left: 0;
+    width: 100%;
+    background-color: var(--pants-purple); /* Same bg color */
+    /* Add shadow to separate from content */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Hide/Show using max-height transition */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  /* Styles for when the mobile menu is open */
+  .header-nav.mobile-open {
+    max-height: 500px; /* Allow height to expand (adjust if more items) */
+  }
+
+  /* Re-display the list inside the open container */
+  .header-nav.mobile-open ul {
+    display: flex;
+    flex-direction: column; /* Stack links vertically */
+    align-items: center; /* Center links */
+    padding: 10px 0; /* Padding inside the dropdown */
+    gap: 0; /* Reset gap for vertical items */
+  }
+
+  .header-nav.mobile-open li {
+    width: 100%; /* Make list items full width */
+  }
+
+  .header-nav.mobile-open a {
+    display: block; /* Make links full width */
+    padding: 12px 20px; /* Add padding for touch targets */
+    text-align: center;
+    width: 100%;
+    font-size: 1.1em; /* Slightly larger touch target */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator lines */
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3); /* Keep shadow */
+  }
+  .header-nav.mobile-open a:hover {
+     background-color: rgba(0,0,0,0.1); /* Slight hover background */
+     color: white; /* Ensure hover color is white */
+  }
+  /* Hide hover underline on mobile nav links */
+  .header-nav.mobile-open a::after {
+    display: none;
+  }
+  .header-nav.mobile-open li:last-child a {
+    border-bottom: none; /* Remove border on last item */
+  }
+
+  /* Optional: Animate hamburger to 'X' when open */
+  .hamburger-button[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger-button[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger-button[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+
+/* --- Added Specific Small Mobile Adjustments --- */
+@media (max-width: 480px) {
+   .app-header {
+     padding-left: 10px; /* Reduce padding further */
+     padding-right: 10px;
+   }
+   .header-title a {
+     font-size: 1.4em; /* Further reduce font size */
+     letter-spacing: 0.5px; /* Slightly reduce letter spacing */
+     /* Ensure stroke doesn't make it too thick */
+     -webkit-text-stroke-width: 0.5px;
+     text-stroke-width: 0.5px;
+     /* --- ADDED: Ensure title doesn't wrap on tiny screens --- */
+     white-space: nowrap;
+   }
 }

@@ -4,12 +4,14 @@ body {
   font-family: 'Baloo 2', cursive, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fdf6f0;
+  background-color: #f0f4f8; /* Use the light blue-grey from hero */
   color: #333;
-  /* --- IMPROVEMENTS --- */
-  font-size: 17px; /* Slightly larger base font size */
-  line-height: 1.7; /* Increased line height for readability */
-  font-weight: 400; /* Ensure body text isn't too thin */
+  /* UPDATED: Base font size */
+  font-size: 18px; /* Increased from 17px */
+  line-height: 1.7;
+  /* Keep base weight normal, increase specifically on p */
+  font-weight: 400;
+
 }
 
 .App {
@@ -19,99 +21,91 @@ body {
   min-height: 100vh;
 }
 
-/* Color Palette - No changes */
+/* --- NEW STYLE --- */
+/* Add padding-top to main content area to account for fixed header */
+main {
+  padding-top: 70px; /* Adjust this value if header height differs */
+}
+/* --- END NEW STYLE --- */
+
+
+/* --- Color Palette --- */
 :root {
-  --sky-pink: #fce1d8;
-  --hill-green-light: #8bc34a;
-  --hill-green-dark: #4caf50;
-  --river-blue: #64b5f6;
-  --dino-lime: #cddc39;
-  --dino-orange: #ff9800;
-  --pants-blue: #2196f3;
-  --pants-purple: #9c27b0;
+  --sky-blue: #a0d2eb;
+  --hill-green-light: #7cb342;
+  --hill-green-dark: #388e3c;
+  --river-blue: #4fa8e0;
+  --dino-lime: #c0ca33;
+  --dino-orange: #fb8c00;
+  --pants-blue: #1976d2;
+  --pants-purple: #8e24aa;
   --text-dark: #212121;
+  --title-yellow: #ffeb3b;
+  --title-orange: #ffa726;
+  --title-red-orange: #ff7043;
 }
+/* --- END Palette --- */
 
-/* --- IMPROVEMENTS for Headings & Paragraphs --- */
+
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700; /* Keep headings bold */
-  line-height: 1.3; /* Slightly tighter line height for headings */
-  margin-top: 1.5em; /* More space above headings */
-  margin-bottom: 0.8em; /* Space below headings */
-  color: var(--text-dark); /* Default heading color */
-}
-
-h2 { /* Make H2 stand out more */
-  font-size: 2em;
-  color: var(--pants-purple); /* Use a fun color */
-}
-
-p {
-  margin-bottom: 1.2em; /* Add default spacing below paragraphs */
-  max-width: 65ch; /* Limit line length for readability */
-  margin-left: auto; /* Center paragraphs with max-width */
-  margin-right: auto; /* Center paragraphs with max-width */
-  font-weight: 500; /* Slightly bolder body text if needed with Baloo 2 */
-}
-
-/* --- IMPROVED Main Title --- */
-.main-title {
-  font-size: 3em;
-  font-weight: 700; /* Ensure boldness */
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
   color: var(--text-dark);
-  margin-bottom: 15px;
-  margin-top: 0;
-  padding: 0 10px;
-  /* Attempting a bolder outline effect with multiple shadows */
-  text-shadow:
-     -2px -2px 0 var(--sky-pink),
-      2px -2px 0 var(--sky-pink),
-     -2px  2px 0 var(--sky-pink),
-      2px  2px 0 var(--sky-pink), /* Pink outline */
-     -3px -3px 0 var(--river-blue),
-      3px -3px 0 var(--river-blue),
-     -3px  3px 0 var(--river-blue),
-      3px  3px 0 var(--river-blue), /* Wider blue outline */
-     -4px -4px 0 var(--text-dark),
-      4px -4px 0 var(--text-dark),
-     -4px  4px 0 var(--text-dark),
-      4px  4px 0 var(--text-dark); /* Thickest dark outline */
-   /* Note: Complex text-shadows can impact performance slightly */
-   /* Consider using an SVG for the title if perfect replication is needed */
 }
 
-/* --- IMPROVED Bordered Box --- */
+h2 {
+  font-size: 2em; /* Base H2 size */
+  color: var(--pants-purple);
+}
+
+/* --- UPDATED Paragraph Styles --- */
+p {
+  margin-bottom: 1.2em;
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+  /* Increase font weight for better readability */
+  font-weight: 600; /* Increased from 500 */
+  /* Add slight letter spacing */
+  letter-spacing: 0.3px;
+  /* Font size will inherit from body (18px base) */
+}
+
+/* Specific heading styles defined in component CSS */
+/* .main-title { ... } */
+
 .bordered-box {
-  border: 4px solid var(--text-dark); /* Thicker border */
-  border-radius: 20px; /* Slightly more rounded */
-  padding: 30px 40px; /* More internal padding */
+  border: 4px solid var(--text-dark);
+  border-radius: 20px;
+  padding: 30px 40px;
   margin: 30px auto;
   max-width: 750px;
-  background-color: white;
-  box-shadow: 5px 5px 0px var(--hill-green-dark); /* Add a simple shadow */
+  background-color: white; /* Default */
+  box-shadow: 5px 5px 0px var(--hill-green-dark);
 }
 
-/* --- IMPROVED Buttons --- */
 button.cta-button {
   font-family: 'Baloo 2', cursive, sans-serif;
-  font-size: 1.25em; /* Slightly larger */
-  font-weight: 700; /* Bolder */
-  padding: 15px 30px; /* More padding */
-  border-radius: 30px; /* More rounded */
-  border: 4px solid var(--text-dark); /* Thicker border */
+  font-size: 1.25em;
+  font-weight: 700;
+  padding: 15px 30px;
+  border-radius: 30px;
+  border: 4px solid var(--text-dark);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add shadow transition */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   margin-top: 20px;
-  box-shadow: 3px 3px 0px rgba(0,0,0,0.5); /* Add depth */
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.5);
 }
 
 button.cta-button:hover {
-  transform: scale(1.05) translateY(-2px); /* More noticeable hover */
+  transform: scale(1.05) translateY(-2px);
    box-shadow: 5px 5px 0px rgba(0,0,0,0.6);
 }
 
 button.cta-button:active {
-  transform: scale(1.02) translateY(1px); /* Pressed effect */
+  transform: scale(1.02) translateY(1px);
   box-shadow: 1px 1px 0px rgba(0,0,0,0.6);
 }
 
@@ -125,15 +119,17 @@ button.cta-button:active {
   color: white;
 }
 
-/* Responsive adjustments */
 @media (min-width: 768px) {
     body {
-        font-size: 18px; /* Increase base size on larger screens */
+        /* UPDATED: Larger font size on desktop */
+        font-size: 20px; /* Increased from 18px */
     }
-    .main-title {
-        font-size: 5em; /* Larger title on desktop */
-    }
+    /* Removed base .main-title styles as they conflict */
     h2 {
-        font-size: 2.5em;
+        font-size: 2.5em; /* Base H2 size */
+    }
+    /* Ensure paragraph max-width is still appropriate */
+    p {
+       /* max-width: 70ch; */ /* Optional: slightly wider lines allowed */
     }
 }

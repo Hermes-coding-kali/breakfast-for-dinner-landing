@@ -1,80 +1,192 @@
 /* src/components/HeroSection.css */
 
-.hero-section.title-page-style {
-  /* Use a plain background like the paper */
-  background-color: #f0f4f8; /* Very light blue-grey */
-  /* Or use: background-color: #ffffff; for plain white */
+.hero-section.fun-hero {
+  /* Richer blue gradient */
+  background: linear-gradient(
+      to bottom,
+      #2196F3 0%, /* Standard Material Blue 500 */
+      #42a5f5 100% /* Lighter Blue 400 for the bottom */
+    );
 
-  padding: 60px 20px;
-  min-height: 70vh; /* Adjust as needed, maybe less now */
+  /* Remove bottom padding to let the line sit at the very edge */
+  padding: 50px 20px 0px 20px; /* Set padding-bottom to 0 */
+  min-height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  position: relative; /* Already relative, needed for pseudo-element */
+  overflow: hidden;
 }
 
-/* Styling for the CSS text approximation of the title */
+/* --- Title Styles --- */
 .main-title.book-title-approx {
-  font-family: 'Lilita One', cursive; /* Use the blocky font */
-  font-size: 5em; /* Make it LARGE */
-  line-height: 1.1; /* Adjust line spacing */
-  /* REMOVE the general color from here */
-  /* Simulate the black outline using text-stroke */
-  -webkit-text-stroke: 3px var(--text-dark); /* Adjust thickness (3px) as needed */
-  text-stroke: 3px var(--text-dark); /* Standard property (less browser support) */
-  /* Add a subtle shadow behind the stroke for depth */
-  text-shadow: 5px 5px 0px rgba(0,0,0,0.15);
-  margin: 0; /* Reset margin */
+  font-family: 'Lilita One', cursive;
+  font-size: 5em;
+  line-height: 1.1;
+  -webkit-text-stroke: 3px var(--text-dark);
+  text-stroke: 3px var(--text-dark);
+  text-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+  /* Add slightly more margin below title to compensate for removed bottom padding */
+  margin: 0 0 40px 0;
   padding: 0;
-  text-transform: uppercase; /* Ensure it's uppercase like the image */
+  text-transform: uppercase;
+  z-index: 2;
+  position: relative;
 }
 
-/* --- ADD STYLES FOR EACH WORD --- */
-.title-breakfast {
-  color: #ffeb3b; /* Bright Yellow */
+.title-breakfast { color: var(--title-yellow); }
+.title-for { color: var(--title-orange); animation-delay: 0.15s; }
+.title-dinner { color: var(--title-red-orange); animation-delay: 0.3s; }
+
+.main-title.book-title-approx span {
+  display: inline-block;
+  opacity: 0;
+  animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+/* --- End Title Styles --- */
+
+
+/* --- Keyframes For Title Animation --- */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+/* --- End Keyframes --- */
+
+
+/* --- Illustration Placeholder Styles --- */
+.illustration-placeholder.hero-main-illustration {
+  min-height: 200px;
+  width: 80%;
+  max-width: 450px;
+  background-color: #fffbeb; /* Light yellow cream */
+  border: 4px solid var(--text-dark);
+  border-radius: 20px;
+  color: var(--text-dark);
+  margin-top: 35px;
+  margin-bottom: 40px; /* Increased margin below */
+  box-shadow: 6px 6px 0px var(--dino-orange); /* Slightly larger orange shadow */
+  z-index: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-weight: 700;
+  animation: rocking 2s ease-in-out infinite alternate;
 }
 
-.title-for {
-  color: #ffa726; /* Orange (adjust hex code if needed) */
-  /* Make 'FOR' slightly smaller if desired */
-  /* font-size: 0.9em; */
+.illustration-placeholder.hero-main-illustration:hover {
+  transform: scale(1.03);
+  transition: transform 0.75s ease-in-out;
+}
+/* --- END Illustration Placeholder Styles --- */
+
+
+/* --- Keyframes For Rocking Animation --- */
+@keyframes rocking {
+  from {
+    transform: rotate(-2deg); /* Start tilted left */
+  }
+  to {
+    transform: rotate(2deg);  /* End tilted right */
+  }
+}
+/* --- END ROCKING KEYFRAMES --- */
+
+
+/* --- CTA Button Styles --- */
+.button-orange {
+  background-color: var(--dino-orange); /* Uses updated deeper orange */
+  color: white;
+}
+.hero-cta-button {
+  margin-top: 0;
+  /* Add margin below button before the separator line */
+  margin-bottom: 60px; /* Space above the bottom line */
+  z-index: 1;
+  position: relative;
 }
 
-.title-dinner {
-  color: #ff7043; /* Reddish-Orange (adjust hex code if needed) */
+
+/* --- UPDATED Black Line Separator --- */
+.hero-section.fun-hero::after {
+  content: ''; /* Necessary for pseudo-elements */
+  position: absolute;
+  bottom: 0; /* Position at the very bottom */
+  left: 0;
+  width: 100%; /* Full width */
+  /* Make the line thinner */
+  height: 2px; /* <<-- REDUCED from 4px */
+  background-color: var(--text-dark); /* Black color */
+  z-index: 3; /* Ensure it's above background but potentially below future elements */
 }
-/* --- END OF ADDED STYLES --- */
+/* --- END Separator --- */
 
 
 /* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
   .main-title.book-title-approx {
-    font-size: 4em; /* Slightly smaller on medium screens */
+    font-size: 4em;
     -webkit-text-stroke-width: 2px;
     text-stroke-width: 2px;
-    text-shadow: 3px 3px 0px rgba(0,0,0,0.15);
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+    margin-bottom: 30px; /* Adjusted */
   }
+  .illustration-placeholder.hero-main-illustration {
+    min-height: 180px;
+    margin-bottom: 30px; /* Adjusted */
+  }
+   .hero-section.fun-hero {
+     /* Keep padding-bottom 0 */
+     padding-top: 40px;
+     padding-left: 15px;
+     padding-right: 15px;
+   }
+   .hero-cta-button {
+     margin-bottom: 50px; /* Adjust space above line */
+   }
+   .hero-section.fun-hero::after {
+      /* Make the line thinner */
+      height: 2px; /* <<-- REDUCED from 3px (or kept same as base) */
+   }
 }
 
 @media (max-width: 480px) {
   .main-title.book-title-approx {
-    font-size: 3em; /* Smaller on mobile */
-     line-height: 1.2;
+    font-size: 3em;
+    line-height: 1.2;
+    margin-bottom: 25px; /* Adjusted */
   }
-   .hero-section.title-page-style {
-     padding: 40px 15px;
-     min-height: 60vh;
+   .hero-section.fun-hero {
+     padding-top: 30px;
+   }
+   .illustration-placeholder.hero-main-illustration {
+     min-height: 150px;
+     width: 90%;
+     margin-bottom: 25px; /* Adjusted */
+     margin-top: 25px; /* Adjusted */
+   }
+   .hero-cta-button {
+     margin-bottom: 40px; /* Adjust space above line */
+   }
+    .hero-section.fun-hero::after {
+      /* Make the line thinner */
+      height: 1px; /* <<-- REDUCED from 2px */
+   }
+   .illustration-placeholder.hero-main-illustration:hover {
+      transform: scale(1.02);
    }
 }
-
-/* Styles for SVG/Image title remain commented out */
-/*
-img.title-image {
-  display: block;
-  max-width: 90%;
-  width: 600px; // Adjust based on your image size
-  height: auto;
-  margin: 0 auto;
-}
-*/

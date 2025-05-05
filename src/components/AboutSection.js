@@ -4,7 +4,7 @@ import './AboutSection.css';
 
 function AboutSection() {
   return (
-    <section className="about-section">
+    <section id="about" className="about-section">
       <div className="bordered-box"> {/* Use the outlined box style */}
         <h2>What's the Book About?</h2>
         {/* Replace placeholder paragraph with Lorem Ipsum */}

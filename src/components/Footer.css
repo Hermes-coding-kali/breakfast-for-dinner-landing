@@ -1,8 +1,22 @@
 /* src/components/Footer.css */
 .app-footer {
-    background-color: var(--text-dark); /* Dark footer */
-    color: #f0f0f0; /* Light text */
-    padding: 20px;
-    margin-top: auto; /* Pushes footer to bottom */
-    font-size: 0.9em;
-  }
+  background-color: var(--text-dark); /* Dark footer */
+  color: #f0f0f0; /* Light text */
+  /* UPDATED: Reduce vertical padding, adjust horizontal */
+  padding: 5px 25px; /* 12px top/bottom, 25px left/right */
+  margin-top: auto; /* Pushes footer to bottom */
+  font-size: 0.9em;
+  /* Ensure text is centered if not already by default */
+  text-align: center;
+}
+
+/* Add styling for links if any are added later */
+/*
+.app-footer a {
+color: var(--sky-blue);
+text-decoration: none;
+}
+.app-footer a:hover {
+text-decoration: underline;
+}
+*/
