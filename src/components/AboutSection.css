@@ -1,0 +1,38 @@
+/* src/components/AboutSection.css */
+.about-section {
+  background-color: var(--hill-green-light);
+  padding: 60px 20px; /* More padding */
+  position: relative; /* For potential decorative elements */
+}
+
+/* Add simple decorative shape */
+.about-section::before {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: 10%;
+    width: 80px;
+    height: 80px;
+    background-color: var(--dino-lime);
+    border-radius: 50%;
+    border: 3px solid var(--text-dark);
+    opacity: 0.7;
+}
+
+.about-section .bordered-box {
+    background-color: #fff;
+    padding: 40px 50px; /* More internal padding */
+}
+
+.about-section h2 {
+  color: var(--dino-orange);
+  margin-bottom: 25px; /* More space below H2 */
+}
+
+.about-illustration {
+  min-height: 180px; /* Larger */
+  width: 70%;
+  max-width: 350px;
+  background-color: var(--dino-lime);
+  margin-top: 30px; /* Ensure space above */
+}

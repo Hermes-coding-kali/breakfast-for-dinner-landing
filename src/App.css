@@ -1,38 +1,139 @@
+/* src/App.css */
+body {
+  margin: 0;
+  font-family: 'Baloo 2', cursive, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fdf6f0;
+  color: #333;
+  /* --- IMPROVEMENTS --- */
+  font-size: 17px; /* Slightly larger base font size */
+  line-height: 1.7; /* Increased line height for readability */
+  font-weight: 400; /* Ensure body text isn't too thin */
+}
+
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-height: 100vh;
+}
+
+/* Color Palette - No changes */
+:root {
+  --sky-pink: #fce1d8;
+  --hill-green-light: #8bc34a;
+  --hill-green-dark: #4caf50;
+  --river-blue: #64b5f6;
+  --dino-lime: #cddc39;
+  --dino-orange: #ff9800;
+  --pants-blue: #2196f3;
+  --pants-purple: #9c27b0;
+  --text-dark: #212121;
+}
+
+/* --- IMPROVEMENTS for Headings & Paragraphs --- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700; /* Keep headings bold */
+  line-height: 1.3; /* Slightly tighter line height for headings */
+  margin-top: 1.5em; /* More space above headings */
+  margin-bottom: 0.8em; /* Space below headings */
+  color: var(--text-dark); /* Default heading color */
+}
+
+h2 { /* Make H2 stand out more */
+  font-size: 2em;
+  color: var(--pants-purple); /* Use a fun color */
+}
+
+p {
+  margin-bottom: 1.2em; /* Add default spacing below paragraphs */
+  max-width: 65ch; /* Limit line length for readability */
+  margin-left: auto; /* Center paragraphs with max-width */
+  margin-right: auto; /* Center paragraphs with max-width */
+  font-weight: 500; /* Slightly bolder body text if needed with Baloo 2 */
+}
+
+/* --- IMPROVED Main Title --- */
+.main-title {
+  font-size: 3em;
+  font-weight: 700; /* Ensure boldness */
+  color: var(--text-dark);
+  margin-bottom: 15px;
+  margin-top: 0;
+  padding: 0 10px;
+  /* Attempting a bolder outline effect with multiple shadows */
+  text-shadow:
+     -2px -2px 0 var(--sky-pink),
+      2px -2px 0 var(--sky-pink),
+     -2px  2px 0 var(--sky-pink),
+      2px  2px 0 var(--sky-pink), /* Pink outline */
+     -3px -3px 0 var(--river-blue),
+      3px -3px 0 var(--river-blue),
+     -3px  3px 0 var(--river-blue),
+      3px  3px 0 var(--river-blue), /* Wider blue outline */
+     -4px -4px 0 var(--text-dark),
+      4px -4px 0 var(--text-dark),
+     -4px  4px 0 var(--text-dark),
+      4px  4px 0 var(--text-dark); /* Thickest dark outline */
+   /* Note: Complex text-shadows can impact performance slightly */
+   /* Consider using an SVG for the title if perfect replication is needed */
+}
+
+/* --- IMPROVED Bordered Box --- */
+.bordered-box {
+  border: 4px solid var(--text-dark); /* Thicker border */
+  border-radius: 20px; /* Slightly more rounded */
+  padding: 30px 40px; /* More internal padding */
+  margin: 30px auto;
+  max-width: 750px;
+  background-color: white;
+  box-shadow: 5px 5px 0px var(--hill-green-dark); /* Add a simple shadow */
+}
+
+/* --- IMPROVED Buttons --- */
+button.cta-button {
+  font-family: 'Baloo 2', cursive, sans-serif;
+  font-size: 1.25em; /* Slightly larger */
+  font-weight: 700; /* Bolder */
+  padding: 15px 30px; /* More padding */
+  border-radius: 30px; /* More rounded */
+  border: 4px solid var(--text-dark); /* Thicker border */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add shadow transition */
+  margin-top: 20px;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.5); /* Add depth */
+}
+
+button.cta-button:hover {
+  transform: scale(1.05) translateY(-2px); /* More noticeable hover */
+   box-shadow: 5px 5px 0px rgba(0,0,0,0.6);
+}
+
+button.cta-button:active {
+  transform: scale(1.02) translateY(1px); /* Pressed effect */
+  box-shadow: 1px 1px 0px rgba(0,0,0,0.6);
+}
+
+.button-blue {
+  background-color: var(--pants-blue);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.button-purple {
+  background-color: var(--pants-purple);
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    body {
+        font-size: 18px; /* Increase base size on larger screens */
+    }
+    .main-title {
+        font-size: 5em; /* Larger title on desktop */
+    }
+    h2 {
+        font-size: 2.5em;
+    }
 }

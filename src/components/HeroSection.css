@@ -1,0 +1,80 @@
+/* src/components/HeroSection.css */
+
+.hero-section.title-page-style {
+  /* Use a plain background like the paper */
+  background-color: #f0f4f8; /* Very light blue-grey */
+  /* Or use: background-color: #ffffff; for plain white */
+
+  padding: 60px 20px;
+  min-height: 70vh; /* Adjust as needed, maybe less now */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  text-align: center;
+}
+
+/* Styling for the CSS text approximation of the title */
+.main-title.book-title-approx {
+  font-family: 'Lilita One', cursive; /* Use the blocky font */
+  font-size: 5em; /* Make it LARGE */
+  line-height: 1.1; /* Adjust line spacing */
+  /* REMOVE the general color from here */
+  /* Simulate the black outline using text-stroke */
+  -webkit-text-stroke: 3px var(--text-dark); /* Adjust thickness (3px) as needed */
+  text-stroke: 3px var(--text-dark); /* Standard property (less browser support) */
+  /* Add a subtle shadow behind the stroke for depth */
+  text-shadow: 5px 5px 0px rgba(0,0,0,0.15);
+  margin: 0; /* Reset margin */
+  padding: 0;
+  text-transform: uppercase; /* Ensure it's uppercase like the image */
+}
+
+/* --- ADD STYLES FOR EACH WORD --- */
+.title-breakfast {
+  color: #ffeb3b; /* Bright Yellow */
+}
+
+.title-for {
+  color: #ffa726; /* Orange (adjust hex code if needed) */
+  /* Make 'FOR' slightly smaller if desired */
+  /* font-size: 0.9em; */
+}
+
+.title-dinner {
+  color: #ff7043; /* Reddish-Orange (adjust hex code if needed) */
+}
+/* --- END OF ADDED STYLES --- */
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .main-title.book-title-approx {
+    font-size: 4em; /* Slightly smaller on medium screens */
+    -webkit-text-stroke-width: 2px;
+    text-stroke-width: 2px;
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.15);
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title.book-title-approx {
+    font-size: 3em; /* Smaller on mobile */
+     line-height: 1.2;
+  }
+   .hero-section.title-page-style {
+     padding: 40px 15px;
+     min-height: 60vh;
+   }
+}
+
+/* Styles for SVG/Image title remain commented out */
+/*
+img.title-image {
+  display: block;
+  max-width: 90%;
+  width: 600px; // Adjust based on your image size
+  height: auto;
+  margin: 0 auto;
+}
+*/

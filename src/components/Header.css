@@ -1,0 +1,40 @@
+/* src/components/Header.css */
+.app-header {
+  padding: 15px 25px; /* Add more padding */
+  background-color: var(--river-blue); /* Use river blue for contrast */
+  color: white; /* White text on blue background */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow below */
+  position: sticky; /* Make it stick to the top on scroll */
+  top: 0;
+  z-index: 10; /* Ensure it stays above other content */
+  text-align: center; /* Center the title for simplicity */
+  border-bottom: 4px solid var(--text-dark); /* Add a 'drawn' border */
+}
+
+.header-title {
+  /* --- MODIFICATIONS --- */
+  font-family: 'Lilita One', cursive; /* Use the blocky font */
+  font-weight: 400; /* Lilita One is already bold, 400 is standard */
+  font-size: 1.8em; /* Adjust size if needed for this font */
+  color: white; /* Keep white for contrast with stroke/background */
+  /* OR try yellow: color: #ffeb3b; */
+  text-transform: uppercase; /* Match hero title style */
+  /* Apply thin text stroke */
+  -webkit-text-stroke: 1px var(--text-dark);
+  text-stroke: 1px var(--text-dark);
+  /* Remove the previous basic text-shadow */
+  text-shadow: none;
+   /* Add slight spacing if needed */
+  letter-spacing: 1px;
+}
+
+/* Responsive adjustment if needed */
+@media (min-width: 768px) {
+  .app-header {
+    padding: 18px 40px; /* Adjusted padding slightly */
+    text-align: left; /* Align left on larger screens */
+  }
+  .header-title {
+    font-size: 2em; /* Adjust size */
+  }
+}

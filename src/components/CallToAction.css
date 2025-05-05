@@ -1,0 +1,63 @@
+/* src/components/CallToAction.css */
+.cta-section {
+    background-color: var(--river-blue);
+    padding: 60px 20px; /* More padding */
+    color: white;
+    position: relative; /* For potential decorative elements */
+  }
+  
+  /* Add simple decorative shape */
+  .cta-section::after {
+      content: '';
+      position: absolute;
+      top: -25px;
+      right: 15%;
+      width: 60px;
+      height: 60px;
+      background-color: var(--sky-pink);
+      transform: rotate(45deg);
+      border: 3px solid var(--text-dark);
+      opacity: 0.8;
+  }
+  
+  
+  .cta-section h2 {
+      color: white;
+      margin-bottom: 15px; /* More space */
+      text-shadow: 1px 1px 0 var(--text-dark);
+  }
+  
+  .cta-section p {
+      color: #eee; /* Slightly dimmer paragraph */
+      margin-bottom: 30px; /* More space */
+      max-width: 55ch;
+  }
+  
+  .email-input {
+      padding: 12px 20px; /* More padding */
+      border-radius: 25px;
+      border: 3px solid var(--text-dark); /* Thicker border */
+      margin-right: 10px;
+      margin-bottom: 15px; /* Space below on mobile */
+      font-family: 'Baloo 2', cursive, sans-serif;
+      font-size: 1.05em; /* Slightly larger */
+      min-width: 250px;
+      box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2); /* Inner shadow */
+  }
+  
+  @media (min-width: 500px) {
+      .email-input {
+          margin-bottom: 0; /* Remove bottom margin on wider screens */
+      }
+  }
+  
+  
+  .cta-illustration {
+      min-height: 120px; /* Larger */
+      width: 60%;
+      max-width: 300px;
+      background-color: var(--pants-purple);
+      border-color: white;
+      color: white;
+      margin-top: 40px; /* More space above */
+  }

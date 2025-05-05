@@ -1,0 +1,8 @@
+/* src/components/Footer.css */
+.app-footer {
+    background-color: var(--text-dark); /* Dark footer */
+    color: #f0f0f0; /* Light text */
+    padding: 20px;
+    margin-top: auto; /* Pushes footer to bottom */
+    font-size: 0.9em;
+  }
