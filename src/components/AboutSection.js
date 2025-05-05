@@ -1,20 +1,30 @@
 // src/components/AboutSection.js
-import React from 'react';
-import './AboutSection.css';
+import React from "react";
+import "./AboutSection.css";
 
 function AboutSection() {
   return (
     <section id="about" className="about-section">
-      <div className="bordered-box"> {/* Use the outlined box style */}
+      <div className="bordered-box">
+        {" "}
+        {/* Use the outlined box style */}
         <h2>What's the Book About?</h2>
         {/* Replace placeholder paragraph with Lorem Ipsum */}
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Breakfast for dinner, or breakfast for lunch?
+          <br />
+          Six rhyming stories in this breakfast bunch!
+          <br /> From birthday's to yesterday's, and things that aren't, as
+          well.
+          <br /> Dinosaurs are wearing pants?! And a family becomes unwell.{" "}
+          <br />
+          So bundle up and get cozy with some stories before bed.
+          <br /> Or in the morning, afternoon, or whilst standing on your head.
         </p>
         {/* Placeholder for another illustration */}
         <div className="illustration-placeholder about-illustration">
-           {/* Update placeholder text */}
-           Illustration Placeholder
+          {/* Update placeholder text */}
+          Illustration Placeholder
         </div>
       </div>
     </section>
