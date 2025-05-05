@@ -24,7 +24,7 @@ body {
 /* --- NEW STYLE --- */
 /* Add padding-top to main content area to account for fixed header */
 main {
-  padding-top: 70px; /* Adjust this value if header height differs */
+  padding-top: 65px; /* Adjust this value if header height differs */
 }
 /* --- END NEW STYLE --- */
 
