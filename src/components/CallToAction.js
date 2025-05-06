@@ -12,20 +12,21 @@ function CallToAction() {
       </h2>
 
       <div className="cta-form-container">
-        <form name="notify" netlify>
+        {/* Add method="POST" to the form tag */}
+        <form name="notify" netlify method="POST">
           <input
             type="text"
             name="firstName"
             placeholder="Your First Name"
             required
-            className="name-input" // You might want to add/use specific styles
+            className="name-input"
           />
           <input
             type="text"
             name="lastName"
             placeholder="Your Last Name"
             required
-            className="name-input" // You might want to add/use specific styles
+            className="name-input"
           />
           <input
             type="email"
