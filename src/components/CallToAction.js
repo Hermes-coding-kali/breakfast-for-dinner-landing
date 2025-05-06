@@ -12,11 +12,32 @@ function CallToAction() {
       </h2>
 
       <div className="cta-form-container">
-        {/* Add method="POST" and data-netlify="true" to the form tag */}
-        <form name="contact" netlify> {/* <--- FIX HERE */}
-          {/* --- Netlify requires this hidden input for standard forms --- */}
+        {/*
+          Netlify Form Setup:
+          - name="notify": Identifies the form in the Netlify UI.
+          - method="POST": Standard method for submitting form data.
+          - data-netlify="true": Tells Netlify to process this form.
+          - Hidden input "form-name": Required by Netlify to correctly identify submissions,
+            its value MUST match the form's name attribute.
+        */}
+        <form
+          name="notify"
+          method="POST"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field" // Optional: Basic spam protection
+          netlify
+        >
+          {/* Hidden input for Netlify */}
           <input type="hidden" name="form-name" value="notify" />
-          {/* ------------------------------------------------------------ */}
+
+          {/* Optional: Honeypot field for spam protection */}
+          <p style={{ display: 'none' }}>
+            <label>
+              Don’t fill this out if you’re human: <input name="bot-field" />
+            </label>
+          </p>
+
+          {/* Visible Form Fields */}
           <input
             type="text"
             name="firstName"
