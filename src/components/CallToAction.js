@@ -1,4 +1,4 @@
-// src/components/CallToAction.js
+// src/components/CallToAction.js (Option 1)
 import React from 'react';
 import './CallToAction.css';
 
@@ -12,8 +12,8 @@ function CallToAction() {
       </h2>
 
       <div className="cta-form-container">
-        {/* Add method="POST" to the form tag */}
-        <form name="notify" netlify method="POST">
+        {/* Change to data-netlify="true" */}
+        <form name="notify" data-netlify="true" method="POST">
           <input
             type="text"
             name="firstName"
@@ -21,13 +21,7 @@ function CallToAction() {
             required
             className="name-input"
           />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Your Last Name"
-            required
-            className="name-input"
-          />
+          {/* ... other inputs ... */}
           <input
             type="email"
             name="email"
