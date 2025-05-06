@@ -1,13 +1,30 @@
 # netlify.toml
-# --- START COPY ---
 
-# If you have an existing [build] section, keep it.
-# Example:
-# [build]
-#  command = "npm run build"
-#  publish = "build"
+# Build settings: Tells Netlify how to build your React app
+[build]
+  # The command Netlify runs to build your site for production
+  # For Create React App, this is usually "npm run build" or "react-scripts build"
+  command = "npm run build"
 
-# Add this section to configure Netlify Functions
-[functions]
-  directory = "netlify/functions/"
-  node_bundler = "esbuild"
+  # The directory that contains the built static files (HTML, CSS, JS)
+  # For Create React App, this is typically the "build" folder
+  publish = "build"
+
+  # Optional: Base directory if your project isn't in the root of the repository
+  # base = "/"
+
+# Redirect rule for Single Page Applications (SPA) like React
+# This rule ensures that when a user navigates directly to a route like
+# yoursite.netlify.app/about or refreshes such a page, Netlify serves
+# the main index.html file instead of showing a 404 error.
+# React Router then takes over on the client-side to display the correct page.
+[[redirects]]
+  # The source path: "/*" matches any path requested
+  from = "/*"
+
+  # The destination path: "/index.html" is the main entry point of your React app
+  to = "/index.html"
+
+  # The HTTP status code: 200 means "OK" and serves the index.html content
+  # without changing the URL in the browser's address bar.
+  status = 200
