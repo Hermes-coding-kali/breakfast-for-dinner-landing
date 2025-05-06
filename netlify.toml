@@ -1,0 +1,13 @@
+# netlify.toml
+# --- START COPY ---
+
+# If you have an existing [build] section, keep it.
+# Example:
+# [build]
+#  command = "npm run build"
+#  publish = "build"
+
+# Add this section to configure Netlify Functions
+[functions]
+  directory = "netlify/functions/"
+  node_bundler = "esbuild"
