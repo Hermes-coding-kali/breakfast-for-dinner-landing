@@ -13,7 +13,7 @@ function CallToAction() {
 
       <div className="cta-form-container">
         {/* Add method="POST" and data-netlify="true" to the form tag */}
-        <form name="notify" method="POST" data-netlify="true"> {/* <--- FIX HERE */}
+        <form name="notify" method="POST" data-netlify="true" netlify> {/* <--- FIX HERE */}
           {/* --- Netlify requires this hidden input for standard forms --- */}
           <input type="hidden" name="form-name" value="notify" />
           {/* ------------------------------------------------------------ */}
