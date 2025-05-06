@@ -1,111 +1,142 @@
 /* src/components/CallToAction.css */
 
 .cta-section {
-    /* Keep the blue gradient background */
-    background: linear-gradient(
-        to bottom,
-        #2196F3 0%, /* Standard Material Blue 500 */
-        #42a5f5 100% /* Lighter Blue 400 for the bottom */
-      );
-  
-    padding: 80px 20px 90px 20px; /* Keep increased padding */
-    color: white; /* Default text color on blue */
-    position: relative;
-    overflow: hidden;
+  background: linear-gradient(
+      to bottom,
+      #2196F3 0%, /* Standard Material Blue 500 */
+      #42a5f5 100% /* Lighter Blue 400 for the bottom */
+    );
+  padding: 80px 20px 90px 20px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 60px;
+  height: 60px;
+  background-color: var(--sky-blue);
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  border: 3px solid var(--text-dark);
+  opacity: 0.7;
+  transform: rotate(-25deg);
+  z-index: 0;
+}
+
+.cta-section h2 {
+  margin-bottom: 30px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  font-family: 'Lilita One', cursive;
+  font-weight: 400;
+  font-size: 2.5em;
+  color: var(--title-yellow);
+  text-transform: none;
+  letter-spacing: 0.5px;
+  -webkit-text-stroke: 2px var(--text-dark);
+  text-stroke: 2px var(--text-dark);
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+}
+
+.cta-form-container {
+  position: relative;
+  z-index: 1;
+  max-width: 550px; /* Adjust max-width for desired overall form width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-form-container form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* This will help center the button */
+  gap: 15px; /* Spacing between elements */
+}
+
+/* Shared styles for all inputs */
+.name-input,
+.email-input {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 3px solid var(--pants-purple);
+  font-family: 'Baloo 2', cursive, sans-serif;
+  font-size: 1.05em;
+  box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+}
+
+/* First name and Last name inputs */
+.name-input {
+  flex: 1 1 calc(50% - 8px); /* Allows two name inputs to fit side-by-side with a gap */
+                              /* (8px is roughly half of 15px gap) */
+  min-width: 160px;          /* Prevent them from becoming too small */
+  order: 1;                  /* Ensure they appear first */
+}
+
+/* Email input */
+.email-input {
+  flex-basis: 100%;          /* Takes full width, forcing it to a new line */
+  order: 2;                  /* Ensure it appears after name inputs */
+}
+
+/* Button */
+.cta-form-container .cta-button {
+  order: 3;                  /* Ensure it appears after the email input */
+  width: 100%;               /* Make the button element itself take available width */
+  max-width: 320px;          /* Set a max-width for the button (adjust as needed) */
+                             /* Centering is handled by justify-content on the form */
+  /* margin-top is effectively handled by the 'gap' property on the form */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .cta-section {
+    padding: 70px 15px 80px 15px;
   }
-  
-  /* Decorative Shape */
-  .cta-section::after {
-      content: '';
-      position: absolute;
-      top: 10%;
-      right: 10%;
-      width: 60px;
-      height: 60px;
-      background-color: var(--sky-blue);
-      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-      border: 3px solid var(--text-dark);
-      opacity: 0.7;
-      transform: rotate(-25deg);
-      z-index: 0;
-  }
-  
-  /* --- Heading Style --- */
   .cta-section h2 {
-    /* Increase margin below heading to compensate for removed paragraph */
-    margin-bottom: 30px; /* Increased from 15px */
-    display: inline-block;
-    position: relative;
-    z-index: 1;
-    font-family: 'Lilita One', cursive;
-    font-weight: 400;
-    font-size: 2.5em;
-    color: var(--title-yellow);
-    text-transform: none;
-    letter-spacing: 0.5px;
-    -webkit-text-stroke: 2px var(--text-dark);
-    text-stroke: 2px var(--text-dark);
-    text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+    font-size: 2.3em;
+    -webkit-text-stroke-width: 1.5px;
+    text-stroke-width: 1.5px;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
+    margin-bottom: 25px;
   }
-  
-  /* --- REMOVED Paragraph Style --- */
-  /*
-  .cta-section p {
-     // Styles removed
+  .cta-section::after {
+    width: 40px; height: 40px; right: 5%; top: 5%;
   }
-  */
-  
-  /* Form Container */
   .cta-form-container {
-      position: relative;
-      z-index: 1;
+     max-width: 500px;
   }
-  
-  
-  /* Form Input Style */
+}
+
+@media (max-width: 480px) {
+  .cta-section {
+     padding-bottom: 70px;
+  }
+  .cta-section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  /* Stack all inputs on small screens */
+  .name-input,
   .email-input {
-      padding: 12px 20px;
-      border-radius: 25px;
-      border: 3px solid var(--pants-purple);
-      margin-right: 10px;
-      margin-bottom: 15px;
-      font-family: 'Baloo 2', cursive, sans-serif;
-      font-size: 1.05em;
-      min-width: 250px;
-      box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2);
+      flex-basis: 100%;
+      min-width: 90%;
+      order: 0; /* Reset order if necessary, though natural flow will stack them */
   }
-  
-  
-  /* Button style inherited */
-  
-  
-  /* --- Responsive Adjustments --- */
-  @media (max-width: 768px) {
-    .cta-section {
-      padding: 70px 15px 80px 15px;
-    }
-    .cta-section h2 {
-      font-size: 2.3em;
-      -webkit-text-stroke-width: 1.5px;
-      text-stroke-width: 1.5px;
-      text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
-      margin-bottom: 25px; /* Adjusted */
-    }
-    .cta-section::after {
-      width: 40px; height: 40px; right: 5%; top: 5%;
-    }
+  /* Ensure email is after names if order was reset broadly */
+  .email-input { order: 1;}
+
+
+  .cta-form-container .cta-button {
+     flex-basis: 90%;
+     max-width: 90%;
+     margin-top: 0; /* Gap should handle this */
+     order: 2; /* After all inputs */
   }
-  
-  @media (max-width: 480px) {
-    .cta-section {
-       padding-bottom: 70px;
-    }
-    .cta-section h2 {
-      font-size: 2em;
-      margin-bottom: 20px; /* Adjusted */
-    }
-    .email-input {
-        min-width: 80%;
-        margin-right: 0;
-    }
-  }
+}
