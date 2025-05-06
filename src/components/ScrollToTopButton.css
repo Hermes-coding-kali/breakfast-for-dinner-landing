@@ -1,0 +1,88 @@
+/* src/components/ScrollToTopButton.css */
+
+.scroll-to-top {
+    /* Container doesn't need much styling */
+    position: relative; /* Or static, doesn't matter much here */
+  }
+  
+  .scroll-button {
+    position: fixed; /* Keep it fixed relative to the viewport */
+    bottom: 30px;    /* Distance from the bottom */
+    right: 30px;     /* Distance from the right */
+    z-index: 999;    /* Ensure it's above most other content */
+  
+    /* Button Styling */
+    background-color: var(--pants-purple); /* Use a color from your theme */
+    color: white;
+    border: 2px solid var(--text-dark); /* Match other button borders */
+    border-radius: 50%; /* Make it circular */
+    width: 50px;       /* Fixed width */
+    height: 50px;      /* Fixed height */
+    font-size: 1.5em;  /* Adjust icon/text size */
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+  
+    /* Center the icon/text inside */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0; /* Reset padding if needed */
+  
+    /* Smooth transition for appearance */
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out, transform 0.2s ease;
+  
+    /* Hover effect */
+    &:hover {
+      background-color: var(--pants-blue); /* Slightly different color on hover */
+      transform: scale(1.1); /* Slightly enlarge on hover */
+    }
+  
+    /* Active effect */
+    &:active {
+      transform: scale(1.0); /* Scale down slightly when clicked */
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  /*
+    Note: The visibility is controlled by React state (conditionally rendering the button).
+    If you wanted a CSS-only fade-in/out based on a class, you could do something like:
+  
+    .scroll-button {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+  
+    .scroll-button.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  
+    And then toggle the 'visible' class in the React component instead of
+    conditionally rendering the button element itself. Both approaches work.
+    The current React approach avoids rendering the button in the DOM at all when hidden.
+  */
+  
+  /* Responsive adjustments if needed */
+  @media (max-width: 768px) {
+    .scroll-button {
+      width: 45px;
+      height: 45px;
+      bottom: 20px;
+      right: 20px;
+      font-size: 1.3em;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .scroll-button {
+      width: 40px;
+      height: 40px;
+      bottom: 15px;
+      right: 15px;
+      font-size: 1.2em;
+    }
+  }
+  

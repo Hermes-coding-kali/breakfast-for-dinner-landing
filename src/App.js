@@ -5,10 +5,9 @@ import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import AboutSection from './components/AboutSection';
 import CallToAction from './components/CallToAction';
-// --- IMPORT THE NEW COMPONENT ---
 import FoodSortGame from './components/FoodSortGame';
-// -------------------------------
 import Footer from './components/Footer';
+import ScrollToTopButton from './components/ScrollToTopButton'; // Import the new component
 
 function App() {
   return (
@@ -18,10 +17,10 @@ function App() {
         <HeroSection />
         <AboutSection />
         <CallToAction />
-        {/* --- ADD THE GAME COMPONENT HERE --- */}
         <FoodSortGame />
-        {/* ------------------------------------ */}
       </main>
+      {/* Add the ScrollToTopButton here, outside main but before Footer */}
+      <ScrollToTopButton />
       <Footer />
     </div>
   );
