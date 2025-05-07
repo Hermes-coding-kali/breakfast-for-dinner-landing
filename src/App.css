@@ -21,12 +21,6 @@ body {
   min-height: 100vh;
 }
 
-/* --- NEW STYLE --- */
-/* Add padding-top to main content area to account for fixed header */
-main {
-  padding-top: 65px; /* Adjust this value if header height differs */
-}
-/* --- END NEW STYLE --- */
 
 
 /* --- Color Palette --- */
