@@ -66,33 +66,41 @@
 /* --- End Keyframes --- */
 
 
-/* --- Illustration Placeholder Styles --- */
-.illustration-placeholder.hero-main-illustration {
-  min-height: 200px;
-  width: 80%;
-  max-width: 450px;
-  background-color: #fffbeb; /* Light yellow cream */
-  border: 4px solid var(--text-dark);
-  border-radius: 20px;
-  color: var(--text-dark);
+/* --- MODIFIED Illustration Styles --- */
+/* Optional container style */
+.hero-main-illustration-container {
+  width: 80%; /* Or as needed */
+  max-width: 450px; /* Or as needed */
   margin-top: 35px;
   margin-bottom: 40px; /* Increased margin below */
-  box-shadow: 6px 6px 0px var(--dino-orange); /* Slightly larger orange shadow */
   z-index: 1;
   position: relative;
-  display: flex;
+  display: flex; /* For centering the image if it's smaller than container */
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  font-weight: 700;
-  animation: rocking 2s ease-in-out infinite alternate;
+  /* Add any specific container styles here, e.g., aspect ratio padding-bottom trick if needed */
 }
 
-.illustration-placeholder.hero-main-illustration:hover {
+img.hero-main-illustration { /* Style the img tag directly */
+  display: block; /* Remove extra space below image */
+  max-width: 100%; /* Make image responsive within its container */
+  height: auto;   /* Maintain aspect ratio */
+  /* min-height: 200px; /* Remove or adjust if it conflicts with image aspect ratio */
+  /* background-color: #fffbeb; /* Remove background color for image */
+  border: 4px solid var(--text-dark);
+  border-radius: 20px;
+  /* color: var(--text-dark); /* Remove text color */
+  box-shadow: 6px 6px 0px var(--dino-orange); /* Slightly larger orange shadow */
+  animation: rocking 2s ease-in-out infinite alternate;
+  /* padding: 20px; /* Remove padding if it's around the image itself and not desired */
+  /* font-weight: 700; /* Remove font weight */
+}
+
+img.hero-main-illustration:hover { /* Apply hover to the image */
   transform: scale(1.03);
   transition: transform 0.75s ease-in-out;
 }
-/* --- END Illustration Placeholder Styles --- */
+/* --- END Illustration Styles --- */
 
 
 /* --- Keyframes For Rocking Animation --- */
@@ -145,10 +153,12 @@
     text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
     margin-bottom: 30px; /* Adjusted */
   }
-  .illustration-placeholder.hero-main-illustration {
-    min-height: 180px;
+  .hero-main-illustration-container { /* Adjust container for responsive */
     margin-bottom: 30px; /* Adjusted */
   }
+  /* img.hero-main-illustration { /* Adjust image if needed */
+    /* min-height: 180px; /* Remove or adjust */
+  /* } */
    .hero-section.fun-hero {
      /* Keep padding-bottom 0 */
      padding-top: 40px;
@@ -173,12 +183,14 @@
    .hero-section.fun-hero {
      padding-top: 30px;
    }
-   .illustration-placeholder.hero-main-illustration {
-     min-height: 150px;
+   .hero-main-illustration-container { /* Adjust container for responsive */
      width: 90%;
      margin-bottom: 25px; /* Adjusted */
      margin-top: 25px; /* Adjusted */
    }
+   /* img.hero-main-illustration { /* Adjust image if needed */
+     /* min-height: 150px; /* Remove or adjust */
+   /* } */
    .hero-cta-button {
      margin-bottom: 40px; /* Adjust space above line */
    }
@@ -186,7 +198,7 @@
       /* Make the line thinner */
       height: 1px; /* <<-- REDUCED from 2px */
    }
-   .illustration-placeholder.hero-main-illustration:hover {
+   img.hero-main-illustration:hover { /* Adjust hover for image */
       transform: scale(1.02);
    }
 }

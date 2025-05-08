@@ -1,43 +1,36 @@
 // src/components/HeroSection.js
-import React, { useEffect, useState } from 'react'; // Import useEffect and useState
+import React, { useEffect, useState } from 'react';
 import './HeroSection.css';
+import BookwormImage from '../assets/Bookworm.jpg'; // <--- IMPORT YOUR IMAGE
 
 function HeroSection() {
-  // State to store header height - needed to calculate scroll offset
   const [headerHeight, setHeaderHeight] = useState(0);
 
-  // Effect to measure header height after component mounts and on resize
   useEffect(() => {
     const headerElement = document.getElementById('main-header');
     if (headerElement) {
       const updateHeight = () => {
         setHeaderHeight(headerElement.offsetHeight);
       };
-      updateHeight(); // Initial measurement
+      updateHeight();
       window.addEventListener('resize', updateHeight);
-      return () => window.removeEventListener('resize', updateHeight); // Cleanup
+      return () => window.removeEventListener('resize', updateHeight);
     }
-  }, []); // Runs once on mount
+  }, []);
 
-  // Function to handle smooth scroll to the CTA section
   const handleScrollToCta = (event) => {
-    event.preventDefault(); // Good practice, though it's a button not an anchor
-
-    const targetElement = document.getElementById('cta'); // Target the CallToAction section
-
+    event.preventDefault();
+    const targetElement = document.getElementById('cta');
     if (targetElement) {
-      // Calculate position to scroll to, subtracting header height
       const targetPosition = targetElement.offsetTop - headerHeight;
-
       window.scrollTo({
         top: targetPosition,
-        behavior: 'smooth' // Enable smooth scrolling
+        behavior: 'smooth'
       });
     }
   };
 
   return (
-    // Keep the fun-hero class
     <section id="hero" className="hero-section fun-hero">
       <h1 className="main-title book-title-approx">
         <span className="title-breakfast">BREAKFAST</span>
@@ -47,21 +40,17 @@ function HeroSection() {
         <span className="title-dinner">DINNER</span>
       </h1>
 
-      {/* Placeholder for a main illustration */}
-      <div className="illustration-placeholder hero-main-illustration">
-         Main Illustration Placeholder
+      {/* MODIFIED: Use an img tag for the illustration */}
+      <div className="hero-main-illustration-container"> {/* Optional: wrapper for better styling control */}
+        <img src={BookwormImage} alt="Bookworm illustration" className="hero-main-illustration" />
       </div>
 
-      {/* Primary call to action - Add onClick handler */}
       <button
         className="cta-button button-orange hero-cta-button"
-        onClick={handleScrollToCta} // Add the click handler here
+        onClick={handleScrollToCta}
       >
         Find Out More!
       </button>
-
-      {/* REMOVED the wavy border div that was here */}
-      {/* <div className="wavy-border"></div> */}
     </section>
   );
 }
