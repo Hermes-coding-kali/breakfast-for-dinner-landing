@@ -1,6 +1,7 @@
 // src/components/AboutSection.js
 import React from "react";
 import "./AboutSection.css";
+import AboutIllustration from '../assets/AboutSectionIllustration.jpg'; // <-- IMPORT YOUR IMAGE
 
 function AboutSection() {
   return (
@@ -9,7 +10,6 @@ function AboutSection() {
         {" "}
         {/* Use the outlined box style */}
         <h2>What's the Book About?</h2>
-        {/* Replace placeholder paragraph with Lorem Ipsum */}
         <p>
           Breakfast for dinner, or breakfast for lunch?
           <br />
@@ -21,10 +21,10 @@ function AboutSection() {
           So bundle up and get cozy with some stories before bed.
           <br /> Or in the morning, afternoon, or whilst standing on your head.
         </p>
-        {/* Placeholder for another illustration */}
+        
+        {/* The illustration placeholder is now replaced with the actual image */}
         <div className="illustration-placeholder about-illustration">
-          {/* Update placeholder text */}
-          Illustration Placeholder
+          <img src={AboutIllustration} alt="A hand-drawn book cover with a smiling plate and a fried egg." className="illustration-image" />
         </div>
       </div>
     </section>
