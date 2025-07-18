@@ -22,6 +22,7 @@ const allFoodItems = [
 // --- Game Configuration ---
 const GAME_DURATION = 20; // seconds
 const CORRECT_SCORE = 10;
+const INCORRECT_PENALTY = 5; // Penalty for a wrong answer
 // --------------------------
 
 function FoodSortGame() {
@@ -89,8 +90,8 @@ function FoodSortGame() {
             setScore((prevScore) => prevScore + CORRECT_SCORE);
             setFeedback('Correct! 🎉');
         } else {
-            // Optional: Add a penalty? For now, just incorrect feedback
-             setFeedback(`Oops! ${currentItem.name} is ${currentItem.type}.`);
+            setScore((prevScore) => prevScore - INCORRECT_PENALTY);
+            setFeedback(`Oops! ${currentItem.name} is ${currentItem.type}.`);
         }
 
         // Clear feedback after a short delay
