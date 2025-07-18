@@ -27,10 +27,17 @@ const INCORRECT_PENALTY = 5; // Penalty for a wrong answer
 
 function FoodSortGame() {
     const [score, setScore] = useState(0);
+    const [highScore, setHighScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
     const [currentItem, setCurrentItem] = useState(null);
     const [gameState, setGameState] = useState('idle'); // 'idle', 'playing', 'gameOver'
     const [feedback, setFeedback] = useState(''); // For correct/incorrect messages
+
+    // Load high score from session storage on component mount
+    useEffect(() => {
+        const cachedHighScore = sessionStorage.getItem('highScore') || 0;
+        setHighScore(parseInt(cachedHighScore, 10));
+    }, []);
 
     // Function to pick a random item
     const pickRandomItem = useCallback(() => {
@@ -43,25 +50,29 @@ function FoodSortGame() {
         setCurrentItem(newItem);
     }, [currentItem]); // Dependency ensures stability if currentItem changes
 
-    // Timer effect
+    // Timer countdown effect
     useEffect(() => {
         if (gameState !== 'playing') {
-            return; // Do nothing if not playing
-        }
-
-        if (timeLeft <= 0) {
-            setGameState('gameOver');
-            setFeedback(''); // Clear feedback on game over
             return;
         }
 
         const timerId = setInterval(() => {
-            setTimeLeft((prevTime) => prevTime - 1);
+            setTimeLeft(prevTime => (prevTime > 0 ? prevTime - 1 : 0));
         }, 1000);
 
-        // Cleanup function
         return () => clearInterval(timerId);
-    }, [gameState, timeLeft]);
+    }, [gameState]);
+
+    // Game over and high score logic effect
+    useEffect(() => {
+        if (timeLeft === 0 && gameState === 'playing') {
+            setGameState('gameOver');
+            if (score > highScore) {
+                setHighScore(score);
+                sessionStorage.setItem('highScore', score.toString());
+            }
+        }
+    }, [timeLeft, gameState, score, highScore]);
 
 
     // Effect to pick the first item when the game starts
@@ -108,6 +119,7 @@ function FoodSortGame() {
             {gameState === 'idle' && (
                 <div className="game-intro">
                     <p>Categorize the food before time runs out!</p>
+                    <p>High Score: {highScore}</p>
                     <button onClick={startGame} className="cta-button button-green">
                         Start Game!
                     </button>
@@ -118,6 +130,7 @@ function FoodSortGame() {
                 <div className="game-area">
                     <div className="game-stats">
                         <span>Score: {score}</span>
+                        <span>High Score: {highScore}</span>
                         <span>Time Left: {timeLeft}s</span>
                     </div>
                     <div className="game-item">
@@ -150,6 +163,7 @@ function FoodSortGame() {
                 <div className="game-over">
                     <h3>Game Over!</h3>
                     <p>Your final score: {score}</p>
+                    <p>High Score: {highScore}</p>
                     <button onClick={startGame} className="cta-button button-green">
                         Play Again?
                     </button>

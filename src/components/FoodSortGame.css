@@ -77,6 +77,8 @@
       font-size: 1.2em;
       margin-bottom: 25px;
       color: var(--pants-purple);
+      /* THIS IS THE FIX: Forces numbers to have a consistent width */
+      font-variant-numeric: tabular-nums;
   }
   
   .game-item {
