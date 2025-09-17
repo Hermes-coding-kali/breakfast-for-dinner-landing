@@ -1,5 +1,5 @@
 // components/FoodSortGame.js
-import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import './FoodSortGame.css';
 import Button from './Button';
 

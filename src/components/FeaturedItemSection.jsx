@@ -1,5 +1,5 @@
 // src/components/FeaturedItemSection.jsx
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import './FeaturedItemSection.css';
 import Button from './Button';
 import { PortableText } from '@portabletext/react';
@@ -126,18 +126,20 @@ export default function FeaturedItemSection({ data }) {
   const imageUrlFromNormalize = n?.imageUrl || null;
   const imageAlt = n?.imageAlt || product?.name || 'Product image';
 
-  const productFirstUrl = product?.images?.[0]?.asset?.url || null;
-  const resolvedImageUrl =
-    (image && image.asset && image.asset.url) || imageUrlFromNormalize || null;
+  const finalImage = useMemo(() => {
+    const productFirstUrl = product?.images?.[0]?.asset?.url || null;
+    const resolvedImageUrl =
+      (image && image.asset && image.asset.url) || imageUrlFromNormalize || null;
 
-  const finalImage =
-    (imageSource === 'custom' && image?.asset?.url)
+    return (imageSource === 'custom' && image?.asset?.url)
       ? { url: image.asset.url, alt: imageAlt }
       : (imageSource === 'fromProduct' && productFirstUrl)
         ? { url: productFirstUrl, alt: imageAlt }
         : (resolvedImageUrl
-            ? { url: resolvedImageUrl, alt: imageAlt }
-            : null);
+          ? { url: resolvedImageUrl, alt: imageAlt }
+          : null);
+  }, [product, image, imageUrlFromNormalize, imageSource, imageAlt]);
+
 
   // Styles (tokens) computed once
   const alignment = n?.alignment ?? 'center';
@@ -198,23 +200,21 @@ export default function FeaturedItemSection({ data }) {
     console.debug('[FeaturedItemSection] img pick', {
       imageSource,
       styleImageHasUrl: !!image?.asset?.url,
-      productFirstHasUrl: !!productFirstUrl,
-      resolvedImageUrl: resolvedImageUrl || undefined,
+      resolvedImageUrl: finalImage?.url || undefined,
       finalHasImage: !!finalImage,
     });
-  }, [n, imageSource, image, productFirstUrl, resolvedImageUrl, finalImage]);
+  }, [n, imageSource, image, finalImage]);
 
   // Reset image loaded state when image changes
   useEffect(() => {
     setImgLoaded(false);
-  }, [finalImage?.url]);
+  }, [finalImage]);
   // ----------------------------------------------------------------------
 
   // After all hooks are declared, it's safe to bail out of rendering
   if (!n || !product) return null;
 
   const {
-    eyebrow, heading, subheading, disclaimer,
     titleColor, subtitleColor, textColor,
 
     // price config
@@ -224,9 +224,6 @@ export default function FeaturedItemSection({ data }) {
     priceBorderWidth: priceBw = 3, priceRadius = 14, priceShadow = '3px 3px 0 rgba(0,0,0,0.12)',
     showCompareAt = false, showCurrency = true,
     priceVariant, priceAccentColor,
-
-    // buttons
-    primaryButton = {}, secondaryButton = {},
   } = n;
 
   const priceNode = () => {
