@@ -104,9 +104,10 @@ function normalizeFeaturedData(raw) {
 }
 
 export default function FeaturedItemSection({ data }) {
-  // --- HOOKS MOVED TO TOP ---
+  // ---------- TOP-LEVEL HOOKS (no conditionals) ----------
   const { addToCart, toggleCart } = useCartStore();
   const n = normalizeFeaturedData(data);
+
   const [pricing, setPricing] = useState({
     price: n?.product?.price ?? null,
     currency: n?.product?.currency ?? null,
@@ -114,38 +115,61 @@ export default function FeaturedItemSection({ data }) {
   });
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  // This early return can now safely stay here
-  if (!n || !n.product) return null;
+  // Safely derive product + slug for hooks below
+  const product = n?.product ?? null;
+  const slugStr =
+    typeof product?.slug === 'string' ? product.slug : product?.slug?.current ?? '';
 
-  const {
-    eyebrow, heading, subheading, disclaimer,
-    alignment = 'center', maxWidth = 800, paddingY = 60, paddingX = 20, stackOn = 'md',
+  // Choose image candidates (plain values, not hooks)
+  const imageSource = n?.imageSource ?? 'fromProduct';
+  const image = n?.image || null;
+  const imageUrlFromNormalize = n?.imageUrl || null;
+  const imageAlt = n?.imageAlt || product?.name || 'Product image';
 
-    // Card
-    cardBg, cardBorderColor, cardBorderWidth = 3, cardBorderStyle = 'dashed',
-    cardRadius = 20, cardShadow = '6px 6px 0 rgba(0,0,0,0.12)',
-    titleColor, subtitleColor, textColor,
+  const productFirstUrl = product?.images?.[0]?.asset?.url || null;
+  const resolvedImageUrl =
+    (image && image.asset && image.asset.url) || imageUrlFromNormalize || null;
 
-    // Image
-    imageSource = 'fromProduct', image, imageUrl: imageUrlFromNormalize, imageAlt,
-    imageBg, imageBorderColor, imageBorderWidth = 4,
-    imageRadius = 18, imageAspect = 'auto',
-    imageShadowColor, imageShadowOffset = { x: 6, y: 6 }, imageShadowBlur = 0,
+  const finalImage =
+    (imageSource === 'custom' && image?.asset?.url)
+      ? { url: image.asset.url, alt: imageAlt }
+      : (imageSource === 'fromProduct' && productFirstUrl)
+        ? { url: productFirstUrl, alt: imageAlt }
+        : (resolvedImageUrl
+            ? { url: resolvedImageUrl, alt: imageAlt }
+            : null);
 
-    // Product
-    product,
-    showPrice = true, priceStyle = 'badge',
-    priceBg, priceTextColor, priceBorderColor, priceBorderWidth = 3, priceRadius = 14, priceShadow = '3px 3px 0 rgba(0,0,0,0.12)',
-    showCompareAt = false, showCurrency = true,
-    priceVariant, priceAccentColor,
+  // Styles (tokens) computed once
+  const alignment = n?.alignment ?? 'center';
+  const maxWidth = n?.maxWidth ?? 800;
+  const paddingY = n?.paddingY ?? 60;
+  const paddingX = n?.paddingX ?? 20;
+  const stackOn = n?.stackOn ?? 'md';
 
-    // Buttons
-    primaryButton = {}, secondaryButton = {},
-  } = n;
+  const sectionStyle = { padding: `${paddingY}px ${paddingX}px` };
+  const shellStyle = { maxWidth: `${maxWidth}px`, textAlign: alignment };
+  const cardStyle = {
+    background: hx(n?.cardBg) || '#fffbeb',
+    border: (n?.cardBorderWidth ?? 3)
+      ? `${n?.cardBorderWidth ?? 3}px ${n?.cardBorderStyle ?? 'dashed'} ${hx(n?.cardBorderColor) || '#212121'}`
+      : 'none',
+    borderRadius: `${n?.cardRadius ?? 20}px`,
+    boxShadow: n?.cardShadow ?? '6px 6px 0 rgba(0,0,0,0.12)',
+    color: hx(n?.textColor) || '#212121',
+  };
+  const imgWrapStyle = {
+    background: hx(n?.imageBg) || 'transparent',
+    border: (n?.imageBorderWidth ?? 4)
+      ? `${n?.imageBorderWidth ?? 4}px solid ${hx(n?.imageBorderColor) || 'transparent'}`
+      : 'none',
+    borderRadius: `${n?.imageRadius ?? 18}px`,
+    boxShadow: `${(n?.imageShadowOffset?.x ?? 6)}px ${(n?.imageShadowOffset?.y ?? 6)}px ${(n?.imageShadowBlur ?? 0)}px ${hx(n?.imageShadowColor) || 'transparent'}`,
+    aspectRatio: (n?.imageAspect ?? 'auto') !== 'auto'
+      ? (n?.imageAspect ?? 'auto').replace(':', ' / ')
+      : undefined,
+  };
 
-  // ---------- PRICING FETCH ----------
-  const slugStr = typeof product?.slug === 'string' ? product.slug : product?.slug?.current;
-
+  // ---------- HOOKS THAT LINT GOT MAD ABOUT (now unconditional) ----------
   const fetchPricing = useCallback(async () => {
     if (!slugStr) return;
     try {
@@ -162,31 +186,15 @@ export default function FeaturedItemSection({ data }) {
     }
   }, [slugStr]);
 
+  // Only runs if we actually need pricing (guard INSIDE effect)
   useEffect(() => {
+    if (!product) return;
     if (pricing.price == null) fetchPricing();
-  }, [fetchPricing, pricing.price]);
-  // -----------------------------------
+  }, [product, pricing.price, fetchPricing]);
 
-  // Prefer style.custom image, then product[0], then top-level resolved imageUrl from GROQ
-  const resolvedImageUrl =
-    (image && image.asset && image.asset.url) ||
-    (imageUrlFromNormalize) ||
-    null;
-
-  const productFirstUrl =
-    product?.images?.[0]?.asset?.url || null;
-
-  const finalImage =
-    (imageSource === 'custom' && image?.asset?.url)
-      ? { url: image.asset.url, alt: imageAlt || product?.name || 'Product image' }
-      : (imageSource === 'fromProduct' && productFirstUrl)
-        ? { url: productFirstUrl, alt: product?.name || 'Product image' }
-        : (resolvedImageUrl
-            ? { url: resolvedImageUrl, alt: imageAlt || product?.name || 'Product image' }
-            : null);
-
-  // Debug snapshot
+  // Debug snapshot (always declared; guarded inside)
   useEffect(() => {
+    if (!n) return;
     console.debug('[FeaturedItemSection] img pick', {
       imageSource,
       styleImageHasUrl: !!image?.asset?.url,
@@ -194,29 +202,32 @@ export default function FeaturedItemSection({ data }) {
       resolvedImageUrl: resolvedImageUrl || undefined,
       finalHasImage: !!finalImage,
     });
-  }, [imageSource, image, productFirstUrl, resolvedImageUrl, finalImage]);
+  }, [n, imageSource, image, productFirstUrl, resolvedImageUrl, finalImage]);
 
-  // Track image load for a basic loading state
-  useEffect(() => { setImgLoaded(false); }, [finalImage?.url]);
+  // Reset image loaded state when image changes
+  useEffect(() => {
+    setImgLoaded(false);
+  }, [finalImage?.url]);
+  // ----------------------------------------------------------------------
 
-  const sectionStyle = { padding: `${paddingY}px ${paddingX}px` };
-  const shellStyle = { maxWidth: `${maxWidth}px`, textAlign: alignment };
-  const cardStyle = {
-    background: hx(cardBg) || '#fffbeb',
-    border: cardBorderWidth ? `${cardBorderWidth}px ${cardBorderStyle} ${hx(cardBorderColor) || '#212121'}` : 'none',
-    borderRadius: `${cardRadius}px`,
-    boxShadow: cardShadow,
-    color: hx(textColor) || '#212121',
-  };
+  // After all hooks are declared, it's safe to bail out of rendering
+  if (!n || !product) return null;
 
-  // NOTE: no forced width — let the grid column control it.
-  const imgWrapStyle = {
-    background: hx(imageBg) || 'transparent',
-    border: imageBorderWidth ? `${imageBorderWidth}px solid ${hx(imageBorderColor) || 'transparent'}` : 'none',
-    borderRadius: `${imageRadius}px`,
-    boxShadow: `${imageShadowOffset?.x ?? 6}px ${imageShadowOffset?.y ?? 6}px ${imageShadowBlur}px ${hx(imageShadowColor) || 'transparent'}`,
-    aspectRatio: imageAspect !== 'auto' ? imageAspect.replace(':', ' / ') : undefined,
-  };
+  const {
+    eyebrow, heading, subheading, disclaimer,
+    titleColor, subtitleColor, textColor,
+
+    // price config
+    showPrice = true,
+    priceStyle = 'badge',
+    priceBg, priceTextColor, priceBorderColor,
+    priceBorderWidth: priceBw = 3, priceRadius = 14, priceShadow = '3px 3px 0 rgba(0,0,0,0.12)',
+    showCompareAt = false, showCurrency = true,
+    priceVariant, priceAccentColor,
+
+    // buttons
+    primaryButton = {}, secondaryButton = {},
+  } = n;
 
   const priceNode = () => {
     if (!showPrice) return null;
@@ -240,7 +251,7 @@ export default function FeaturedItemSection({ data }) {
           style={{
             background: hx(priceBg) || '#fffdf5',
             color: hx(priceTextColor) || '#212121',
-            border: priceBorderWidth ? `${priceBorderWidth}px solid ${hx(priceBorderColor) || '#212121'}` : 'none',
+            border: priceBw ? `${priceBw}px solid ${hx(priceBorderColor) || '#212121'}` : 'none',
             borderRadius: `${priceRadius}px`,
             boxShadow: priceShadow,
             ...badgeExtra,
@@ -276,7 +287,6 @@ export default function FeaturedItemSection({ data }) {
     if (!buttonData || !buttonData.label) return null;
     const { label, action = 'linkToPDP', link, style, override, fullWidth, maxWidth: btnMaxWidth } = buttonData;
 
-    // Merge base style doc + override for the <Button />
     const btnTokens = { ...(style || {}), ...(override || {}) };
 
     const buttonLayout = {
@@ -286,7 +296,6 @@ export default function FeaturedItemSection({ data }) {
     };
 
     const props = {};
-    const slugStr = typeof product?.slug === 'string' ? product.slug : product?.slug?.current;
 
     if (action === 'customLink' && link?.href) {
       props.to = link.href;
@@ -332,13 +341,13 @@ export default function FeaturedItemSection({ data }) {
       aria-labelledby="fi-heading"
     >
       <div className="fi-shell" style={shellStyle}>
-        {eyebrow && <p className="fi-eyebrow">{eyebrow}</p>}
-        {heading && <h2 id="fi-heading" className="fi-heading" style={{ color: hx(titleColor) }}>{heading}</h2>}
-        {subheading && <p className="fi-subheading" style={{ color: hx(subtitleColor) }}>{subheading}</p>}
+        {n.eyebrow && <p className="fi-eyebrow">{n.eyebrow}</p>}
+        {n.heading && <h2 id="fi-heading" className="fi-heading" style={{ color: hx(titleColor) }}>{n.heading}</h2>}
+        {n.subheading && <p className="fi-subheading" style={{ color: hx(subtitleColor) }}>{n.subheading}</p>}
 
         <div className="fi-card" style={cardStyle}>
           <div className="fi-grid">
-            {/* IMAGE (responsive + loading placeholder + fallback) */}
+            {/* IMAGE */}
             {(() => {
               const chosen = finalImage;
               const wrapStyle = imgWrapStyle;
@@ -386,10 +395,10 @@ export default function FeaturedItemSection({ data }) {
                       onLoad={() => setImgLoaded(true)}
                       style={{
                         display: 'block',
-                        width: 'auto',        // 👈 natural width
-                        maxWidth: '100%',     // 👈 never overflow the column
+                        width: 'auto',
+                        maxWidth: '100%',
                         height: 'auto',
-                        marginInline: 'auto', // center if narrower than column
+                        marginInline: 'auto',
                       }}
                     />
                   </div>
@@ -413,11 +422,11 @@ export default function FeaturedItemSection({ data }) {
               {priceNode()}
 
               <div className="fi-cta-row equal">
-                {renderButton(primaryButton)}
-                {renderButton(secondaryButton)}
+                {renderButton(n.primaryButton || {})}
+                {renderButton(n.secondaryButton || {})}
               </div>
 
-              {disclaimer && <small className="fi-footnote" style={{ color: hx(textColor) }}>{disclaimer}</small>}
+              {n.disclaimer && <small className="fi-footnote" style={{ color: hx(textColor) }}>{n.disclaimer}</small>}
             </div>
           </div>
         </div>
