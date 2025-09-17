@@ -14,7 +14,7 @@ function Heading({ as: Tag = 'h1', className, children, ...rest }) {
 function mergeTokens(base, override) {
   const merged = { ...(base || {}) };
   if (override && typeof override === 'object') {
-    for (const [k, v] of Object.entries(overoverride)) {
+    for (const [k, v] of Object.entries(override)) {
       if (v !== undefined && v !== null && v !== '') merged[k] = v;
     }
   }
