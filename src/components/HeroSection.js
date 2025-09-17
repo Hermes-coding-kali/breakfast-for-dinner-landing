@@ -47,21 +47,19 @@ function HeroSection({ data, headerHeight = 0 }) {
 
   const handleButtonClick = (event, href) => {
     const isHome = location.pathname === '/';
-    // Simplified check: Does the link start with '/#'?
     const isAnchorLink = href && href.startsWith('/#');
 
     if (isHome && isAnchorLink) {
-      event.preventDefault(); // Prevent navigation
+      event.preventDefault(); // This is the key: stop the browser from navigating.
       const targetId = href.split('#')[1];
-      scrollToId(targetId, headerHeight);
+      scrollToId(targetId, headerHeight); // Use your existing utility.
 
-      // Optional: Update URL hash without reloading.
-      // This helps with browser history and deep linking.
+      // This part updates the URL in the address bar without reloading the page.
       if (window.history.pushState) {
         window.history.pushState(null, '', href);
       }
     }
-    // For all other links, the Button component's default behavior is correct.
+    // For any other type of link, we do nothing and let the <Button> component's default behavior (via React Router's <Link> or a standard <a>) take over.
   };
 
   const styleVars = {
@@ -117,17 +115,11 @@ function HeroSection({ data, headerHeight = 0 }) {
               const isExternal = href && /^https?:\/\//i.test(href);
               const target = b?.link?.openInNewTab || isExternal ? '_blank' : undefined;
 
-              // The key change is here:
-              // We pass the href to `to` for React Router links OR `href` for external links.
-              // The onClick handler will catch the anchor links and prevent default behavior.
-              const linkProps = isExternal
-                ? { href }
-                : { to: href };
-
               return (
                 <Button
                   key={b?._key || b?.label}
-                  {...linkProps}
+                  to={!isExternal ? href : undefined} // Pass href to `to` for internal routing
+                  href={isExternal ? href : undefined} // Only use `href` for true external links
                   target={target}
                   onClick={(e) => handleButtonClick(e, href)}
                   aria-label={b?.link?.ariaLabel || undefined}
