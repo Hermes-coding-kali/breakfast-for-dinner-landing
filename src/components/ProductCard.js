@@ -1,3 +1,4 @@
+// src/components/ProductCard.js
 import React, { useRef, useState, useCallback } from "react";
 import { PortableText } from "@portabletext/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,10 +8,19 @@ import { useCartStore } from "../stores/cartStore";
 import "./ProductCard.css";
 
 function ProductCard({ product, view = "card" }) {
+  // --- HOOKS MOVED TO TOP ---
   const { addToCart, toggleCart } = useCartStore();
   const imgRef = useRef(null);
   const navigate = useNavigate();
+  const [pricing, setPricing] = useState({
+    price: product?.price,
+    currency: product?.currency,
+    stripePriceId: product?.stripePriceId,
+  });
+  const [pricingLoading, setPricingLoading] = useState(false);
+  const [pricingError, setPricingError] = useState(null);
 
+  // This early return can now safely stay here
   if (!product) return null;
 
   // 👇 Robustly resolve slug from either string or {current: string}
@@ -38,14 +48,6 @@ function ProductCard({ product, view = "card" }) {
 
   const isSoldOut =
     normalized.inventory !== undefined && normalized.inventory <= 0;
-
-  const [pricing, setPricing] = useState({
-    price: normalized.price,
-    currency: normalized.currency,
-    stripePriceId: normalized.stripePriceId,
-  });
-  const [pricingLoading, setPricingLoading] = useState(false);
-  const [pricingError, setPricingError] = useState(null);
 
   const fetchPricing = useCallback(async () => {
     if (pricing.price != null && pricing.currency && pricing.stripePriceId) {

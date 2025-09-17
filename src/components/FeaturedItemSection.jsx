@@ -104,7 +104,17 @@ function normalizeFeaturedData(raw) {
 }
 
 export default function FeaturedItemSection({ data }) {
+  // --- HOOKS MOVED TO TOP ---
+  const { addToCart, toggleCart } = useCartStore();
   const n = normalizeFeaturedData(data);
+  const [pricing, setPricing] = useState({
+    price: n?.product?.price ?? null,
+    currency: n?.product?.currency ?? null,
+    stripePriceId: n?.product?.stripePriceId ?? null,
+  });
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  // This early return can now safely stay here
   if (!n || !n.product) return null;
 
   const {
@@ -133,15 +143,7 @@ export default function FeaturedItemSection({ data }) {
     primaryButton = {}, secondaryButton = {},
   } = n;
 
-  const { addToCart, toggleCart } = useCartStore();
-
   // ---------- PRICING FETCH ----------
-  const [pricing, setPricing] = useState({
-    price: product.price ?? null,
-    currency: product.currency ?? null,
-    stripePriceId: product.stripePriceId ?? null,
-  });
-
   const slugStr = typeof product?.slug === 'string' ? product.slug : product?.slug?.current;
 
   const fetchPricing = useCallback(async () => {
@@ -195,7 +197,6 @@ export default function FeaturedItemSection({ data }) {
   }, [imageSource, image, productFirstUrl, resolvedImageUrl, finalImage]);
 
   // Track image load for a basic loading state
-  const [imgLoaded, setImgLoaded] = useState(false);
   useEffect(() => { setImgLoaded(false); }, [finalImage?.url]);
 
   const sectionStyle = { padding: `${paddingY}px ${paddingX}px` };
