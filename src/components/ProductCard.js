@@ -11,7 +11,7 @@ function ProductCard({ product, view = "card" }) {
   const { addToCart, toggleCart } = useCartStore();
   const imgRef = useRef(null);
   const navigate = useNavigate();
-
+ 
   // pricing state lives here (unconditional)
   const [pricing, setPricing] = useState({
     price: product && typeof product.price === "number" ? product.price : null,
