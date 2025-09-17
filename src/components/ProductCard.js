@@ -1,4 +1,3 @@
-// src/components/ProductCard.js
 import React, { useRef, useState, useCallback } from "react";
 import { PortableText } from "@portabletext/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,38 +7,38 @@ import { useCartStore } from "../stores/cartStore";
 import "./ProductCard.css";
 
 function ProductCard({ product, view = "card" }) {
-  // --- HOOKS MOVED TO TOP ---
+  // ---- hooks must be at the top, unconditionally ----
   const { addToCart, toggleCart } = useCartStore();
   const imgRef = useRef(null);
   const navigate = useNavigate();
+
+  // pricing state lives here (unconditional)
   const [pricing, setPricing] = useState({
-    price: product?.price,
-    currency: product?.currency,
-    stripePriceId: product?.stripePriceId,
+    price: product && typeof product.price === "number" ? product.price : null,
+    currency: (product && product.currency) || "CAD",
+    stripePriceId: (product && product.stripePriceId) || null,
   });
   const [pricingLoading, setPricingLoading] = useState(false);
   const [pricingError, setPricingError] = useState(null);
 
-  // This early return can now safely stay here
-  if (!product) return null;
-
-  // 👇 Robustly resolve slug from either string or {current: string}
+  // ---- normalize safely even if product is null/undefined ----
   const resolvedSlug =
-    typeof product.slug === "string"
+    typeof product?.slug === "string"
       ? product.slug
-      : product.slug?.current ?? "";
+      : product?.slug?.current ?? "";
 
   const normalized = {
-    _id: product._id,
-    title: product.title ?? product.name ?? "Untitled",
-    slug: resolvedSlug, // <-- use resolved slug everywhere
-    price: typeof product.price === "number" ? product.price : null,
-    currency: product.currency ?? "CAD",
-    stripePriceId: product.stripePriceId ?? null,
-    mainImage: product.mainImage ?? product.images?.[0] ?? null,
-    description: product.description ?? null,
+    _id: product?._id,
+    title: product?.title ?? product?.name ?? "Untitled",
+    slug: resolvedSlug,
+    price:
+      typeof product?.price === "number" ? product.price : pricing.price ?? null,
+    currency: pricing.currency ?? product?.currency ?? "CAD",
+    stripePriceId: pricing.stripePriceId ?? product?.stripePriceId ?? null,
+    mainImage: product?.mainImage ?? product?.images?.[0] ?? null,
+    description: product?.description ?? null,
     inventory:
-      typeof product.inventory === "number" ? product.inventory : undefined,
+      typeof product?.inventory === "number" ? product.inventory : undefined,
   };
 
   const mainImageUrl = normalized.mainImage
@@ -49,6 +48,7 @@ function ProductCard({ product, view = "card" }) {
   const isSoldOut =
     normalized.inventory !== undefined && normalized.inventory <= 0;
 
+  // ---- callbacks also must be declared unconditionally ----
   const fetchPricing = useCallback(async () => {
     if (pricing.price != null && pricing.currency && pricing.stripePriceId) {
       return;
@@ -106,16 +106,14 @@ function ProductCard({ product, view = "card" }) {
   const onAddToCart = async (e) => {
     e?.preventDefault();
     e?.stopPropagation();
-
-    if (pricing.price == null) {
-      await fetchPricing();
-    }
+    if (pricing.price == null) await fetchPricing();
 
     const enriched = {
       ...product,
-      price: pricing.price ?? product.price ?? null,
-      currency: pricing.currency ?? product.currency ?? "CAD",
-      stripePriceId: pricing.stripePriceId ?? product.stripePriceId ?? null,
+      price: (pricing.price ?? product?.price) ?? null,
+      currency: (pricing.currency ?? product?.currency) ?? "CAD",
+      stripePriceId:
+        (pricing.stripePriceId ?? product?.stripePriceId) ?? null,
     };
 
     addToCart(enriched);
@@ -125,12 +123,11 @@ function ProductCard({ product, view = "card" }) {
   const onViewDetails = (e) => {
     e?.preventDefault();
     e?.stopPropagation();
-    if (normalized.slug) {
-      navigate(`/store/${normalized.slug}`);
-    } else {
-      console.warn("Missing slug for product", product);
-    }
+    if (normalized.slug) navigate(`/store/${normalized.slug}`);
   };
+
+  // ---- render guard (AFTER hooks) ----
+  if (!product) return null;
 
   return (
     <div className={`product-card ${view}`} onMouseLeave={bounce}>
@@ -161,8 +158,8 @@ function ProductCard({ product, view = "card" }) {
             )}
           </h2>
 
-          {normalized.price !== null && (
-            <div className="price-badge">${normalized.price.toFixed(2)}</div>
+          {normalized.price != null && (
+            <div className="price-badge">${Number(normalized.price).toFixed(2)}</div>
           )}
         </div>
 
@@ -185,7 +182,6 @@ function ProductCard({ product, view = "card" }) {
                 {pricingLoading ? "Adding…" : "Add to Cart"}
               </button>
 
-              {/* Only show on cards, NOT on detail view */}
               {view === "card" && (
                 <button
                   type="button"
