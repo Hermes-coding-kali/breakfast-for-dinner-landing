@@ -5,181 +5,140 @@ import './HeroSection.css';
 import Button from './Button';
 import { scrollToId } from '../utils/scrollToId';
 
-/** Merge base tokens with override tokens (override wins when defined) */
+// Helper: choose HTML tag dynamically
+function Heading({ as: Tag = 'h1', className, children, ...rest }) {
+  return <Tag className={className} {...rest}>{children}</Tag>;
+}
+
+// Merge base tokens with override tokens (override wins when defined)
 function mergeTokens(base, override) {
   const merged = { ...(base || {}) };
   if (override && typeof override === 'object') {
     for (const [k, v] of Object.entries(override)) {
-      if (v !== undefined && v !== null) merged[k] = v;
+      if (v !== undefined && v !== null && v !== '') merged[k] = v;
     }
   }
   return merged;
 }
 
-/** Normalize any href Sanity might send */
-function normalizeHref(href) {
-  if (!href) return '';
-  const h = href.trim();
-
-  // External / protocols we don't touch
-  if (/^(https?:|mailto:|tel:)/i.test(h)) return h;
-
-  // Pure hash (e.g. "#about") -> normalize to "/#about"
-  if (h.startsWith('#')) return `/${h}`;
-
-  // Already normalized anchor
-  if (h.startsWith('/#')) return h;
-
-  // Internal path missing leading slash (e.g. "store") -> "/store"
-  if (!h.startsWith('/')) return `/${h}`;
-
-  // "/store" or similar stays
-  return h;
-}
-
-/** Flexible heading element */
-function Heading({ as: Tag = 'h1', className, children, ...rest }) {
-  return <Tag className={className} {...rest}>{children}</Tag>;
-}
-
-function HeroSection({
-  data = {},
-  headerHeight = 0, // offset for sticky headers
-}) {
+// Accept `headerHeight` prop
+function HeroSection({ data, headerHeight = 0 }) {
   const location = useLocation();
-
   const {
+    eyebrow,
     titleLine1,
     titleLine2,
     titleLine3,
-    titleAs = 'h1',
     subtitle,
-    media, // optional image/video object
+    image,
+    imageAlt,
     buttons = [],
-    backgroundAngle = 135,
-    backgroundColorStart = '#2196f3',
-    backgroundColorEnd = '#42a5f5',
+    alignment = 'center',
+    imagePosition = 'right',
+    headingLevel = 'h1',
+    backgroundAngle = 180,
+    backgroundColorStart,
+    backgroundColorEnd,
     overlayOpacity = 0,
     titleLine1Color,
     titleLine2Color,
     titleLine3Color,
-  } = data;
+  } = data || {};
+
+  const handleButtonClick = (event, href) => {
+    const isHome = location.pathname === '/';
+    const isAnchorLink = href && href.startsWith('/#');
+
+    if (isHome && isAnchorLink) {
+      event.preventDefault(); // Stop the browser from navigating.
+      const targetId = href.split('#')[1];
+      scrollToId(targetId, headerHeight); // Use our smooth scroll utility.
+
+      // This part updates the URL in the address bar without reloading the page.
+      if (window.history.pushState) {
+        window.history.pushState(null, '', href);
+      }
+    }
+    // For other links, let the Button component handle it.
+  };
 
   const styleVars = {
     '--hero-bg-angle': `${backgroundAngle}deg`,
-    '--hero-bg-start': backgroundColorStart,
-    '--hero-bg-end': backgroundColorEnd,
+    '--hero-bg-start': backgroundColorStart || '#2196f3',
+    '--hero-bg-end': backgroundColorEnd || '#42a5f5',
     '--hero-overlay-opacity': overlayOpacity,
   };
 
-  const handleAnchorClickOnHome = (e, href) => {
-    // Smooth-scroll only when already on "/" and link is an anchor "/#id"
-    const isHome = location.pathname === '/';
-    const isAnchor = href && href.startsWith('/#');
-
-    if (isHome && isAnchor) {
-      e.preventDefault();
-      const targetId = href.split('#')[1];
-      if (targetId) {
-        scrollToId(targetId, headerHeight);
-        if (window.history.pushState) window.history.pushState(null, '', href);
-      }
-    }
-  };
+  const HeadingTag = ['h1', 'h2', 'h3'].includes(headingLevel) ? headingLevel : 'h1';
 
   return (
     <section
-      className="hero-section"
+      id="hero"
+      className={`hero-section align-${alignment} img-${imagePosition}`}
       style={styleVars}
-      aria-label="Hero Section"
+      aria-label="Hero"
     >
-      <div className="hero-overlay" />
-      <div className="hero-container">
-        <div className="hero-text">
-          {(titleLine1 || titleLine2 || titleLine3) && (
-            <Heading as={titleAs} className="hero-title">
-              {titleLine1 && (
-                <span style={titleLine1Color ? { color: titleLine1Color } : undefined}>
-                  {titleLine1}
-                </span>
-              )}
-              {titleLine2 && (
-                <>
-                  {' '}
-                  <span style={titleLine2Color ? { color: titleLine2Color } : undefined}>
-                    {titleLine2}
-                  </span>
-                </>
-              )}
-              {titleLine3 && (
-                <>
-                  {' '}
-                  <span style={titleLine3Color ? { color: titleLine3Color } : undefined}>
-                    {titleLine3}
-                  </span>
-                </>
-              )}
-            </Heading>
-          )}
+      <div className="hero-bg-overlay" aria-hidden="true" />
+      <div className="hero-inner">
+        {eyebrow && <p className="hero-eyebrow">{eyebrow}</p>}
 
-          {subtitle && <p className="hero-subtitle">{subtitle}</p>}
+        {(titleLine1 || titleLine2 || titleLine3) && (
+          <Heading as={HeadingTag} className="main-title book-title-approx">
+            {titleLine1 && <span style={{ color: titleLine1Color || 'var(--title-yellow)' }}>{titleLine1}</span>}
+            {titleLine2 && <span style={{ color: titleLine2Color || 'var(--title-orange)' }}>{titleLine2}</span>}
+            {titleLine3 && <span style={{ color: titleLine3Color || 'var(--title-red-orange)' }}>{titleLine3}</span>}
+          </Heading>
+        )}
 
-          {Array.isArray(buttons) && buttons.length > 0 && (
-            <div className="hero-buttons-container">
-              {buttons.map((b) => {
-                const tokens = mergeTokens(b?.style, b?.override);
-                const rawHref = b?.link?.href || '';
-                const href = normalizeHref(rawHref);
+        {subtitle && <p className="hero-subtitle">{subtitle}</p>}
 
-                const isAnchorLink = href.startsWith('/#');
-                const isExternal = /^https?:\/\//i.test(href);
-                const isInternalPage = href.startsWith('/') && !isAnchorLink;
-
-                // Props for our <Button> (assumes your Button renders <Link> when `to` is set, <a> when `href` is set)
-                const buttonProps = isInternalPage
-                  ? { to: href }
-                  : { href };
-
-                return (
-                  <Button
-                    key={b?._key || b?.label || href}
-                    {...buttonProps}
-                    target={b?.link?.openInNewTab || isExternal ? '_blank' : undefined}
-                    rel={b?.link?.openInNewTab || isExternal ? 'noopener noreferrer' : undefined}
-                    aria-label={b?.link?.ariaLabel || undefined}
-                    styleTokens={tokens}
-                    onClick={(e) => handleAnchorClickOnHome(e, href)}
-                  >
-                    {b?.label || 'Learn more'}
-                  </Button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Optional media (image/video) */}
-        {media?.type === 'image' && media?.src && (
-          <div className="hero-image">
+        <div className="hero-main-illustration-container">
+          {image?.asset?.url && (
             <img
-              src={media.src}
-              alt={media.alt || ''}
+              src={image.asset.url}
+              alt={imageAlt || 'Hero image'}
+              className="hero-main-illustration"
+              width={image.asset.metadata?.dimensions?.width || undefined}
+              height={image.asset.metadata?.dimensions?.height || undefined}
               loading="eager"
               decoding="async"
               sizes="(max-width: 768px) 90vw, 60vw"
             />
-          </div>
-        )}
-        {media?.type === 'video' && media?.src && (
-          <div className="hero-image">
-            <video
-              src={media.src}
-              autoPlay
-              playsInline
-              muted
-              loop
-              preload="metadata"
-            />
+          )}
+        </div>
+
+        {Array.isArray(buttons) && buttons.length > 0 && (
+          <div className="hero-buttons-container">
+            {buttons.map((b) => {
+              const tokens = mergeTokens(b?.style, b?.override);
+              const href = b?.link?.href;
+              
+              // Determine link type
+              const isAnchorLink = href && href.startsWith('/#');
+              const isExternal = href && /^https?:\/\//i.test(href);
+              const isInternalPage = href && href.startsWith('/') && !isAnchorLink;
+
+              // Choose props for the Button component
+              let buttonProps = {};
+              if (isInternalPage) {
+                buttonProps.to = href; // Use React Router's <Link>
+              } else {
+                buttonProps.href = href; // Use a standard <a> tag for anchors and external links
+              }
+
+              return (
+                <Button
+                  key={b?._key || b?.label}
+                  {...buttonProps}
+                  target={b?.link?.openInNewTab || isExternal ? '_blank' : undefined}
+                  onClick={(e) => handleButtonClick(e, href)}
+                  aria-label={b?.link?.ariaLabel || undefined}
+                  styleTokens={tokens}
+                >
+                  {b?.label || 'Learn more'}
+                </Button>
+              );
+            })}
           </div>
         )}
       </div>
