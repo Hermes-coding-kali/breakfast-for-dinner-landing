@@ -104,10 +104,9 @@ function normalizeFeaturedData(raw) {
 }
 
 export default function FeaturedItemSection({ data }) {
-  // --- hooks at top (unconditional) ---
+  // --- HOOKS MOVED TO TOP ---
   const { addToCart, toggleCart } = useCartStore();
   const n = normalizeFeaturedData(data);
-
   const [pricing, setPricing] = useState({
     price: n?.product?.price ?? null,
     currency: n?.product?.currency ?? null,
@@ -115,7 +114,7 @@ export default function FeaturedItemSection({ data }) {
   });
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  // If no data/product, render nothing (AFTER hooks)
+  // This early return can now safely stay here
   if (!n || !n.product) return null;
 
   const {
@@ -136,7 +135,7 @@ export default function FeaturedItemSection({ data }) {
     // Product
     product,
     showPrice = true, priceStyle = 'badge',
-    priceBg, priceTextColor, priceBorderColor, priceBorderWidth: priceBw = 3, priceRadius = 14, priceShadow = '3px 3px 0 rgba(0,0,0,0.12)',
+    priceBg, priceTextColor, priceBorderColor, priceBorderWidth = 3, priceRadius = 14, priceShadow = '3px 3px 0 rgba(0,0,0,0.12)',
     showCompareAt = false, showCurrency = true,
     priceVariant, priceAccentColor,
 
@@ -144,7 +143,7 @@ export default function FeaturedItemSection({ data }) {
     primaryButton = {}, secondaryButton = {},
   } = n;
 
-  // ---------- pricing fetch (hook + effect) ----------
+  // ---------- PRICING FETCH ----------
   const slugStr = typeof product?.slug === 'string' ? product.slug : product?.slug?.current;
 
   const fetchPricing = useCallback(async () => {
@@ -166,9 +165,9 @@ export default function FeaturedItemSection({ data }) {
   useEffect(() => {
     if (pricing.price == null) fetchPricing();
   }, [fetchPricing, pricing.price]);
-  // ---------------------------------------------------
+  // -----------------------------------
 
-  // Image selection (no hooks used here)
+  // Prefer style.custom image, then product[0], then top-level resolved imageUrl from GROQ
   const resolvedImageUrl =
     (image && image.asset && image.asset.url) ||
     (imageUrlFromNormalize) ||
@@ -186,7 +185,7 @@ export default function FeaturedItemSection({ data }) {
             ? { url: resolvedImageUrl, alt: imageAlt || product?.name || 'Product image' }
             : null);
 
-  // Debug snapshot (effect is unconditional; guard inside)
+  // Debug snapshot
   useEffect(() => {
     console.debug('[FeaturedItemSection] img pick', {
       imageSource,
@@ -200,7 +199,6 @@ export default function FeaturedItemSection({ data }) {
   // Track image load for a basic loading state
   useEffect(() => { setImgLoaded(false); }, [finalImage?.url]);
 
-  // Inline tokens (display-only)
   const sectionStyle = { padding: `${paddingY}px ${paddingX}px` };
   const shellStyle = { maxWidth: `${maxWidth}px`, textAlign: alignment };
   const cardStyle = {
@@ -210,6 +208,8 @@ export default function FeaturedItemSection({ data }) {
     boxShadow: cardShadow,
     color: hx(textColor) || '#212121',
   };
+
+  // NOTE: no forced width — let the grid column control it.
   const imgWrapStyle = {
     background: hx(imageBg) || 'transparent',
     border: imageBorderWidth ? `${imageBorderWidth}px solid ${hx(imageBorderColor) || 'transparent'}` : 'none',
@@ -218,7 +218,6 @@ export default function FeaturedItemSection({ data }) {
     aspectRatio: imageAspect !== 'auto' ? imageAspect.replace(':', ' / ') : undefined,
   };
 
-  // Price render
   const priceNode = () => {
     if (!showPrice) return null;
     const priceVal = pricing.price ?? product.price;
@@ -241,7 +240,7 @@ export default function FeaturedItemSection({ data }) {
           style={{
             background: hx(priceBg) || '#fffdf5',
             color: hx(priceTextColor) || '#212121',
-            border: priceBw ? `${priceBw}px solid ${hx(priceBorderColor) || '#212121'}` : 'none',
+            border: priceBorderWidth ? `${priceBorderWidth}px solid ${hx(priceBorderColor) || '#212121'}` : 'none',
             borderRadius: `${priceRadius}px`,
             boxShadow: priceShadow,
             ...badgeExtra,
@@ -273,7 +272,6 @@ export default function FeaturedItemSection({ data }) {
     );
   };
 
-  // Button renderer (no hooks inside)
   const renderButton = (buttonData) => {
     if (!buttonData || !buttonData.label) return null;
     const { label, action = 'linkToPDP', link, style, override, fullWidth, maxWidth: btnMaxWidth } = buttonData;
@@ -288,13 +286,13 @@ export default function FeaturedItemSection({ data }) {
     };
 
     const props = {};
-    const slugStr2 = typeof product?.slug === 'string' ? product.slug : product?.slug?.current;
+    const slugStr = typeof product?.slug === 'string' ? product.slug : product?.slug?.current;
 
     if (action === 'customLink' && link?.href) {
       props.to = link.href;
       if (link.openInNewTab) props.target = '_blank';
-    } else if (action === 'linkToPDP' && slugStr2) {
-      props.to = `/store/${slugStr2}`;
+    } else if (action === 'linkToPDP' && slugStr) {
+      props.to = `/store/${slugStr}`;
     } else if (action === 'addToCart') {
       props.onClick = async (e) => {
         e?.preventDefault(); e?.stopPropagation();
@@ -388,10 +386,10 @@ export default function FeaturedItemSection({ data }) {
                       onLoad={() => setImgLoaded(true)}
                       style={{
                         display: 'block',
-                        width: 'auto',
-                        maxWidth: '100%',
+                        width: 'auto',        // 👈 natural width
+                        maxWidth: '100%',     // 👈 never overflow the column
                         height: 'auto',
-                        marginInline: 'auto',
+                        marginInline: 'auto', // center if narrower than column
                       }}
                     />
                   </div>
