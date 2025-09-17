@@ -21,6 +21,26 @@ function mergeTokens(base, override) {
   return merged;
 }
 
+// NEW: normalize href from Sanity so "#id" => "/#id" and "store" => "/store"
+function normalizeHref(href) {
+  if (!href) return '';
+  const h = href.trim();
+
+  // External/special schemes: leave as-is
+  if (/^(https?:|mailto:|tel:)/i.test(h)) return h;
+
+  // Pure hash => "/#section"
+  if (h.startsWith('#')) return `/${h}`;
+
+  // Already "/#section"
+  if (h.startsWith('/#')) return h;
+
+  // Internal path without leading slash => "/path"
+  if (!h.startsWith('/')) return `/${h}`;
+
+  return h;
+}
+
 // Accept `headerHeight` prop
 function HeroSection({ data, headerHeight = 0 }) {
   const location = useLocation();
@@ -111,8 +131,9 @@ function HeroSection({ data, headerHeight = 0 }) {
           <div className="hero-buttons-container">
             {buttons.map((b) => {
               const tokens = mergeTokens(b?.style, b?.override);
-              const href = b?.link?.href;
-              
+              const rawHref = b?.link?.href;
+              const href = normalizeHref(rawHref);
+
               // Determine link type
               const isAnchorLink = href && href.startsWith('/#');
               const isExternal = href && /^https?:\/\//i.test(href);
