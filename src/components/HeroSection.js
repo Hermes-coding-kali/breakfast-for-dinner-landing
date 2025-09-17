@@ -1,7 +1,9 @@
 // src/components/HeroSection.js
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import './HeroSection.css';
 import Button from './Button';
+import { scrollToId } from '../utils/scrollToId';
 
 // Helper: choose HTML tag dynamically
 function Heading({ as: Tag = 'h1', className, children, ...rest }) {
@@ -19,7 +21,9 @@ function mergeTokens(base, override) {
   return merged;
 }
 
-function HeroSection({ data }) {
+// Accept `headerHeight` prop
+function HeroSection({ data, headerHeight = 0 }) {
+  const location = useLocation();
   const {
     eyebrow,
     titleLine1,
@@ -32,8 +36,6 @@ function HeroSection({ data }) {
     alignment = 'center',
     imagePosition = 'right',
     headingLevel = 'h1',
-
-    // Colors coming from GROQ as plain hex strings
     backgroundAngle = 180,
     backgroundColorStart,
     backgroundColorEnd,
@@ -42,6 +44,24 @@ function HeroSection({ data }) {
     titleLine2Color,
     titleLine3Color,
   } = data || {};
+
+  // Add this click handler
+  const handleButtonClick = (event, href) => {
+    const isHome = location.pathname === '/';
+    const isAnchorLink = href && href.startsWith('/#');
+
+    if (isHome && isAnchorLink) {
+      event.preventDefault();
+      const targetId = href.split('#')[1];
+      scrollToId(targetId, headerHeight);
+
+      // Manually update the URL hash in the address bar without a page reload
+      if (window.history.pushState) {
+        window.history.pushState(null, '', `/#${targetId}`);
+      }
+    }
+    // For all other links (external, different pages), let the Button component handle it.
+  };
 
   const styleVars = {
     '--hero-bg-angle': `${backgroundAngle}deg`,
@@ -52,15 +72,6 @@ function HeroSection({ data }) {
 
   const HeadingTag = ['h1', 'h2', 'h3'].includes(headingLevel) ? headingLevel : 'h1';
 
-  // Normalize link target: if href starts with 'http', treat as external
-  const normalizeLinkProps = (href) => {
-    if (!href) return { to: undefined, href: undefined, target: undefined };
-    const isExternal = /^https?:\/\//i.test(href);
-    if (isExternal) return { href, target: '_blank' };
-    // internal route or hash on same page
-    return { to: href };
-  };
-
   return (
     <section
       id="hero"
@@ -69,7 +80,6 @@ function HeroSection({ data }) {
       aria-label="Hero"
     >
       <div className="hero-bg-overlay" aria-hidden="true" />
-
       <div className="hero-inner">
         {eyebrow && <p className="hero-eyebrow">{eyebrow}</p>}
 
@@ -100,14 +110,21 @@ function HeroSection({ data }) {
 
         {Array.isArray(buttons) && buttons.length > 0 && (
           <div className="hero-buttons-container">
+            {/* Update the button mapping logic */}
             {buttons.map((b) => {
               const tokens = mergeTokens(b?.style, b?.override);
-              const { to, href, target } = normalizeLinkProps(b?.link?.href);
-
+              const href = b?.link?.href;
+              const isExternal = href && /^https?:\/\//i.test(href);
+              const isAnchor = href && href.includes('/#');
+              const target = b?.link?.openInNewTab || isExternal ? '_blank' : undefined;
+              
               return (
                 <Button
                   key={b?._key || b?.label}
-                  {...(to ? { to } : { href, target })}
+                  to={!isExternal && !isAnchor && href ? href : undefined}
+                  href={isExternal || isAnchor ? href : undefined}
+                  target={target}
+                  onClick={(e) => handleButtonClick(e, href)}
                   aria-label={b?.link?.ariaLabel || undefined}
                   styleTokens={tokens}
                 >

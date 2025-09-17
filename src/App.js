@@ -95,7 +95,8 @@ function App() {
       <MarketingModal />
       <main style={{ paddingTop: headerHeight }}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          {/* 👇 PASS headerHeight to HomePage here */}
+          <Route path="/" element={<HomePage offset={headerHeight} />} />
           <Route path="/store" element={<StorePage />} />
           <Route path="/store/:slug" element={<ProductDetailPage />} />
           <Route path="/success" element={<Success />} />

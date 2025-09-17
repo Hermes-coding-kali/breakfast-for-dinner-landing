@@ -313,7 +313,7 @@ export default function HomePage({ offset = 0 }) {
   return (
     <Suspense fallback={<div style={{ padding: '4rem', textAlign: 'center' }}>Loading sections…</div>}>
       {page.pageBuilder?.map((section, i) => (
-        <Section key={section?._key || `${section?._type}-${i}`} section={section} />
+        <Section key={section?._key || `${section?._type}-${i}`} section={section} offset={offset} />
       ))}
     </Suspense>
   );

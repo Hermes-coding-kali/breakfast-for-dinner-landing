@@ -1,23 +1,23 @@
 // src/components/Section.jsx
 import React from 'react'
 
-// Lazy imports
+// Lazy imports (unchanged)
 const HeroSection = React.lazy(() => import('./HeroSection'))
 const AboutSection = React.lazy(() => import('./AboutSection'))
 const FeaturedItemSection = React.lazy(() => import('./FeaturedItemSection'))
-const EmailSignupSection = React.lazy(() => import('./EmailSignup')) // NEW
+const EmailSignupSection = React.lazy(() => import('./EmailSignup'))
 const FoodSortGameSection = React.lazy(() => import('./FoodSortGame'))
 
 const registry = {
   heroSection: HeroSection,
   aboutSection: AboutSection,
   featuredItemSection: FeaturedItemSection,
-  // new key from the new schema
   emailSignupSection: EmailSignupSection,
   foodSortGameSection: FoodSortGameSection,
 }
 
-export default function Section({section}) {
+// 👇 ACCEPT THE OFFSET PROP HERE
+export default function Section({section, offset}) {
   if (!section?._type) return null
   const Component = registry[section._type]
   if (!Component) {
@@ -28,5 +28,6 @@ export default function Section({section}) {
       </div>
     )
   }
-  return <Component data={section} />
+  // 👇 PASS IT TO THE ACTUAL SECTION COMPONENT AS `headerHeight`
+  return <Component data={section} headerHeight={offset} />
 }
