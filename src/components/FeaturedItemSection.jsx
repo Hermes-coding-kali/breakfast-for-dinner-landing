@@ -333,6 +333,7 @@ export default function FeaturedItemSection({ data }) {
 
   return (
     <section
+      id='featured-item'
       className={`fi-section fi-stack-${stackOn}`}
       style={{ ...sectionStyle, overflowX: 'clip' }}
       aria-labelledby="fi-heading"
