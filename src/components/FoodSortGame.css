@@ -1,183 +1,138 @@
-/* src/components/FoodSortGame.css */
-
 .food-sort-game-section {
-    background-color: var(--hill-green-light); /* Use a background color from palette */
-    padding: 50px 20px;
-    color: var(--text-dark); /* Dark text on light green */
-    border-top: 4px dashed var(--text-dark); /* Separator from CTA */
-    border-bottom: 4px dashed var(--text-dark); /* Separator from Footer */
-    margin-top: 0; /* Remove default section margin if needed */
-    margin-bottom: 0;
+    background: linear-gradient(
+      var(--fsg-bgAngle, 0deg),
+      var(--fsg-bgStart, var(--hill-green-light)),
+      var(--fsg-bgEnd, var(--hill-green-light))
+    );
+    color: var(--fsg-text, var(--text-dark));
+    border-top: 4px dashed var(--fsg-dash, var(--text-dark));
+    border-bottom: 4px dashed var(--fsg-dash, var(--text-dark));
+    margin: 0;
     position: relative;
     overflow: hidden;
   }
   
-  /* Add some decorative elements like other sections */
+  /* blobs */
   .food-sort-game-section::before,
   .food-sort-game-section::after {
-      content: '';
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white blobs */
-      border-radius: 50%;
-      z-index: 0;
+    content: '';
+    position: absolute;
+    width: 50px; height: 50px;
+    background-color: var(--fsg-blob, #fff);
+    opacity: var(--fsg-blobOpa, .3);
+    border-radius: 50%;
+    z-index: 0;
   }
-  
   .food-sort-game-section::before {
-      top: 15%;
-      left: 10%;
-      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* Blob shape */
+    top: 15%; left: 10%;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
   }
-  
   .food-sort-game-section::after {
-      bottom: 10%;
-      right: 15%;
-       border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; /* Different blob shape */
+    bottom: 10%; right: 15%;
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   }
   
-  
+  /* heading */
   .food-sort-game-section h2 {
-      font-family: 'Lilita One', cursive;
-      font-size: 2.8em;
-      color: white; /* White title on green bg */
-      -webkit-text-stroke: 2px var(--text-dark);
-      text-stroke: 2px var(--text-dark);
-      text-shadow: 3px 3px 0px rgba(0,0,0,0.15);
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
+    font-family: 'Lilita One', cursive;
+    font-size: 2.8em;
+    color: var(--fsg-headingFill, #fff);
+    -webkit-text-stroke: var(--fsg-headingStrokeW, 2px) var(--fsg-headingStroke, #212121);
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
   }
   
   .game-intro p,
   .game-over p {
-      font-size: 1.1em;
-      margin-bottom: 25px;
-      font-weight: 600;
-       position: relative;
-      z-index: 1;
+    font-size: 1.1em;
+    margin-bottom: 25px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+    text-align: center;
   }
   
+  /* card */
   .game-area {
-      background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
-      padding: 30px;
-      border-radius: 15px;
-      border: 3px solid var(--text-dark);
-      box-shadow: 4px 4px 0px var(--hill-green-dark);
-      max-width: 500px;
-      margin: 20px auto;
-       position: relative;
-      z-index: 1;
+    background-color: var(--fsg-gameBg, rgba(255,255,255,0.8));
+    padding: 30px;
+    border-radius: var(--fsg-gameRadius, 15px);
+    border: var(--fsg-gameBorderW, 3px) solid var(--fsg-gameBorderColor, var(--text-dark));
+    box-shadow: 4px 4px 0 var(--fsg-gameShadow, var(--hill-green-dark));
+    max-width: 500px;
+    margin: 20px auto;
+    position: relative;
+    z-index: 1;
   }
   
+  /* stats */
   .game-stats {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 700;
-      font-size: 1.2em;
-      margin-bottom: 25px;
-      color: var(--pants-purple);
-      /* THIS IS THE FIX: Forces numbers to have a consistent width */
-      font-variant-numeric: tabular-nums;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.2em;
+    margin-bottom: 25px;
+    color: var(--fsg-statsColor, var(--pants-purple));
+    font-variant-numeric: tabular-nums;
   }
   
+  /* item */
   .game-item {
-      margin-bottom: 15px; /* Space before feedback */
-      padding: 20px;
-      background-color: #fffbeb; /* Creamy background */
-      border-radius: 10px;
-      border: 2px dashed var(--dino-orange);
+    margin-bottom: 15px;
+    padding: 20px;
+    background-color: #fffbeb;
+    border-radius: 10px;
+    border: 2px dashed var(--dino-orange);
+    text-align: center;
   }
+  .item-emoji { font-size: 3em; display: block; margin-bottom: 5px; }
+  .item-name { font-size: 1.5em; font-weight: 700; color: var(--fsg-text, var(--text-dark)); }
   
-  .item-emoji {
-      font-size: 3em; /* Make emoji large */
-      display: block; /* Put emoji on its own line */
-      margin-bottom: 5px;
-  }
-  
-  .item-name {
-      font-size: 1.5em;
-      font-weight: 700;
-      color: var(--text-dark);
-  }
-  
+  /* feedback */
   .game-feedback {
-      min-height: 1.5em; /* Keep space even when empty */
-      margin-bottom: 20px;
-      font-weight: 600;
-      font-size: 1.1em;
-      color: var(--pants-blue); /* Blue feedback text */
+    min-height: 1.5em;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: var(--fsg-feedback, var(--pants-blue));
+    text-align: center;
   }
   
+  /* choices */
   .game-choices {
-      display: flex;
-      justify-content: center;
-      gap: 15px; /* Space between buttons */
-      flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
   }
   
-  /* Use existing button styles but add specific colors */
-  .button-green {
-      background-color: var(--hill-green-dark);
-      color: white;
-  }
-  .button-yellow {
-       background-color: var(--title-yellow);
-       color: var(--text-dark); /* Dark text on yellow */
-       border-color: var(--dino-orange); /* Orange border */
-       box-shadow: 3px 3px 0px var(--dino-orange);
-  }
-  .button-yellow:hover {
-       box-shadow: 5px 5px 0px var(--dino-orange);
-  }
-  .button-yellow:active {
-       box-shadow: 1px 1px 0px var(--dino-orange);
-  }
+  /* optional full-width utility for the start/play-again button */
+  .fsg-fw { width: 100%; }
   
-  
-  .game-over h3 {
-      color: var(--dino-orange);
-      font-size: 2em;
-      margin-bottom: 10px;
-       position: relative;
-      z-index: 1;
-  }
-  
-  /* Responsive Adjustments */
+  /* responsive */
   @media (max-width: 768px) {
-      .food-sort-game-section h2 {
-          font-size: 2.4em;
-          -webkit-text-stroke-width: 1.5px;
-          text-stroke-width: 1.5px;
-      }
-       .game-area {
-          padding: 20px;
-       }
+    .food-sort-game-section h2 {
+      font-size: 2.4em;
+      -webkit-text-stroke-width: 1.5px;
+    }
+    .game-area { padding: 20px; }
   }
-  
+
   @media (max-width: 480px) {
-       .food-sort-game-section {
-          padding: 40px 15px;
-       }
-       .food-sort-game-section h2 {
-          font-size: 2em;
-       }
-        .game-stats {
-          font-size: 1.1em;
-          margin-bottom: 20px;
-        }
-        .item-emoji {
-          font-size: 2.5em;
-        }
-        .item-name {
-          font-size: 1.3em;
-        }
-        .game-choices button.cta-button {
-            font-size: 1.1em; /* Slightly smaller buttons */
-            padding: 12px 25px;
-            width: 45%; /* Make buttons take up more width */
-        }
-         .game-choices {
-            gap: 10px;
-         }
+    .food-sort-game-section h2 { font-size: 2em; }
+    .game-stats { 
+      font-size: 1.1em; 
+      margin-bottom: 20px;
+
+      /* NEW: stack stats on separate lines for mobile */
+      flex-direction: column; 
+      align-items: center; 
+      gap: 6px;
+    }
+    .item-emoji { font-size: 2.5em; }
+    .item-name { font-size: 1.3em; }
+    .game-choices { gap: 10px; }
   }

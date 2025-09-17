@@ -1,0 +1,72 @@
+/* Baseline for all buttons, regardless of element */
+.btn {
+  appearance: none;
+  border-style: solid;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  gap: 8px;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+
+  /* No wrapping; truncate long labels */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* Font fallback */
+  font-family: var(--font-body-paragraph-family, 'Baloo 2', sans-serif);
+  font-weight: var(--font-body-paragraph-weight, 700);
+
+  /* Motion */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin: 0;
+}
+
+/* Hover/active states (kept from your original) */
+.btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+}
+.btn:active {
+  transform: scale(1.02) translateY(1px);
+  box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+}
+.btn:focus-visible {
+  outline: 3px dashed var(--color-accent-blue, #1e90ff);
+  outline-offset: 3px;
+}
+
+/* Disabled */
+.btn[aria-disabled="true"],
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Utility: block (fill container width) */
+.btn--block { width: 100%; }
+
+/* Button group helpers */
+.btn-group {
+  display: flex;
+  gap: 8px;         /* site-wide spacing between siblings */
+  flex-wrap: wrap;  /* stack on narrow screens */
+}
+
+/* Equal-width pair (use with two block buttons) */
+.btn-group.equal {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  gap: 8px;
+}
+@media (max-width: 640px) {
+  .btn-group.equal { grid-template-columns: 1fr; }
+}

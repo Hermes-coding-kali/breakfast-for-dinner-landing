@@ -1,0 +1,244 @@
+/* ===== Product Card (shared) ===== */
+.product-card {
+  background: #fcfaf5;                 /* cardBg */
+  border: 3px dashed #212121;          /* cardBorderWidth/style/color */
+  border-radius: 20px;                  /* cardRadius */
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.12); /* cardShadow */
+  position: relative;
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 8px 8px 0 rgba(0,0,0,0.12);
+}
+
+/* subtle stripe overlay */
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #212121 0px,
+    #212121 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  border-radius: inherit;
+}
+
+/* ===== Image frame — upright (no tilt) ===== */
+.product-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;                 /* consistent thumbnail ratio */
+  background: #ffffff;                  /* imageBg */
+  border: 4px solid #212121;            /* imageBorder */
+  border-radius: 18px;                  /* imageRadius */
+  overflow: hidden;
+  box-shadow: 6px 6px 0 #2121210f;      /* soft frame shadow */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;                            /* overridden in view-specific caps */
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                    /* fill the frame */
+  object-position: center;
+  display: block;
+}
+
+.product-image-fallback {
+  font-weight: 700;
+  color: #777;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+}
+
+/* ===== Sold out pill ===== */
+.sold-out {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #212121;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ===== Content ===== */
+.product-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.product-title {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  color: #212121;
+}
+
+.product-title-link {
+  color: inherit;
+  text-decoration: none;
+}
+.product-title-link:hover {
+  text-decoration: underline;
+}
+
+/* Price pill */
+.price-badge {
+  background: #ffeb3b;
+  color: #212121;
+  border: 3px solid #212121;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+  white-space: nowrap;
+}
+
+/* ===== Actions (two buttons) ===== */
+.product-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  appearance: none;
+  cursor: pointer;
+  font-weight: 800;
+  border-radius: 14px;
+  border: 3px solid #212121;
+  padding: 10px 14px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.12);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Secondary (Add to Cart) — white */
+.btn.btn-secondary {
+  background: #ffffff;
+  color: #212121;
+}
+
+/* Primary (View Details) — orange */
+.btn.btn-primary-alt {
+  background: #fb8c00;
+  color: #212121;
+}
+
+/* ===== Bounce (no rotation) ===== */
+@keyframes bounce-kf {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(0.98); }
+  60%  { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+.bounce {
+  animation: bounce-kf 220ms ease;
+}
+
+.buy-unavailable {
+  font-weight: 700;
+  color: #8d8d8d;
+  align-self: center;
+}
+
+/* ===================================================================== */
+/* View-specific sizing so cards don't get enormous on wide screens       */
+/* ===================================================================== */
+
+/* --- Card view (in the grid): keep it compact --- */
+.product-card.card {
+  max-width: 380px;        /* hard cap in grid cards */
+  padding: 14px;
+  margin: 0 auto;          /* nice centering if needed */
+}
+
+.product-card.card .product-image-wrap {
+  max-width: 340px;
+  max-height: 460px;       /* safety cap */
+  margin: 0 auto;
+}
+
+.product-card.card .product-title { font-size: 1.05rem; }
+.product-card.card .price-badge   { font-size: 0.9rem; padding: 5px 9px; }
+.product-card.card .btn           { padding: 9px 12px; border-width: 2.5px; }
+
+/* --- Detail view (PDP): larger, but still tasteful --- */
+.product-card.detail {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.product-card.detail .product-image-wrap {
+  max-width: 560px;
+  max-height: 720px;
+  margin: 0 auto 10px;
+}
+
+.product-card.detail .product-title { font-size: 1.25rem; }
+.product-card.detail .price-badge   { font-size: 0.95rem; padding: 6px 10px; }
+
+/* ===================================================================== */
+/* Responsive tweaks                                                      */
+/* ===================================================================== */
+
+@media (max-width: 900px) {
+  .product-card.detail {
+    max-width: 720px;
+  }
+  .product-card.detail .product-image-wrap {
+    max-width: 520px;
+    max-height: 640px;
+  }
+}
+
+@media (max-width: 600px) {
+  .product-card { padding: 14px; gap: 14px; }
+  .product-title { font-size: 1.1rem; }
+
+  .product-card.card {
+    max-width: 100%;
+  }
+  .product-card.card .product-image-wrap {
+    max-width: 100%;
+    max-height: 70vh;      /* avoid taking the whole screen */
+  }
+
+  .product-card.detail {
+    max-width: 100%;
+  }
+  .product-card.detail .product-image-wrap {
+    max-width: 100%;
+    max-height: 75vh;
+  }
+}

@@ -1,0 +1,24 @@
+/* src/components/ProductActions.css */
+
+/* This container handles the LAYOUT of the buttons */
+.product-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  /* This rule makes the buttons stretch to fill space on the detail/presale views */
+  .detail .product-actions .btn,
+  .detail .product-actions form,
+  .presale .product-actions .btn,
+  .presale .product-actions form {
+    flex: 1 1 200px;
+  }
+  
+  /* The style override for the CheckoutButton still needs to know what a .btn looks like */
+  /* We can simplify this later, but for now it ensures consistency */
+  .product-actions form button,
+  .product-actions form .cta-button {
+    width: 100%;
+  }

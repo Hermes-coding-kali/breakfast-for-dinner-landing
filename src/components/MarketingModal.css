@@ -1,0 +1,166 @@
+/* src/components/MarketingModal.css */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(33, 37, 41, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: modal-fade-in 0.3s ease-out forwards;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  --c-paper: #fcfaf5;
+  --c-text: #212529;
+  --c-headline: #fd7e14;
+  --c-button-bg: #20c997;
+  --c-button-hover: #1baa80;
+
+  font-family: 'Poppins', sans-serif;
+  background: var(--c-paper);
+  border-radius: 12px;
+  max-width: 450px;
+  width: 100%;
+  animation: modal-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: center;
+  padding: 30px;
+  /* transform: rotate(-1deg); */
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--c-text);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 2.8rem;
+  opacity: 0.4;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+.modal-close:hover {
+  opacity: 1;
+  transform: rotate(180deg) scale(1.1);
+}
+
+.modal-headline {
+  font-family: 'Patrick Hand', cursive;
+  font-weight: 400;
+  font-size: 3rem;
+  margin: 0 0 15px 0;
+  color: var(--c-headline);
+  line-height: 1.1;
+}
+
+.modal-image-container {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: #000000;
+  transform: rotate(0deg);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* --- Aura Glow Behind the Image --- */
+.modal-image-container::before {
+  content: '';
+  position: absolute;
+  inset: -12px; /* space for glow */
+  border-radius: 20px;
+  background: conic-gradient(
+    from 0deg,
+    #fd7e14,
+    #20c997,
+    #ff4da6,
+    #6f42c1,
+    #fd7e14
+  );
+  filter: blur(14px);
+  opacity: 0.65;
+  z-index: -1;
+  animation: aura-spin 8s linear infinite;
+}
+
+/* Paper-cut frame effect */
+.modal-image-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 3px dashed rgba(33, 37, 41, 0.15);
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.modal-image-container img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes aura-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.modal-body {
+  font-size: 1rem;
+  color: var(--c-text);
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+.modal-cta .cta-button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  background-color: var(--c-button-bg);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 100%;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(32, 201, 151, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.modal-cta .cta-button:hover {
+  background-color: var(--c-button-hover);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(32, 201, 151, 0.4);
+}
+.modal-cta .cta-button:active {
+  transform: translateY(0);
+}
+
+@keyframes modal-pop {
+  from {
+    transform: scale(0.8) rotate(-5deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}

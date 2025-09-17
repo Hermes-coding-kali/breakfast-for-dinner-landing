@@ -1,0 +1,41 @@
+/* src/components/EmailSignup.css */
+
+.email-signup-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;              /* overridden by inline style gap if you set formGap */
+    max-width: 550px;       /* overridden by formWrapStyle.maxWidth from CMS */
+    margin: 0 auto;
+  }
+  
+  /* First + Last name side-by-side */
+  .email-signup-form .name-input {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 160px;
+  }
+  
+  /* Email full width under names */
+  .email-signup-form .email-input {
+    flex-basis: 100%;
+  }
+  
+  /* Submit button centered with a max width */
+  .email-signup-form .submit-button {
+    flex-basis: 100%;
+    max-width: 320px;  /* visual cap; matches buttonMaxWidth */
+    margin: 0 auto;
+    display: block;
+    width: 100%;       /* respects “full width” look */
+  }
+  
+  /* Stack on mobile */
+  @media (max-width: 768px) {
+    .email-signup-form .name-input,
+    .email-signup-form .email-input,
+    .email-signup-form .submit-button {
+      flex-basis: 100%;
+      min-width: 90%;
+    }
+  }
+  

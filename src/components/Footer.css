@@ -1,22 +1,38 @@
 /* src/components/Footer.css */
 .app-footer {
-  background-color: var(--text-dark); /* Dark footer */
-  color: #f0f0f0; /* Light text */
-  /* UPDATED: Reduce vertical padding, adjust horizontal */
-  padding: 5px 25px; /* 12px top/bottom, 25px left/right */
-  margin-top: auto; /* Pushes footer to bottom */
+  background-color: var(--footer-bg);
+  color: var(--footer-text-color);
+  padding: 20px 25px;
+  margin-top: auto;
   font-size: 0.9em;
-  /* Ensure text is centered if not already by default */
   text-align: center;
 }
 
-/* Add styling for links if any are added later */
-/*
-.app-footer a {
-color: var(--sky-blue);
-text-decoration: none;
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
-.app-footer a:hover {
-text-decoration: underline;
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
-*/
+
+.social-icon-link {
+  color: var(--footer-icon-color);
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.social-icon-link:hover {
+  color: var(--footer-icon-hover-color);
+  transform: scale(1.15) translateY(-2px);
+}
+
+.social-icon-link svg {
+  width: 24px;
+  height: 24px;
+}
