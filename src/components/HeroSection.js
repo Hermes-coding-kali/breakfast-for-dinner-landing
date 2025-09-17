@@ -50,16 +50,16 @@ function HeroSection({ data, headerHeight = 0 }) {
     const isAnchorLink = href && href.startsWith('/#');
 
     if (isHome && isAnchorLink) {
-      event.preventDefault(); // This is the key: stop the browser from navigating.
+      event.preventDefault(); // Stop the browser from navigating.
       const targetId = href.split('#')[1];
-      scrollToId(targetId, headerHeight); // Use your existing utility.
+      scrollToId(targetId, headerHeight); // Use our smooth scroll utility.
 
       // This part updates the URL in the address bar without reloading the page.
       if (window.history.pushState) {
         window.history.pushState(null, '', href);
       }
     }
-    // For any other type of link, we do nothing and let the <Button> component's default behavior (via React Router's <Link> or a standard <a>) take over.
+    // For other links, let the Button component handle it.
   };
 
   const styleVars = {
@@ -112,15 +112,25 @@ function HeroSection({ data, headerHeight = 0 }) {
             {buttons.map((b) => {
               const tokens = mergeTokens(b?.style, b?.override);
               const href = b?.link?.href;
+              
+              // Determine link type
+              const isAnchorLink = href && href.startsWith('/#');
               const isExternal = href && /^https?:\/\//i.test(href);
-              const target = b?.link?.openInNewTab || isExternal ? '_blank' : undefined;
+              const isInternalPage = href && href.startsWith('/') && !isAnchorLink;
+
+              // Choose props for the Button component
+              let buttonProps = {};
+              if (isInternalPage) {
+                buttonProps.to = href; // Use React Router's <Link>
+              } else {
+                buttonProps.href = href; // Use a standard <a> tag for anchors and external links
+              }
 
               return (
                 <Button
                   key={b?._key || b?.label}
-                  to={!isExternal ? href : undefined} // Pass href to `to` for internal routing
-                  href={isExternal ? href : undefined} // Only use `href` for true external links
-                  target={target}
+                  {...buttonProps}
+                  target={b?.link?.openInNewTab || isExternal ? '_blank' : undefined}
                   onClick={(e) => handleButtonClick(e, href)}
                   aria-label={b?.link?.ariaLabel || undefined}
                   styleTokens={tokens}
