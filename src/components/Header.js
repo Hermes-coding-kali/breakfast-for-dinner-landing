@@ -109,9 +109,26 @@ function Header({ data, headerHeight = 0 }) {
 
   return (
     <header id="main-header" className="app-header fixed-header" style={styleVars}>
+      {/* Text title (desktop/tablet only; hidden on mobile) */}
       <div className="header-title">
         <Link to="/">{siteTitle || 'Breakfast for Dinner'}</Link>
       </div>
+
+      {/* Image logo (mobile only; hidden on desktop/tablet via CSS) */}
+      <Link
+        to="/"
+        className="header-logo"
+        aria-label={siteTitle ? `${siteTitle} home` : 'Home'}
+      >
+        <img
+          src={mobileLogoUrl || '../assets/Breakfast-header.webp'} // <-- put your mobile logo path here
+          alt={siteTitle || 'Site logo'}
+          width="120"
+          height="36"
+          loading="eager"
+          decoding="async"
+        />
+      </Link>
 
       <div className="header-right-group">
         <nav
