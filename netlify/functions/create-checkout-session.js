@@ -50,11 +50,19 @@ exports.handler = async (event) => {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
-      // --- THIS IS THE MAGIC PART ---
       automatic_tax: { enabled: true },
-      // -----------------------------
+      
+      // --- ADD THIS SECTION ---
+      shipping_options: [
+        {
+          shipping_rate: 'shr_...', // <-- PASTE YOUR SHIPPING RATE ID HERE
+        },
+      ],
+      // ------------------------
+
       success_url: `${process.env.URL}/success`,
       cancel_url: `${process.env.URL}/cancel`,
+      // This line was already here and is required for shipping!
       shipping_address_collection: { allowed_countries: ['CA'] },
       allow_promotion_codes: true,
     });
