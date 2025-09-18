@@ -55,7 +55,7 @@ exports.handler = async (event) => {
       // --- ADD THIS SECTION ---
       shipping_options: [
         {
-          shipping_rate: 'shr_...', // <-- PASTE YOUR SHIPPING RATE ID HERE
+          shipping_rate: 'shr_1S8eOvDgMYpxoSaOrxUIVsU8', // <-- PASTE YOUR SHIPPING RATE ID HERE
         },
       ],
       // ------------------------
