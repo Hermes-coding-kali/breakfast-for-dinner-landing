@@ -121,7 +121,7 @@ function Header({ data, headerHeight = 0 }) {
         aria-label={siteTitle ? `${siteTitle} home` : 'Home'}
       >
         <img
-          src={mobileLogoUrl || '../assets/Breakfast-header.webp'} // <-- put your mobile logo path here
+          src={'../assets/Breakfast-header.webp'} // <-- put your mobile logo path here
           alt={siteTitle || 'Site logo'}
           width="120"
           height="36"
