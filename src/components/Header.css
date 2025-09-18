@@ -21,6 +21,13 @@
   transition: background-color 0.3s ease;
 }
 
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .header-title a {
   font-family: 'Lilita One', cursive;
   font-weight: 400;
@@ -32,6 +39,12 @@
   text-stroke: 1px var(--header-title-stroke);
   text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
+}
+
+.mobile-logo {
+  display: none; /* Hidden by default */
+  height: 50px; /* Adjust size as needed */
+  width: auto;
 }
 
 .header-right-group {
@@ -135,7 +148,6 @@
   width: 25px;
   height: 3px;
   background-color: var(--header-title-color);
-  /* Match title color */
   margin: 5px 0;
   border-radius: 1px;
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -146,20 +158,40 @@
     padding: 10px 15px;
   }
 
-  .header-title a {
-    font-size: 1.6em;
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hamburger-button {
+    display: block;
+    order: 1; /* Left */
+  }
+
+  .header-title {
+    order: 2; /* Center */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .header-title .desktop-title {
+      display: none;
+  }
+
+  .mobile-logo {
+    display: block;
   }
 
   .header-right-group {
+    order: 3; /* Right */
     gap: 15px;
   }
 
   .header-nav {
     display: none;
-  }
-
-  .hamburger-button {
-    display: block;
   }
 
   .header-nav.mobile-open {
@@ -209,16 +241,5 @@
 
   .hamburger-button[aria-expanded="true"] span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
-  }
-}
-
-@media (max-width: 768px) {
-  .app-header {
-    justify-content: center;
-  }
-
-  .header-right-group {
-    position: absolute;
-    right: 12px;
   }
 }

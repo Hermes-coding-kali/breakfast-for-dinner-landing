@@ -3,14 +3,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../stores/cartStore';
 import './Header.css';
+import headerImage from '../assets/Breakfast-header.webp'; // Import the image
 
 // The navigation links are now defined here
 const navItems = [
   { label: 'Home', path: '/#hero' },
   { label: 'Store', path: '/store' },
   { label: 'About', path: '/#about' }, // This is an anchor link to the 'about' section on the homepage
-  { label: 'Game', path: '/#food-sort-game' }, // <-- ADDED THIS LINE
-
+  { label: 'Game', path: '/#food-sort-game' },
 ];
 
 // Helper to get hex value from Sanity color object
@@ -109,53 +109,7 @@ function Header({ data, headerHeight = 0 }) {
 
   return (
     <header id="main-header" className="app-header fixed-header" style={styleVars}>
-      <div className="header-title">
-        <Link to="/">{siteTitle || 'Breakfast for Dinner'}</Link>
-      </div>
-
-      <div className="header-right-group">
-        <nav
-          className={`header-nav ${isOpen ? 'mobile-open' : ''}`}
-          id="mobile-nav-list"
-          aria-label="Primary"
-        >
-          <ul>
-            {navItems.map((item) => {
-              const { label, path } = item;
-              const isAnchor = path.includes('#');
-
-              return (
-                <li key={path}>
-                  {isAnchor ? (
-                    <a href={path} onClick={(e) => handleNavClick(e, path)}>
-                      {label}
-                    </a>
-                  ) : (
-                    <Link to={path}>{label}</Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        <button
-          onClick={toggleCart}
-          className="cart-button"
-          aria-label={`View cart with ${totalItems} item${totalItems === 1 ? '' : 's'}`}
-        >
-          <svg
-            className="cart-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
-          </svg>
-          {totalItems > 0 && <span className="cart-item-count" aria-live="polite">{totalItems}</span>}
-        </button>
-
+      <div className="header-content">
         <button
           className="hamburger-button"
           onClick={toggleMenu}
@@ -167,6 +121,57 @@ function Header({ data, headerHeight = 0 }) {
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </button>
+
+        <div className="header-title">
+          <Link to="/">
+            <span className="desktop-title">{siteTitle || 'Breakfast for Dinner'}</span>
+            <img src={headerImage} alt="Breakfast for Dinner logo" className="mobile-logo" />
+          </Link>
+        </div>
+
+        <div className="header-right-group">
+          <nav
+            className={`header-nav ${isOpen ? 'mobile-open' : ''}`}
+            id="mobile-nav-list"
+            aria-label="Primary"
+          >
+            <ul>
+              {navItems.map((item) => {
+                const { label, path } = item;
+                const isAnchor = path.includes('#');
+
+                return (
+                  <li key={path}>
+                    {isAnchor ? (
+                      <a href={path} onClick={(e) => handleNavClick(e, path)}>
+                        {label}
+                      </a>
+                    ) : (
+                      <Link to={path}>{label}</Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <button
+            onClick={toggleCart}
+            className="cart-button"
+            aria-label={`View cart with ${totalItems} item${totalItems === 1 ? '' : 's'}`}
+          >
+            <svg
+              className="cart-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+            {totalItems > 0 && <span className="cart-item-count" aria-live="polite">{totalItems}</span>}
+          </button>
+        </div>
       </div>
     </header>
   );
