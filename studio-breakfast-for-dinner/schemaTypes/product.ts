@@ -54,30 +54,35 @@ export default defineType({
             type: 'boolean',
             initialValue: false,
         }),
-        // --- REMOVED price and currency FIELDS ---
-        // The price will be fetched directly from Stripe.
-
         defineField({
             name: 'stripe',
             title: 'Stripe Integration',
             type: 'object',
             options: { collapsible: true, collapsed: false },
-            validation: (Rule) => Rule.required(), // require that the whole object exists
+            validation: (Rule) => Rule.required(),
             fields: [
                 defineField({
                     name: 'stripePriceId',
                     title: 'Stripe Price ID',
                     type: 'string',
                     description: 'Copy the Price ID from Stripe (e.g., price_1M...)',
-                    validation: (Rule) => Rule.required(), // require that this value is filled in
+                    validation: (Rule) => Rule.required(),
                 }),
+                // ADD THIS FIELD
+                defineField({
+                    name: 'taxCode',
+                    title: 'Stripe Tax Code',
+                    type: 'string',
+                    description: 'e.g., "txcd_92010004" for Children\'s Books (Physical).',
+                    initialValue: 'txcd_92010004'
+                })
             ],
         }),
     ],
     preview: {
         select: {
             title: 'name',
-            media: 'images.0.asset', // Show the first image in previews
+            media: 'images.0.asset',
             category: 'category.title',
         },
         prepare({ title, media, category }) {

@@ -1,3 +1,4 @@
+// netlify/functions/create-checkout-session.js
 require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { createClient } = require('@sanity/client');
@@ -21,8 +22,6 @@ exports.handler = async (event) => {
     }
 
     const body = JSON.parse(event.body || '{}');
-
-    // Support both shapes: { items: [...] } OR { productId, quantity }
     let items = Array.isArray(body.items) && body.items.length
       ? body.items
       : (body.productId ? [{ productId: body.productId, quantity: body.quantity || 1 }] : []);
@@ -31,12 +30,6 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing or invalid cart items' }) };
     }
 
-    // Optional tax rates via env
-    const taxRates = [];
-    if (process.env.STRIPE_PST_TAX_RATE_ID) taxRates.push(process.env.STRIPE_PST_TAX_RATE_ID);
-    if (process.env.STRIPE_GST_TAX_RATE_ID) taxRates.push(process.env.STRIPE_GST_TAX_RATE_ID);
-
-    // Validate product IDs in Sanity and read each product's Stripe Price ID
     const ids = items.map((i) => i.productId);
     const sanityProducts = await client.fetch(
       `*[_type == "product" && _id in $ids]{ _id, name, "priceId": stripe.stripePriceId }`,
@@ -51,21 +44,21 @@ exports.handler = async (event) => {
       return {
         price: p.priceId,
         quantity: i.quantity || 1,
-        tax_rates: taxRates.length ? taxRates : undefined,
       };
     });
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
-      // ✅ Back to your dedicated pages:
+      // --- THIS IS THE MAGIC PART ---
+      automatic_tax: { enabled: true },
+      // -----------------------------
       success_url: `${process.env.URL}/success`,
       cancel_url: `${process.env.URL}/cancel`,
       shipping_address_collection: { allowed_countries: ['CA'] },
       allow_promotion_codes: true,
     });
 
-    // Return URL for direct redirect
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) };
   } catch (err) {
     console.error('Error creating checkout session:', err);
