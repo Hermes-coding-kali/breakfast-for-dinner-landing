@@ -46,7 +46,7 @@ exports.handler = async (event) => {
         quantity: i.quantity || 1,
       };
     });
-
+ 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
