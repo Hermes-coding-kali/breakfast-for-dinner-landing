@@ -8,10 +8,10 @@ if (!process.env.SANITY_PROJECT_ID) throw new Error('Missing SANITY_PROJECT_ID')
 if (!process.env.SANITY_DATASET) throw new Error('Missing SANITY_DATASET');
 if (!process.env.URL) throw new Error('Missing URL for redirect URLs');
 
-const client = sanityClient({
+const client = createClient({
   projectId: process.env.SANITY_PROJECT_ID,
   dataset: process.env.SANITY_DATASET,
-  token: process.env.SANITY_API_TOKEN,
+  apiVersion: '2023-01-01',
   useCdn: false,
 });
 
