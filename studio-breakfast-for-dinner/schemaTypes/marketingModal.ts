@@ -1,4 +1,4 @@
-// studio-breakfast-for-dinner/schemaTypes/marketingModal.ts
+// schemaTypes/marketingModal.ts
 import {defineField, defineType} from 'sanity'
 import {PresentationIcon} from '@sanity/icons'
 
@@ -55,6 +55,19 @@ export default defineType({
       type: 'string',
       description: 'The text for the call-to-action button (e.g., "Pre-order Now")',
       initialValue: 'Pre-order Now',
+    }),
+    defineField({
+      name: 'buttonStyle',
+      title: 'Base Button Style',
+      type: 'reference',
+      to: [{type: 'buttonStyle'}],
+      description: 'Select a saved button style preset.',
+    }),
+    defineField({
+      name: 'buttonOverride',
+      title: 'Button Style Overrides',
+      type: 'buttonStyleOverride',
+      description: 'Fine-tune the button style for this modal only.',
     }),
   ],
   preview: {

@@ -32,7 +32,10 @@ const SITE_CONFIG_QUERY = /* groq */ `*[_type == "siteConfig"][0]{
   "headerStyle": headerStyle->{...},
   "headerStyleOverride": headerStyleOverride{...},
   "footerStyle": footerStyle->{...},
-  "footerStyleOverride": footerStyleOverride{...}
+  "footerStyleOverride": footerStyleOverride{...},
+  "featuredProduct": featuredProduct->{ _id, name, images },
+  "buttonStyle": buttonStyle->{...},
+  "buttonOverride": buttonOverride{...}
 }`;
 function App() {
   const { setModalData, openModal } = useModalStore();
