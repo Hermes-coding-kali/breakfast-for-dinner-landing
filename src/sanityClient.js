@@ -4,8 +4,9 @@ import imageUrlBuilder from '@sanity/image-url'; // <-- For processing images
 
 // This is your existing code to fetch data
 const client = createClient({
-  projectId: '14ptmpdh',
-  dataset: 'production',
+  // Use environment variables for project ID and dataset
+  projectId: process.env.SANITY_PROJECT_ID,
+  dataset: process.env.SANITY_DATASET,
   useCdn: true,
   apiVersion: '2024-08-14',
 });
