@@ -20,7 +20,7 @@
   height: 100%;
   overflow: hidden;
   z-index: 0;
-}
+} 
 
 .confetti-container span {
   position: absolute;
