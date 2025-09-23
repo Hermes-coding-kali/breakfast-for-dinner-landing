@@ -10,33 +10,76 @@ exports.handler = async ({ body, headers }) => {
   let event;
 
   try {
-    // Verify the event came from Stripe
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
     console.log(`Webhook signature verification failed.`, err.message);
     return { statusCode: 400, body: `Webhook Error: ${err.message}` };
   }
 
-  // Handle the 'checkout.session.completed' event
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object; 
+    const session = event.data.object;
+
+    // --- NEW: Fetch line items from the session ---
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+      expand: ['data.price.product'], // This expands the product details
+    });
+
+    // --- Format the shipping address and line items ---
+    const shippingDetails = session.shipping_details;
+    const address = shippingDetails.address;
+    const formattedAddress = `
+      ${shippingDetails.name}<br>
+      ${address.line1}<br>
+      ${address.line2 ? address.line2 + '<br>' : ''}
+      ${address.city}, ${address.state} ${address.postal_code}<br>
+      ${address.country}
+    `;
+
+    const itemsPurchased = lineItems.data.map(item => `
+      <li>
+        <strong>${item.price.product.name}</strong><br>
+        Quantity: ${item.quantity}
+      </li>
+    `).join('');
+
     const customerEmail = session.customer_details.email;
 
     try {
-      // Email to the Owner
+      // --- Email to the Owner (Unchanged) ---
       await resend.emails.send({
-        from: 'Sales <sales@breakfastfordinner.ca>', // Use your verified Resend domain
-        to: ['br3akfast.f0r.dinn3r@gmail.com'], // Replace with the owner's actual email
-        subject: 'New Sale on Breakfast for Dinner!',
-        html: `<h2>You made a new sale!</h2><p><strong>Customer Email:</strong> ${customerEmail}</p><p><strong>Total:</strong> $${(session.amount_total / 100).toFixed(2)}</p>`,
+        from: 'Sales <sales@breakfastfordinner.ca>',
+        to: ['mayahermeskali@gmail.com'],
+        subject: `New Sale! Order #${session.id.substring(8)}`, // Add a unique ID
+        html: `<h2>You made a new sale!</h2>
+               <p><strong>Customer Email:</strong> ${customerEmail}</p>
+               <p><strong>Total:</strong> $${(session.amount_total / 100).toFixed(2)}</p>
+               <p><strong>Order ID:</strong> ${session.id}</p>`,
       });
 
-      // Email to the Publishing Company
+      // --- NEW: Detailed Email to the Publishing Company ---
       await resend.emails.send({
-        from: 'New Order <orders@breakfastfordinner.ca>', // Use your verified Resend domain
-        to: ['hermes.kali.music@gmail.com'], // Replace with the publisher's actual email
-        subject: 'New Book Order Received',
-        html: `<h2>A new book order has been placed.</h2><p>Please prepare the order for shipment. Details can be found in the sales dashboard.</p>`,
+        from: 'New Order <orders@breakfastfordinner.ca>',
+        to: ['hermes.kali.music@gmail.com'],
+        subject: `New Order Notification - Please Ship (Order #${session.id.substring(8)})`,
+        html: `
+          <h1>New Order to Fulfill</h1>
+          <p>A new book order has been placed and requires shipment. Please see the details below.</p>
+          
+          <h2>Shipping Address:</h2>
+          <p>
+            ${formattedAddress}
+          </p>
+          
+          <h2>Customer Contact:</h2>
+          <p>${customerEmail}</p>
+          
+          <h2>Items to Ship:</h2>
+          <ul>
+            ${itemsPurchased}
+          </ul>
+
+          <p><strong>Stripe Order ID:</strong> ${session.id}</p>
+        `,
       });
 
       console.log('Internal sale notification emails sent successfully via Resend.');
