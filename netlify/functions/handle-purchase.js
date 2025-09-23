@@ -19,7 +19,7 @@ exports.handler = async ({ body, headers }) => {
 
   // Handle the 'checkout.session.completed' event
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
+    const session = event.data.object; 
     const customerEmail = session.customer_details.email;
 
     try {
