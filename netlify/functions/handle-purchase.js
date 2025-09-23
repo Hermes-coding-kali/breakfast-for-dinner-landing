@@ -19,21 +19,28 @@ exports.handler = async ({ body, headers }) => {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
 
-    // --- NEW: Fetch line items from the session ---
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-      expand: ['data.price.product'], // This expands the product details
+      expand: ['data.price.product'],
     });
 
-    // --- Format the shipping address and line items ---
-    const shippingDetails = session.shipping_details;
-    const address = shippingDetails.address;
+    // --- ROBUST FIX FOR SHIPPING DETAILS ---
+    // Use shipping_details if it exists, otherwise fall back to customer_details.
+    const details = session.shipping_details || session.customer_details;
+    if (!details || !details.address) {
+      // If no address is found anywhere, stop to prevent errors.
+      console.error('No shipping or customer address found in the session.');
+      return { statusCode: 400, body: 'Missing address information.' };
+    }
+    
+    const address = details.address;
     const formattedAddress = `
-      ${shippingDetails.name}<br>
+      ${details.name}<br>
       ${address.line1}<br>
       ${address.line2 ? address.line2 + '<br>' : ''}
       ${address.city}, ${address.state} ${address.postal_code}<br>
       ${address.country}
     `;
+    // ------------------------------------
 
     const itemsPurchased = lineItems.data.map(item => `
       <li>
@@ -45,18 +52,18 @@ exports.handler = async ({ body, headers }) => {
     const customerEmail = session.customer_details.email;
 
     try {
-      // --- Email to the Owner (Unchanged) ---
+      // --- Email to the Owner ---
       await resend.emails.send({
         from: 'Sales <sales@breakfastfordinner.ca>',
         to: ['mayahermeskali@gmail.com'],
-        subject: `New Sale! Order #${session.id.substring(8)}`, // Add a unique ID
+        subject: `New Sale! Order #${session.id.substring(8)}`,
         html: `<h2>You made a new sale!</h2>
                <p><strong>Customer Email:</strong> ${customerEmail}</p>
                <p><strong>Total:</strong> $${(session.amount_total / 100).toFixed(2)}</p>
                <p><strong>Order ID:</strong> ${session.id}</p>`,
       });
 
-      // --- NEW: Detailed Email to the Publishing Company ---
+      // --- Detailed Email to the Publishing Company ---
       await resend.emails.send({
         from: 'New Order <orders@breakfastfordinner.ca>',
         to: ['hermes.kali.music@gmail.com'],
