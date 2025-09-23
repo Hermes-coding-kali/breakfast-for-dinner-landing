@@ -1,0 +1,22 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Burnaby",
+			"country": {
+				"code": "CA",
+				"name": "Canada"
+			},
+			"subdivision": {
+				"code": "BC",
+				"name": "British Columbia"
+			},
+			"timezone": "America/Vancouver",
+			"latitude": 49.2311,
+			"longitude": -122.956,
+			"postalCode": "V5E"
+		},
+		"timestamp": 1758011220978
+	},
+	"liveTunnelSlug": "0598f6ab",
+	"siteId": "493cc285-152a-4e87-8095-bb7ebd07cb7c"
+}

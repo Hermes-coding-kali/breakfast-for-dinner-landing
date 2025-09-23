@@ -1,0 +1,5787 @@
+[
+  {
+    "fields": [
+      {
+        "name": "h",
+        "type": "number",
+        "title": "Hue"
+      },
+      {
+        "name": "s",
+        "type": "number",
+        "title": "Saturation"
+      },
+      {
+        "name": "l",
+        "type": "number",
+        "title": "Lightness"
+      },
+      {
+        "name": "a",
+        "type": "number",
+        "title": "Alpha"
+      }
+    ],
+    "name": "hslaColor",
+    "type": "object",
+    "title": "Hue Saturation Lightness"
+  },
+  {
+    "fields": [
+      {
+        "name": "h",
+        "type": "number",
+        "title": "Hue"
+      },
+      {
+        "name": "s",
+        "type": "number",
+        "title": "Saturation"
+      },
+      {
+        "name": "v",
+        "type": "number",
+        "title": "Value"
+      },
+      {
+        "name": "a",
+        "type": "number",
+        "title": "Alpha"
+      }
+    ],
+    "name": "hsvaColor",
+    "type": "object",
+    "title": "Hue Saturation Value"
+  },
+  {
+    "fields": [
+      {
+        "name": "r",
+        "type": "number",
+        "title": "Red"
+      },
+      {
+        "name": "g",
+        "type": "number",
+        "title": "Green"
+      },
+      {
+        "name": "b",
+        "type": "number",
+        "title": "Blue"
+      },
+      {
+        "name": "a",
+        "type": "number",
+        "title": "Alpha"
+      }
+    ],
+    "name": "rgbaColor",
+    "type": "object",
+    "title": "Red Green Blue (rgb)"
+  },
+  {
+    "fields": [
+      {
+        "name": "hex",
+        "type": "string"
+      },
+      {
+        "name": "alpha",
+        "type": "number"
+      },
+      {
+        "name": "hsl",
+        "type": "hslaColor",
+        "title": "Hue Saturation Lightness"
+      },
+      {
+        "name": "hsv",
+        "type": "hsvaColor",
+        "title": "Hue Saturation Value"
+      },
+      {
+        "name": "rgb",
+        "type": "rgbaColor",
+        "title": "Red Green Blue (rgb)"
+      }
+    ],
+    "name": "color",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Product Name"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "images",
+        "type": "array",
+        "title": "Product Images"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "category"
+          }
+        ],
+        "name": "category",
+        "type": "reference"
+      },
+      {
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "description",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Leave empty for unlimited stock.",
+        "name": "inventory",
+        "type": "number"
+      },
+      {
+        "initialValue": false,
+        "name": "isFeatured",
+        "type": "boolean",
+        "title": "Feature on homepage?"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": false
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Copy the Price ID from Stripe (e.g., price_1M...)",
+            "name": "stripePriceId",
+            "type": "string",
+            "title": "Stripe Price ID"
+          },
+          {
+            "initialValue": "txcd_92010004",
+            "description": "e.g., \"txcd_92010004\" for Children's Books (Physical).",
+            "name": "taxCode",
+            "type": "string",
+            "title": "Stripe Tax Code"
+          }
+        ],
+        "name": "stripe",
+        "type": "object",
+        "title": "Stripe Integration"
+      }
+    ],
+    "name": "product",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      }
+    ],
+    "name": "category",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Holiday 2025 Book Presale\"",
+        "name": "title",
+        "type": "string",
+        "title": "Internal Title"
+      },
+      {
+        "initialValue": false,
+        "description": "Turn this on to make the modal appear on the website.",
+        "name": "enabled",
+        "type": "boolean",
+        "title": "Enable Modal"
+      },
+      {
+        "description": "The main marketing message (e.g., \"Limited Time Offer!\")",
+        "name": "headline",
+        "type": "string"
+      },
+      {
+        "description": "Additional details or descriptive text.",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "body",
+        "type": "array",
+        "title": "Body Text"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "backgroundImage",
+        "type": "image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Select the product this modal will sell.",
+        "to": [
+          {
+            "type": "product"
+          }
+        ],
+        "name": "featuredProduct",
+        "type": "reference"
+      },
+      {
+        "initialValue": "Pre-order Now",
+        "description": "The text for the call-to-action button (e.g., \"Pre-order Now\")",
+        "name": "ctaText",
+        "type": "string",
+        "title": "Button Text"
+      },
+      {
+        "description": "Select a saved button style preset.",
+        "to": [
+          {
+            "type": "buttonStyle"
+          }
+        ],
+        "name": "buttonStyle",
+        "type": "reference",
+        "title": "Base Button Style"
+      },
+      {
+        "description": "Fine-tune the button style for this modal only.",
+        "name": "buttonOverride",
+        "type": "buttonStyleOverride",
+        "title": "Button Style Overrides"
+      }
+    ],
+    "name": "marketingModal",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": false,
+        "description": "Turn this on to show the banner across the top of the site.",
+        "name": "enabled",
+        "type": "boolean",
+        "title": "Enable Banner"
+      },
+      {
+        "description": "When should the banner start showing?",
+        "name": "startDate",
+        "type": "datetime"
+      },
+      {
+        "description": "When should the banner stop showing?",
+        "name": "endDate",
+        "type": "datetime"
+      },
+      {
+        "rows": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Main message (e.g., \"Free shipping on all orders this week!\")",
+        "name": "text",
+        "type": "text",
+        "title": "Banner Text"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Info",
+              "value": "info"
+            },
+            {
+              "title": "Promo",
+              "value": "promo"
+            },
+            {
+              "title": "Warning",
+              "value": "warning"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "info",
+        "name": "variant",
+        "type": "string",
+        "title": "Banner Style"
+      },
+      {
+        "description": "Add one or more action buttons (e.g., \"Shop Now\", \"Learn More\").",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "text",
+                "type": "string",
+                "title": "Button Text"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "link",
+                "type": "string",
+                "title": "Button Link"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "ctas",
+        "type": "array",
+        "title": "Calls to Action"
+      },
+      {
+        "description": "Choose a custom background color for the banner.",
+        "name": "backgroundColor",
+        "type": "color"
+      },
+      {
+        "description": "Choose a custom color for the text.",
+        "name": "textColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Small image (like a seasonal graphic or logo).",
+        "name": "image",
+        "type": "image",
+        "title": "Optional Icon / Graphic"
+      }
+    ],
+    "name": "marketingBanner",
+    "type": "document",
+    "title": "Announcement Banner"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Create brand color “tokens” the site can reuse (e.g., “Brand Purple”, “Text Dark”).",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 2
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 40
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "A friendly name (e.g., “Brand Purple”, “Accent Orange”).",
+                "name": "name",
+                "type": "string",
+                "title": "Color Token Name"
+              },
+              {
+                "options": {
+                  "disableAlpha": true,
+                  "colorList": [
+                    "#8e24aa",
+                    "#fb8c00",
+                    "#212121",
+                    "#ffffff",
+                    "#ffeb3b",
+                    "#ffa726",
+                    "#ff7043",
+                    "#2196f3",
+                    "#42a5f5"
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Choose from your brand colors (you can still pick a custom color).",
+                "name": "value",
+                "type": "color",
+                "title": "Pick Color"
+              }
+            ],
+            "type": "object",
+            "name": "colorToken"
+          }
+        ],
+        "name": "colors",
+        "type": "array",
+        "title": "Color Palette"
+      },
+      {
+        "description": "Define reusable text styles used across the site.",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 2
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 40
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "e.g., “Page Heading”, “Body Paragraph”, “Button Label”.",
+                "name": "name",
+                "type": "string",
+                "title": "Style Name"
+              },
+              {
+                "options": {
+                  "list": [
+                    "Lilita One",
+                    "Baloo 2",
+                    "Poppins",
+                    "Patrick Hand"
+                  ]
+                },
+                "description": "Choose from the available brand fonts.",
+                "name": "font",
+                "type": "string",
+                "title": "Font Family"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 100
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 900
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "How bold the text should be (100–900). 400 = normal, 700 = bold.",
+                "name": "fontWeight",
+                "type": "number"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "e.g., 1, 1.25, 2 (1rem is usually 16px).",
+                "name": "fontSize",
+                "type": "number",
+                "title": "Font Size (rem)"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Unitless multiplier (e.g., 1.2).",
+                "name": "lineHeight",
+                "type": "number"
+              },
+              {
+                "description": "Optional spacing between letters, in ems.",
+                "name": "letterSpacing",
+                "type": "number",
+                "title": "Letter Spacing (em)"
+              }
+            ],
+            "type": "object",
+            "name": "textStyle"
+          }
+        ],
+        "name": "typography",
+        "type": "array"
+      },
+      {
+        "description": "Define reusable button styles (e.g., “Primary”, “Secondary”). These control spacing, corners, and colors.",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 2
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 40
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Give this style a clear name (e.g., “Primary”, “Secondary”).",
+                "name": "name",
+                "type": "string",
+                "title": "Button Style Name"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Space inside the button on the left and right.",
+                "name": "paddingX",
+                "type": "number",
+                "title": "Horizontal Padding (px)"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Space inside the button on the top and bottom.",
+                "name": "paddingY",
+                "type": "number",
+                "title": "Vertical Padding (px)"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "0 = square; higher numbers = more rounded.",
+                "name": "borderRadius",
+                "type": "number",
+                "title": "Corner Roundness (px)"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Outline thickness. Set 0 for no border.",
+                "name": "borderWidth",
+                "type": "number",
+                "title": "Border Thickness (px)"
+              },
+              {
+                "options": {
+                  "disableAlpha": true,
+                  "colorList": [
+                    "#8e24aa",
+                    "#fb8c00",
+                    "#212121",
+                    "#ffffff",
+                    "#ffeb3b",
+                    "#ffa726",
+                    "#ff7043",
+                    "#2196f3",
+                    "#42a5f5"
+                  ]
+                },
+                "description": "Color of the label text.",
+                "name": "textColor",
+                "type": "color"
+              },
+              {
+                "options": {
+                  "disableAlpha": true,
+                  "colorList": [
+                    "#8e24aa",
+                    "#fb8c00",
+                    "#212121",
+                    "#ffffff",
+                    "#ffeb3b",
+                    "#ffa726",
+                    "#ff7043",
+                    "#2196f3",
+                    "#42a5f5"
+                  ]
+                },
+                "description": "Fill color behind the text.",
+                "name": "backgroundColor",
+                "type": "color"
+              },
+              {
+                "options": {
+                  "disableAlpha": true,
+                  "colorList": [
+                    "#8e24aa",
+                    "#fb8c00",
+                    "#212121",
+                    "#ffffff",
+                    "#ffeb3b",
+                    "#ffa726",
+                    "#ff7043",
+                    "#2196f3",
+                    "#42a5f5"
+                  ]
+                },
+                "description": "Outline color (when Border Thickness > 0).",
+                "name": "borderColor",
+                "type": "color"
+              }
+            ],
+            "type": "object",
+            "name": "buttonStyle"
+          }
+        ],
+        "name": "buttons",
+        "type": "array",
+        "title": "Button Styles"
+      }
+    ],
+    "name": "designSystem",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Breakfast for Dinner",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 60
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The official name of the site. This appears in browser tabs, search engine results, and social media links.",
+        "name": "siteTitle",
+        "type": "string"
+      },
+      {
+        "initialValue": "https://example.com",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main web address for the site (e.g., https://breakfastfordinner.com). This is crucial for SEO.",
+        "name": "siteUrl",
+        "type": "url",
+        "title": "Site URL"
+      },
+      {
+        "initialValue": "en-US",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "regex",
+                "constraint": {
+                  "pattern": "/^[a-z]{2,3}(-[A-Z]{2})?$/",
+                  "invert": false
+                }
+              }
+            ],
+            "level": "warning",
+            "message": "Use a valid language tag like \"en-US\""
+          }
+        ],
+        "description": "The primary language of the site content, specified by a BCP 47 tag (e.g., \"en-US\" for English/United States or \"fr-CA\" for French/Canada).",
+        "name": "locale",
+        "type": "string",
+        "title": "Primary Language"
+      },
+      {
+        "description": "Select a saved Header Style preset to apply to the main site header.",
+        "to": [
+          {
+            "type": "headerStyle"
+          }
+        ],
+        "name": "headerStyle",
+        "type": "reference",
+        "title": "Base Header Style"
+      },
+      {
+        "description": "Fine-tune the header by overriding specific fields from the selected Base Style. Any field you leave blank here will use the setting from the Base Style.",
+        "name": "headerStyleOverride",
+        "type": "headerStyle",
+        "title": "Header Style Overrides (Optional)"
+      },
+      {
+        "initialValue": "© {year} CoCo Bean. All Rights Reserved.",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 140
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The copyright or short message displayed in the footer. Use {year} to automatically display the current year.",
+        "name": "footerText",
+        "type": "string"
+      },
+      {
+        "initialValue": [
+          {
+            "_type": "socialLink",
+            "platform": "instagram",
+            "url": "https://instagram.com"
+          },
+          {
+            "_type": "socialLink",
+            "platform": "twitter",
+            "url": "https://twitter.com"
+          },
+          {
+            "_type": "socialLink",
+            "platform": "facebook",
+            "url": "https://facebook.com"
+          }
+        ],
+        "description": "Add links to your social media profiles. These will appear as icons in the footer.",
+        "of": [
+          {
+            "type": "socialLink",
+            "title": "Social Media Link"
+          }
+        ],
+        "name": "socialLinks",
+        "type": "array",
+        "title": "Social Media Links"
+      },
+      {
+        "description": "Select a saved Footer Style preset.",
+        "to": [
+          {
+            "type": "footerStyle"
+          }
+        ],
+        "name": "footerStyle",
+        "type": "reference",
+        "title": "Base Footer Style"
+      },
+      {
+        "description": "Fine-tune the footer by overriding specific fields from the selected Base Style.",
+        "name": "footerStyleOverride",
+        "type": "footerStyle",
+        "title": "Footer Style Overrides (Optional)"
+      },
+      {
+        "initialValue": "%s | Breakfast for Dinner",
+        "description": "A template for page titles in search results. The \"%s\" will be replaced with the individual page's title.",
+        "name": "defaultSeoTitleTemplate",
+        "type": "string",
+        "title": "SEO Title Template"
+      },
+      {
+        "rows": 3,
+        "initialValue": "Discover the delightful world of \"Breakfast for Dinner,\" a charming book by CoCo Bean that celebrates the joy of morning meals at any time of day.",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 160
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "A short, compelling summary (up to 160 characters) to show in search results for pages that don't have their own specific description.",
+        "name": "defaultSeoDescription",
+        "type": "text",
+        "title": "Default SEO Description"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "The image that appears when the site is shared on social media (e.g., Facebook, Twitter), if a specific page doesn't have its own share image.",
+        "name": "defaultSeoImage",
+        "type": "image",
+        "title": "Default Social Share Image"
+      },
+      {
+        "initialValue": false,
+        "description": "Enable this to add a \"noindex\" tag sitewide, telling search engines like Google not to list your site in their results. Useful for development or private sites.",
+        "name": "noindex",
+        "type": "boolean",
+        "title": "Discourage Search Engines"
+      },
+      {
+        "initialValue": false,
+        "description": "Enable this to add a \"nofollow\" tag to all external links, suggesting that search engines should not follow them.",
+        "name": "nofollow",
+        "type": "boolean",
+        "title": "Nofollow Outbound Links"
+      },
+      {
+        "description": "Your Google Analytics Measurement ID (e.g., G-XXXXXXX) to enable site tracking.",
+        "name": "analyticsId",
+        "type": "string",
+        "title": "Google Analytics ID (optional)"
+      }
+    ],
+    "name": "siteConfig",
+    "type": "document",
+    "title": "Site Configuration"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Page Title"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "URL path for this page (e.g., \"about\" → /about)",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "rows": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Editor-only note about the page’s purpose (not shown on site).",
+        "name": "description",
+        "type": "text",
+        "title": "Internal Description"
+      },
+      {
+        "description": "Add, remove, and reorder sections to build the page.",
+        "of": [
+          {
+            "type": "heroSection"
+          },
+          {
+            "type": "aboutSection"
+          },
+          {
+            "type": "featuredItemSection",
+            "title": "Featured Item"
+          },
+          {
+            "type": "emailSignupSection"
+          },
+          {
+            "type": "foodSortGameSection"
+          }
+        ],
+        "name": "pageBuilder",
+        "type": "array",
+        "title": "Page Sections"
+      },
+      {
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 60
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Optional override. If empty, defaults to Page Title.",
+            "name": "metaTitle",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 160
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "metaDescription",
+            "type": "text"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "description": "Used for link previews if set.",
+            "name": "ogImage",
+            "type": "image",
+            "title": "Open Graph Image"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "canonicalUrl",
+            "type": "url",
+            "title": "Canonical URL (optional)"
+          },
+          {
+            "initialValue": false,
+            "name": "noindex",
+            "type": "boolean",
+            "title": "Noindex (exclude from search engines)"
+          },
+          {
+            "initialValue": false,
+            "name": "nofollow",
+            "type": "boolean",
+            "title": "Nofollow outbound links"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      },
+      {
+        "description": "Optional: controls when the page is considered “published.”",
+        "name": "publishedAt",
+        "type": "datetime",
+        "title": "Publish Date"
+      },
+      {
+        "initialValue": false,
+        "name": "excludeFromNav",
+        "type": "boolean",
+        "title": "Hide from Navigation"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Use to sort pages in menus (lower first).",
+        "name": "order",
+        "type": "number",
+        "title": "Manual Order"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Default",
+              "value": "default"
+            },
+            {
+              "title": "Landing (wide)",
+              "value": "landing"
+            },
+            {
+              "title": "Narrow (readable)",
+              "value": "narrow"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "default",
+        "name": "layout",
+        "type": "string"
+      }
+    ],
+    "name": "page",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "eyebrow",
+        "type": "string",
+        "title": "Eyebrow (optional)"
+      },
+      {
+        "initialValue": "BREAKFAST",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "titleLine1",
+        "type": "string",
+        "title": "Title: First Line"
+      },
+      {
+        "initialValue": "FOR",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "titleLine2",
+        "type": "string",
+        "title": "Title: Second Line"
+      },
+      {
+        "initialValue": "DINNER",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "titleLine3",
+        "type": "string",
+        "title": "Title: Third Line"
+      },
+      {
+        "rows": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "subtitle",
+        "type": "text",
+        "title": "Subtitle (optional)"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Main Image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "imageAlt",
+        "type": "string",
+        "title": "Image Alt Text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 3
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "type": "heroButton"
+          }
+        ],
+        "name": "buttons",
+        "type": "array"
+      },
+      {
+        "options": {
+          "list": [
+            "h1",
+            "h2",
+            "h3"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "h1",
+        "name": "headingLevel",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            "left",
+            "center",
+            "right"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "center",
+        "name": "alignment",
+        "type": "string",
+        "title": "Text Alignment"
+      },
+      {
+        "options": {
+          "list": [
+            "left",
+            "right",
+            "background"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "right",
+        "name": "imagePosition",
+        "type": "string"
+      },
+      {
+        "initialValue": 180,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 360
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "backgroundAngle",
+        "type": "number",
+        "title": "Background Gradient Angle (deg)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#2196f3"
+          ]
+        },
+        "name": "backgroundColorStart",
+        "type": "color",
+        "title": "Background Gradient: Start"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#42a5f5"
+          ]
+        },
+        "name": "backgroundColorEnd",
+        "type": "color",
+        "title": "Background Gradient: End"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "overlayOpacity",
+        "type": "number",
+        "title": "Overlay Opacity (0–1)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#ffeb3b"
+          ]
+        },
+        "name": "titleLine1Color",
+        "type": "color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#ffa726"
+          ]
+        },
+        "name": "titleLine2Color",
+        "type": "color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#ff7043"
+          ]
+        },
+        "name": "titleLine3Color",
+        "type": "color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fb8c00"
+          ]
+        },
+        "name": "imageShadowColor",
+        "type": "color"
+      }
+    ],
+    "name": "heroSection",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "warning",
+            "message": "Short labels (≤ 20 chars) work best on mobile."
+          }
+        ],
+        "description": "The text shown on the button (e.g., “Buy Now”, “Read More”). Keep it short and action-oriented.",
+        "name": "label",
+        "type": "string",
+        "title": "Button Text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Where this button should go when clicked. Choose an internal page, an on-page anchor (e.g., #about), or an external URL. You can also set “Open in new tab” and an accessibility label there.",
+        "name": "link",
+        "type": "link",
+        "title": "Destination"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Pick a saved Button Style (e.g., “Primary”, “Secondary”). These are reusable presets managed in the Button Style collection.",
+        "to": [
+          {
+            "type": "buttonStyle"
+          }
+        ],
+        "name": "style",
+        "type": "reference",
+        "title": "Base Button Style"
+      },
+      {
+        "description": "Use ONLY if this button needs to look a bit different than the selected Base Button Style. Fill in specific fields to override (e.g., just the background color or padding). Leave blank to inherit everything.",
+        "name": "override",
+        "type": "buttonStyleOverride",
+        "title": "Per-Button Style Overrides (Optional)"
+      }
+    ],
+    "name": "heroButton",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "What's the Book About?",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The section title that appears above the paragraph (e.g., “What’s the Book About?”).",
+        "name": "heading",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Write the main paragraph text. Use line breaks sparingly. You can add multiple blocks.",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "content",
+        "type": "array"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Optional image shown below the text box (inside the bordered box).",
+        "name": "image",
+        "type": "image",
+        "title": "Illustration Image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Describe the image for accessibility (screen readers). Required if image set.",
+        "hidden": "conditional",
+        "name": "imageAlt",
+        "type": "string",
+        "title": "Image Alt Text"
+      },
+      {
+        "options": {
+          "list": [
+            "image-left",
+            "image-right",
+            "stacked"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "image-right",
+        "description": "How content is arranged. “Image Right” matches your current design (image below text on mobile).",
+        "name": "layout",
+        "type": "string"
+      },
+      {
+        "initialValue": 700,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The maximum width of the bordered box. Keep around 700 for readability.",
+        "name": "maxWidth",
+        "type": "number",
+        "title": "Max Content Width (px)"
+      },
+      {
+        "initialValue": 35,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Space above and below the section.",
+        "name": "sectionPaddingY",
+        "type": "number",
+        "title": "Section Vertical Padding (px)"
+      },
+      {
+        "initialValue": 20,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Left/right padding of the section.",
+        "name": "sectionPaddingX",
+        "type": "number",
+        "title": "Section Horizontal Padding (px)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#7cb342"
+          ]
+        },
+        "description": "Overall background behind the bordered box.",
+        "name": "sectionBg",
+        "type": "color",
+        "title": "Section Background Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fffbeb",
+            "#ffeb3b",
+            "#ffa726"
+          ]
+        },
+        "description": "Fill color of the dashed bordered box.",
+        "name": "boxBg",
+        "type": "color",
+        "title": "Box Background Color"
+      },
+      {
+        "initialValue": 25,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Top/bottom padding inside the bordered box.",
+        "name": "boxPaddingY",
+        "type": "number",
+        "title": "Box Vertical Padding (px)"
+      },
+      {
+        "initialValue": 35,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Left/right padding inside the bordered box.",
+        "name": "boxPaddingX",
+        "type": "number",
+        "title": "Box Horizontal Padding (px)"
+      },
+      {
+        "initialValue": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Thickness of the dashed border around the box.",
+        "name": "boxBorderWidth",
+        "type": "number",
+        "title": "Box Border Width (px)"
+      },
+      {
+        "options": {
+          "list": [
+            "dashed",
+            "solid"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "dashed",
+        "description": "Border style of the box (dashed/solid).",
+        "name": "boxBorderStyle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Color of the box border lines.",
+        "name": "boxBorderColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fb8c00",
+            "#ffa726",
+            "#ff7043"
+          ]
+        },
+        "description": "Main color of the heading text.",
+        "name": "headingColor",
+        "type": "color",
+        "title": "Heading Fill Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Outline color around the heading letters.",
+        "name": "headingStrokeColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The thickness of the outline around the heading text.",
+        "name": "headingStrokeWidth",
+        "type": "number",
+        "title": "Heading Stroke Width (px)"
+      },
+      {
+        "options": {
+          "list": [
+            "Lilita One",
+            "Baloo 2",
+            "Poppins",
+            "Patrick Hand"
+          ]
+        },
+        "initialValue": "Lilita One",
+        "description": "Choose a font for the heading.",
+        "name": "headingFontFamily",
+        "type": "string"
+      },
+      {
+        "initialValue": 2.5,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Base size; responsive CSS will still scale down on smaller screens.",
+        "name": "headingFontSize",
+        "type": "number",
+        "title": "Heading Font Size (em)"
+      },
+      {
+        "initialValue": 0.5,
+        "description": "Extra spacing between heading letters.",
+        "name": "headingLetterSpacing",
+        "type": "number",
+        "title": "Heading Letter Spacing (px)"
+      },
+      {
+        "initialValue": "2px 2px 0px rgba(0,0,0,0.1)",
+        "description": "CSS shadow, e.g. \"2px 2px 0px rgba(0,0,0,0.1)\". Leave empty for none.",
+        "name": "headingTextShadow",
+        "type": "string"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#c0ca33"
+          ]
+        },
+        "description": "The lime blob near bottom/left.",
+        "name": "blob1Color",
+        "type": "color",
+        "title": "Bottom Left Blob Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Outline color of Blob 1.",
+        "name": "blob1BorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 0.6,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Transparency of the bottom-left blob.",
+        "name": "blob1Opacity",
+        "type": "number",
+        "title": "Blob 1 Opacity (0–1)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#a0d2eb"
+          ]
+        },
+        "description": "The sky-blue blob near top/right.",
+        "name": "blob2Color",
+        "type": "color",
+        "title": "Top Right Blob Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Outline color of Blob 2.",
+        "name": "blob2BorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 0.7,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Transparency of the top-right blob.",
+        "name": "blob2Opacity",
+        "type": "number",
+        "title": "Blob 2 Opacity (0–1)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#a0d2eb"
+          ]
+        },
+        "description": "Sticky tape rectangles color (pick sky-blue, adjust alpha in the picker if desired).",
+        "name": "tapeBg",
+        "type": "color",
+        "title": "Tape Background Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Thin outline on the tape rectangles (pick dark, adjust alpha if desired).",
+        "name": "tapeBorderColor",
+        "type": "color"
+      },
+      {
+        "description": "Size of each tape rectangle.",
+        "fields": [
+          {
+            "initialValue": 70,
+            "name": "width",
+            "type": "number",
+            "title": "Width (px)"
+          },
+          {
+            "initialValue": 30,
+            "name": "height",
+            "type": "number",
+            "title": "Height (px)"
+          }
+        ],
+        "name": "tapeSize",
+        "type": "object",
+        "title": "Tape Size (Width x Height px)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fffbeb",
+            "#ffeb3b",
+            "#ffa726"
+          ]
+        },
+        "description": "Background behind the image inside its frame.",
+        "name": "imageBg",
+        "type": "color",
+        "title": "Image Frame Background"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Border color of the image frame.",
+        "name": "imageBorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Thickness of the image frame border.",
+        "name": "imageBorderWidth",
+        "type": "number",
+        "title": "Image Border Width (px)"
+      },
+      {
+        "initialValue": 20,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Roundness of the image frame corners.",
+        "name": "imageBorderRadius",
+        "type": "number",
+        "title": "Image Border Radius (px)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fb8c00",
+            "#ffa726",
+            "#ff7043"
+          ]
+        },
+        "description": "Drop shadow color for the image (orange by default).",
+        "name": "imageShadowColor",
+        "type": "color"
+      },
+      {
+        "description": "X and Y offset of the image shadow.",
+        "fields": [
+          {
+            "initialValue": 6,
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "initialValue": 6,
+            "name": "y",
+            "type": "number"
+          }
+        ],
+        "name": "imageShadowOffset",
+        "type": "object",
+        "title": "Image Shadow Offset (px)"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Blur radius of the image shadow (0 for crisp blocky shadow).",
+        "name": "imageShadowBlur",
+        "type": "number",
+        "title": "Image Shadow Blur (px)"
+      },
+      {
+        "initialValue": 70,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Overall image width relative to the container.",
+        "name": "imageWidthPct",
+        "type": "number",
+        "title": "Image Width (% of container)"
+      },
+      {
+        "initialValue": 300,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Hard cap for how wide the image can get.",
+        "name": "imageMaxWidth",
+        "type": "number",
+        "title": "Image Max Width (px)"
+      },
+      {
+        "initialValue": 20,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Space above the image frame.",
+        "name": "imageMarginTop",
+        "type": "number",
+        "title": "Image Top Margin (px)"
+      },
+      {
+        "initialValue": 10,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Space below the image frame.",
+        "name": "imageMarginBottom",
+        "type": "number",
+        "title": "Image Bottom Margin (px)"
+      }
+    ],
+    "name": "aboutSection",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "description": "Heading/subheading/eyebrow + the product to feature.",
+        "name": "content",
+        "type": "fiContent"
+      },
+      {
+        "description": "All layout, card, image, price, buttons, and decor live here (separate doc).",
+        "to": [
+          {
+            "type": "featuredItemStyle"
+          }
+        ],
+        "name": "style",
+        "type": "reference"
+      }
+    ],
+    "name": "featuredItemSection",
+    "type": "object",
+    "title": "Featured Item"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "heading",
+        "type": "string"
+      },
+      {
+        "rows": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "subheading",
+        "type": "text",
+        "title": "Subheading (optional)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 64
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Must exactly match the form’s name attribute in your React component. Remember data-netlify=\"true\" and a honeypot field.",
+        "name": "formName",
+        "type": "string",
+        "title": "Netlify Form Name"
+      },
+      {
+        "initialValue": "you@example.com",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "emailPlaceholder",
+        "type": "string"
+      },
+      {
+        "initialValue": "Subscribe",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "buttonLabel",
+        "type": "string",
+        "title": "Submit Button Label"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 120
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., “We never share your email.”",
+        "name": "privacyNote",
+        "type": "string",
+        "title": "Privacy Note (short)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "privacyLink",
+        "type": "url",
+        "title": "Privacy Policy Link (optional)"
+      },
+      {
+        "initialValue": "Thanks! Please check your inbox.",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 120
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "successMessage",
+        "type": "string"
+      },
+      {
+        "initialValue": "Oops—something went wrong. Please try again.",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 120
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "errorMessage",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "If set, navigate here after successful submit.",
+        "name": "successRedirect",
+        "type": "url",
+        "title": "Redirect URL on Success (optional)"
+      },
+      {
+        "initialValue": true,
+        "name": "enableHoneypot",
+        "type": "boolean"
+      },
+      {
+        "initialValue": "bot-field",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "honeypotFieldName",
+        "type": "string"
+      }
+    ],
+    "name": "callToActionSection",
+    "type": "object",
+    "title": "Call to Action Section"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Mini-Game: Breakfast or Dinner?",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Big title shown above the mini-game.",
+        "name": "heading",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "initialValue": "Categorize the food before time runs out!",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 240
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Short intro/instructions shown before the game starts.",
+        "name": "introText",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 8
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Optional bullets (max 8).",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "instructions",
+        "type": "array",
+        "title": "Instructions (bulleted)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Easy",
+              "value": "easy"
+            },
+            {
+              "title": "Normal",
+              "value": "normal"
+            },
+            {
+              "title": "Hard",
+              "value": "hard"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "normal",
+        "description": "Label only. Timer & scoring are fixed.",
+        "name": "difficulty",
+        "type": "string",
+        "title": "Difficulty (label only)"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 50
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "How many items to show before ending. 0 = unlimited (timer still ends).",
+        "name": "maxRounds",
+        "type": "number"
+      },
+      {
+        "initialValue": "Start Game!",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Text on the start/restart button.",
+        "name": "startButtonLabel",
+        "type": "string"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": false
+        },
+        "description": "Visual theming for the section.",
+        "fields": [
+          {
+            "initialValue": 50,
+            "description": "Top/bottom padding (px).",
+            "name": "paddingY",
+            "type": "number",
+            "title": "Section Padding (Vertical)"
+          },
+          {
+            "initialValue": 20,
+            "description": "Left/right padding (px).",
+            "name": "paddingX",
+            "type": "number",
+            "title": "Section Padding (Horizontal)"
+          },
+          {
+            "initialValue": 0,
+            "description": "Angle for gradient if both colors are set.",
+            "name": "bgAngle",
+            "type": "number",
+            "title": "Background Angle (deg)"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#7DB942",
+                "#A5D66A",
+                "#6FB03B"
+              ]
+            },
+            "name": "bgColorStart",
+            "type": "color",
+            "title": "Background Color (Start)"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#7DB942",
+                "#A5D66A",
+                "#6FB03B"
+              ]
+            },
+            "name": "bgColorEnd",
+            "type": "color",
+            "title": "Background Color (End)"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#212121",
+                "#1A1A1A"
+              ]
+            },
+            "name": "textColor",
+            "type": "color",
+            "title": "Body Text Color"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#212121",
+                "#1A1A1A"
+              ]
+            },
+            "name": "dashColor",
+            "type": "color",
+            "title": "Dashed Border Color"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#FFFFFF",
+                "#FFFDF5"
+              ]
+            },
+            "name": "headingFillColor",
+            "type": "color",
+            "title": "Heading Fill"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#212121",
+                "#000000"
+              ]
+            },
+            "name": "headingStrokeColor",
+            "type": "color",
+            "title": "Heading Stroke"
+          },
+          {
+            "initialValue": 2,
+            "name": "headingStrokeWidth",
+            "type": "number",
+            "title": "Heading Stroke Width (px)"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#FFFFFF",
+                "#FFFEFA"
+              ]
+            },
+            "name": "gameAreaBg",
+            "type": "color",
+            "title": "Game Card Background"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#212121"
+              ]
+            },
+            "name": "gameAreaBorderColor",
+            "type": "color",
+            "title": "Game Card Border"
+          },
+          {
+            "initialValue": 3,
+            "name": "gameAreaBorderWidth",
+            "type": "number",
+            "title": "Game Card Border Width (px)"
+          },
+          {
+            "initialValue": 15,
+            "name": "gameAreaRadius",
+            "type": "number",
+            "title": "Game Card Corner Radius (px)"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#558B2F",
+                "#4E7F2C"
+              ]
+            },
+            "name": "gameAreaShadowColor",
+            "type": "color",
+            "title": "Game Card Shadow Color"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#6C4AE3",
+                "#512DA8"
+              ]
+            },
+            "name": "statsColor",
+            "type": "color",
+            "title": "Stats Text Color"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#1976D2",
+                "#3F51B5"
+              ]
+            },
+            "name": "feedbackColor",
+            "type": "color",
+            "title": "Feedback Text Color"
+          },
+          {
+            "initialValue": true,
+            "name": "showBlobs",
+            "type": "boolean",
+            "title": "Show Decorative Blobs"
+          },
+          {
+            "options": {
+              "colorList": [
+                "#FFFFFF"
+              ]
+            },
+            "name": "blobColor",
+            "type": "color"
+          },
+          {
+            "initialValue": 0.3,
+            "description": "0 = invisible, 1 = solid",
+            "name": "blobOpacity",
+            "type": "number"
+          },
+          {
+            "description": "Pick a button style tile for the Start Game button.",
+            "to": [
+              {
+                "type": "buttonStyle"
+              }
+            ],
+            "name": "startButtonStyle",
+            "type": "reference"
+          },
+          {
+            "options": {
+              "collapsible": true,
+              "collapsed": true
+            },
+            "fields": [
+              {
+                "name": "paddingX",
+                "type": "number",
+                "title": "Padding X (px)"
+              },
+              {
+                "name": "paddingY",
+                "type": "number",
+                "title": "Padding Y (px)"
+              },
+              {
+                "name": "borderRadius",
+                "type": "number",
+                "title": "Border Radius (px)"
+              },
+              {
+                "name": "borderWidth",
+                "type": "number",
+                "title": "Border Width (px)"
+              },
+              {
+                "options": {
+                  "colorList": [
+                    "#FFFFFF",
+                    "#212121"
+                  ]
+                },
+                "name": "textColor",
+                "type": "color",
+                "title": "Text"
+              },
+              {
+                "options": {
+                  "colorList": [
+                    "#558B2F",
+                    "#7DB942",
+                    "#212121"
+                  ]
+                },
+                "name": "backgroundColor",
+                "type": "color",
+                "title": "Background"
+              },
+              {
+                "options": {
+                  "colorList": [
+                    "#212121",
+                    "#000000"
+                  ]
+                },
+                "name": "borderColor",
+                "type": "color",
+                "title": "Border"
+              },
+              {
+                "name": "font",
+                "type": "string",
+                "title": "Font Family"
+              },
+              {
+                "name": "fontWeight",
+                "type": "number"
+              },
+              {
+                "name": "fontSize",
+                "type": "number",
+                "title": "Font Size (px)"
+              },
+              {
+                "name": "boxShadow",
+                "type": "string"
+              },
+              {
+                "name": "textShadow",
+                "type": "string"
+              }
+            ],
+            "name": "startButtonOverride",
+            "type": "object"
+          },
+          {
+            "to": [
+              {
+                "type": "buttonStyle"
+              }
+            ],
+            "name": "breakfastButtonStyle",
+            "type": "reference"
+          },
+          {
+            "options": {
+              "collapsible": true,
+              "collapsed": true
+            },
+            "fields": [
+              {
+                "name": "paddingX",
+                "type": "number",
+                "title": "Padding X (px)"
+              },
+              {
+                "name": "paddingY",
+                "type": "number",
+                "title": "Padding Y (px)"
+              },
+              {
+                "name": "borderRadius",
+                "type": "number",
+                "title": "Border Radius (px)"
+              },
+              {
+                "name": "borderWidth",
+                "type": "number",
+                "title": "Border Width (px)"
+              },
+              {
+                "options": {
+                  "colorList": [
+                    "#FFFFFF",
+                    "#212121"
+                  ]
+                },
+                "name": "textColor",
+                "type": "color",
+                "title": "Text"
+              },
+              {
+                "options": {
+                  "colorList": [
+                    "#ffeb3b",
+                    "#7DB942",
+                    "#212121"
+                  ]
+                },
+                "name": "backgroundColor",
+                "type": "color",
+                "title": "Background"
+              },
+              {
+                "name": "borderColor",
+                "type": "color"
+              },
+              {
+                "name": "font",
+                "type": "string",
+                "title": "Font Family"
+              },
+              {
+                "name": "fontWeight",
+                "type": "number"
+              },
+              {
+                "name": "fontSize",
+                "type": "number",
+                "title": "Font Size (px)"
+              },
+              {
+                "name": "boxShadow",
+                "type": "string"
+              },
+              {
+                "name": "textShadow",
+                "type": "string"
+              }
+            ],
+            "name": "breakfastButtonOverride",
+            "type": "object"
+          },
+          {
+            "to": [
+              {
+                "type": "buttonStyle"
+              }
+            ],
+            "name": "dinnerButtonStyle",
+            "type": "reference"
+          },
+          {
+            "options": {
+              "collapsible": true,
+              "collapsed": true
+            },
+            "fields": [
+              {
+                "name": "paddingX",
+                "type": "number",
+                "title": "Padding X (px)"
+              },
+              {
+                "name": "paddingY",
+                "type": "number",
+                "title": "Padding Y (px)"
+              },
+              {
+                "name": "borderRadius",
+                "type": "number",
+                "title": "Border Radius (px)"
+              },
+              {
+                "name": "borderWidth",
+                "type": "number",
+                "title": "Border Width (px)"
+              },
+              {
+                "options": {
+                  "colorList": [
+                    "#FFFFFF",
+                    "#212121"
+                  ]
+                },
+                "name": "textColor",
+                "type": "color",
+                "title": "Text"
+              },
+              {
+                "options": {
+                  "colorList": [
+                    "#8e24aa",
+                    "#7DB942",
+                    "#212121"
+                  ]
+                },
+                "name": "backgroundColor",
+                "type": "color",
+                "title": "Background"
+              },
+              {
+                "name": "borderColor",
+                "type": "color"
+              },
+              {
+                "name": "font",
+                "type": "string",
+                "title": "Font Family"
+              },
+              {
+                "name": "fontWeight",
+                "type": "number"
+              },
+              {
+                "name": "fontSize",
+                "type": "number",
+                "title": "Font Size (px)"
+              },
+              {
+                "name": "boxShadow",
+                "type": "string"
+              },
+              {
+                "name": "textShadow",
+                "type": "string"
+              }
+            ],
+            "name": "dinnerButtonOverride",
+            "type": "object"
+          }
+        ],
+        "name": "style",
+        "type": "object"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "list": [
+                "internal",
+                "external"
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "internal",
+            "name": "type",
+            "type": "string",
+            "title": "Link Type"
+          },
+          {
+            "to": [
+              {
+                "type": "page"
+              }
+            ],
+            "hidden": "conditional",
+            "name": "internal",
+            "type": "reference",
+            "title": "Internal Page"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "hidden": "conditional",
+            "name": "external",
+            "type": "url",
+            "title": "External URL"
+          },
+          {
+            "initialValue": false,
+            "name": "openInNewTab",
+            "type": "boolean",
+            "title": "Open in new tab"
+          }
+        ],
+        "name": "startLink",
+        "type": "object",
+        "title": "Start Link (optional)"
+      }
+    ],
+    "name": "foodSortGameSection",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "External URL",
+              "value": "externalUrl"
+            },
+            {
+              "title": "Internal Page",
+              "value": "internalPage"
+            },
+            {
+              "title": "Home Section (anchor)",
+              "value": "homeSection"
+            }
+          ],
+          "layout": "radio"
+        },
+        "description": "Choose where this link should go.",
+        "name": "type",
+        "type": "string",
+        "title": "Link Type"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "externalUrl",
+        "type": "url",
+        "title": "External URL"
+      },
+      {
+        "initialValue": true,
+        "hidden": "conditional",
+        "name": "openInNewTab",
+        "type": "boolean",
+        "title": "Open in new tab"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "page"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "internal",
+        "type": "reference",
+        "title": "Internal Page"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Enter the ID of a section on the Home page (e.g., \"about\").",
+        "hidden": "conditional",
+        "name": "homeSectionId",
+        "type": "string",
+        "title": "Home Section ID"
+      },
+      {
+        "description": "Helps screen readers describe the link purpose.",
+        "name": "ariaLabel",
+        "type": "string",
+        "title": "ARIA Label (optional)"
+      }
+    ],
+    "name": "link",
+    "type": "object"
+  },
+  {
+    "description": "Change specific style settings for one button, without affecting the base style.",
+    "fields": [
+      {
+        "description": "Override button width spacing.",
+        "name": "paddingX",
+        "type": "number",
+        "title": "Horizontal Padding (px)"
+      },
+      {
+        "description": "Override button height spacing.",
+        "name": "paddingY",
+        "type": "number",
+        "title": "Vertical Padding (px)"
+      },
+      {
+        "description": "Override button corner roundness.",
+        "name": "borderRadius",
+        "type": "number",
+        "title": "Corner Roundness (px)"
+      },
+      {
+        "description": "Override thickness of outline.",
+        "name": "borderWidth",
+        "type": "number",
+        "title": "Border Thickness (px)"
+      },
+      {
+        "options": {
+          "disableAlpha": true
+        },
+        "description": "Override the text color.",
+        "name": "textColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true
+        },
+        "description": "Override the background fill.",
+        "name": "backgroundColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true
+        },
+        "description": "Override the border color.",
+        "name": "borderColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "list": [
+            "Lilita One",
+            "Baloo 2",
+            "Poppins",
+            "Patrick Hand"
+          ]
+        },
+        "description": "Override which font family is used for this button only.",
+        "name": "font",
+        "type": "string",
+        "title": "Font Family"
+      },
+      {
+        "description": "Override how bold the text should be (100–900).",
+        "name": "fontWeight",
+        "type": "number"
+      },
+      {
+        "description": "Override box shadow (leave blank to use base style).",
+        "name": "boxShadow",
+        "type": "string"
+      },
+      {
+        "description": "Override text shadow (leave blank to use base style).",
+        "name": "textShadow",
+        "type": "string"
+      }
+    ],
+    "name": "buttonStyleOverride",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Primary",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 40
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Give this style a name like “Primary” or “Secondary” so you can reuse it.",
+        "name": "name",
+        "type": "string",
+        "title": "Style Name"
+      },
+      {
+        "options": {
+          "list": [
+            "Lilita One",
+            "Baloo 2",
+            "Poppins",
+            "Patrick Hand"
+          ]
+        },
+        "initialValue": "Baloo 2",
+        "description": "Font used for the button label.",
+        "name": "font",
+        "type": "string",
+        "title": "Font Family"
+      },
+      {
+        "initialValue": 1.25,
+        "description": "Base font size in rem (e.g., 1.25 = 20px if root is 16px).",
+        "name": "fontSize",
+        "type": "number",
+        "title": "Font Size (rem)"
+      },
+      {
+        "initialValue": 700,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 100
+              },
+              {
+                "flag": "max",
+                "constraint": 900
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Boldness of the button text (100–900).",
+        "name": "fontWeight",
+        "type": "number"
+      },
+      {
+        "initialValue": 30,
+        "description": "Space left/right inside the button.",
+        "name": "paddingX",
+        "type": "number",
+        "title": "Horizontal Padding (px)"
+      },
+      {
+        "initialValue": 15,
+        "description": "Space top/bottom inside the button.",
+        "name": "paddingY",
+        "type": "number",
+        "title": "Vertical Padding (px)"
+      },
+      {
+        "initialValue": 30,
+        "description": "How rounded the corners should be.",
+        "name": "borderRadius",
+        "type": "number",
+        "title": "Corner Roundness (px)"
+      },
+      {
+        "initialValue": 4,
+        "description": "Thickness of the button outline.",
+        "name": "borderWidth",
+        "type": "number",
+        "title": "Border Thickness (px)"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#a0d2eb",
+            "#7cb342",
+            "#388e3c",
+            "#4fa8e0",
+            "#c0ca33",
+            "#fb8c00",
+            "#1976d2",
+            "#8e24aa",
+            "#ffeb3b",
+            "#ffa726",
+            "#ff7043",
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "initialValue": {
+          "hex": "#8e24aa"
+        },
+        "description": "Fill color behind the text.",
+        "name": "backgroundColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "initialValue": {
+          "hex": "#ffffff"
+        },
+        "description": "Color of the button label text.",
+        "name": "textColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "initialValue": {
+          "hex": "#212121"
+        },
+        "description": "Outline color (visible if Border Thickness > 0).",
+        "name": "borderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": "3px 3px 0 #00000080",
+        "description": "Optional shadow around the button (e.g., \"5px 5px 0 #000\").",
+        "name": "boxShadow",
+        "type": "string"
+      },
+      {
+        "description": "Optional shadow on the button text (e.g., \"1px 1px 2px rgba(0,0,0,0.4)\").",
+        "name": "textShadow",
+        "type": "string"
+      }
+    ],
+    "name": "buttonStyle",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Hungry for Updates? Sign Up Now!",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              },
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Big title shown above the form (e.g., “Get updates”).",
+        "name": "heading",
+        "type": "string"
+      },
+      {
+        "rows": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Short description below the heading.",
+        "name": "subheading",
+        "type": "text",
+        "title": "Subheading (optional)"
+      },
+      {
+        "rows": 2,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Small note under the form (e.g., “No spam. Unsubscribe anytime.”).",
+        "name": "privacyNote",
+        "type": "text",
+        "title": "Privacy Note (optional)"
+      },
+      {
+        "initialValue": "notify",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Value used for Netlify form handling (hidden input \"form-name\").",
+        "name": "formName",
+        "type": "string",
+        "title": "Form Name (Netlify)"
+      },
+      {
+        "initialValue": true,
+        "description": "Adds two name inputs above the email field.",
+        "name": "showNameFields",
+        "type": "boolean",
+        "title": "Include First/Last Name Fields"
+      },
+      {
+        "initialValue": "First name",
+        "description": "Placeholder text for the first name input.",
+        "hidden": "conditional",
+        "name": "firstNamePlaceholder",
+        "type": "string"
+      },
+      {
+        "initialValue": "Last name",
+        "description": "Placeholder text for the last name input.",
+        "hidden": "conditional",
+        "name": "lastNamePlaceholder",
+        "type": "string"
+      },
+      {
+        "initialValue": "you@example.com",
+        "description": "Placeholder text for the email input.",
+        "name": "emailPlaceholder",
+        "type": "string"
+      },
+      {
+        "initialValue": true,
+        "description": "Adds a hidden field to reduce spam.",
+        "name": "enableHoneypot",
+        "type": "boolean",
+        "title": "Enable Honeypot Field"
+      },
+      {
+        "initialValue": "bot-field",
+        "description": "Name of the hidden honeypot input.",
+        "hidden": "conditional",
+        "name": "honeypotFieldName",
+        "type": "string"
+      },
+      {
+        "initialValue": "Thanks! Please check your inbox.",
+        "description": "Shown after successful submission (if not redirecting).",
+        "name": "successMessage",
+        "type": "string"
+      },
+      {
+        "initialValue": "Oops—something went wrong. Please try again.",
+        "description": "Shown if the submission fails.",
+        "name": "errorMessage",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "If set, users are redirected here after success.",
+        "name": "successRedirect",
+        "type": "url",
+        "title": "Success Redirect URL (optional)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#8e24aa",
+            "#1976d2",
+            "#4fa8e0",
+            "#212121"
+          ]
+        },
+        "description": "Border color for inputs.",
+        "name": "inputBorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 3,
+        "description": "Thickness of the input border.",
+        "name": "inputBorderWidth",
+        "type": "number",
+        "title": "Input Border Width (px)"
+      },
+      {
+        "initialValue": 25,
+        "description": "Roundness of input corners.",
+        "name": "inputBorderRadius",
+        "type": "number",
+        "title": "Input Border Radius (px)"
+      },
+      {
+        "initialValue": 12,
+        "description": "Top/bottom padding inside inputs.",
+        "name": "inputPaddingY",
+        "type": "number",
+        "title": "Input Vertical Padding (px)"
+      },
+      {
+        "initialValue": 20,
+        "description": "Left/right padding inside inputs.",
+        "name": "inputPaddingX",
+        "type": "number",
+        "title": "Input Horizontal Padding (px)"
+      },
+      {
+        "options": {
+          "list": [
+            "Baloo 2",
+            "Lilita One",
+            "Poppins",
+            "Patrick Hand"
+          ]
+        },
+        "initialValue": "Baloo 2",
+        "description": "Font used inside inputs.",
+        "name": "inputFontFamily",
+        "type": "string"
+      },
+      {
+        "initialValue": 1.05,
+        "description": "Base size for input text.",
+        "name": "inputFontSize",
+        "type": "number",
+        "title": "Input Font Size (em)"
+      },
+      {
+        "initialValue": "inset 2px 2px 3px rgba(0,0,0,0.2)",
+        "description": "CSS box-shadow string (e.g., \"inset 2px 2px 3px rgba(0,0,0,0.2)\").",
+        "name": "inputInsetShadow",
+        "type": "string"
+      },
+      {
+        "initialValue": 15,
+        "description": "Space between inputs and the button.",
+        "name": "formGap",
+        "type": "number",
+        "title": "Form Row Gap (px)"
+      },
+      {
+        "initialValue": 80,
+        "description": "Space above and below the section.",
+        "name": "paddingY",
+        "type": "number",
+        "title": "Section Vertical Padding (px)"
+      },
+      {
+        "initialValue": 20,
+        "description": "Left/right padding of the section.",
+        "name": "paddingX",
+        "type": "number",
+        "title": "Section Horizontal Padding (px)"
+      },
+      {
+        "initialValue": 550,
+        "description": "Max width of the form container.",
+        "name": "formMaxWidth",
+        "type": "number",
+        "title": "Form Max Width (px)"
+      },
+      {
+        "initialValue": 180,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 360
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Angle for the background gradient.",
+        "name": "bgAngle",
+        "type": "number",
+        "title": "Background Gradient Angle (deg)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#1976d2",
+            "#4fa8e0",
+            "#a0d2eb"
+          ]
+        },
+        "description": "Top color of the section gradient.",
+        "name": "bgColorStart",
+        "type": "color",
+        "title": "Background Gradient: Start"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#4fa8e0",
+            "#a0d2eb",
+            "#1976d2"
+          ]
+        },
+        "description": "Bottom color of the section gradient.",
+        "name": "bgColorEnd",
+        "type": "color",
+        "title": "Background Gradient: End"
+      },
+      {
+        "options": {
+          "list": [
+            "Lilita One",
+            "Baloo 2",
+            "Poppins",
+            "Patrick Hand"
+          ]
+        },
+        "initialValue": "Lilita One",
+        "description": "Font used for the heading.",
+        "name": "headingFontFamily",
+        "type": "string"
+      },
+      {
+        "initialValue": 2.5,
+        "description": "Base size; CSS can still scale responsively.",
+        "name": "headingFontSize",
+        "type": "number",
+        "title": "Heading Font Size (em)"
+      },
+      {
+        "initialValue": 0.5,
+        "description": "Extra spacing between heading letters.",
+        "name": "headingLetterSpacing",
+        "type": "number",
+        "title": "Heading Letter Spacing (px)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#ffeb3b",
+            "#ffa726",
+            "#ff7043"
+          ]
+        },
+        "description": "Main color of the heading text.",
+        "name": "headingFillColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Outline color around the heading.",
+        "name": "headingStrokeColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 2,
+        "description": "Thickness of the outline around the heading text.",
+        "name": "headingStrokeWidth",
+        "type": "number",
+        "title": "Heading Stroke Width (px)"
+      },
+      {
+        "initialValue": "2px 2px 0px rgba(0,0,0,0.15)",
+        "description": "CSS shadow, e.g. \"2px 2px 0px rgba(0,0,0,0.15)\".",
+        "name": "headingTextShadow",
+        "type": "string"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#a0d2eb",
+            "#c0ca33",
+            "#fb8c00"
+          ]
+        },
+        "description": "Color of the decorative blob.",
+        "name": "blobColor",
+        "type": "color",
+        "title": "Blob Fill Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "description": "Outline color of the blob.",
+        "name": "blobBorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 3,
+        "description": "Thickness of the blob outline.",
+        "name": "blobBorderWidth",
+        "type": "number",
+        "title": "Blob Border Width (px)"
+      },
+      {
+        "initialValue": 0.7,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Transparency of the blob.",
+        "name": "blobOpacity",
+        "type": "number",
+        "title": "Blob Opacity (0–1)"
+      },
+      {
+        "description": "Width/height of the blob (approx).",
+        "fields": [
+          {
+            "initialValue": 60,
+            "name": "width",
+            "type": "number"
+          },
+          {
+            "initialValue": 60,
+            "name": "height",
+            "type": "number"
+          }
+        ],
+        "name": "blobSize",
+        "type": "object",
+        "title": "Blob Size (px)"
+      },
+      {
+        "description": "Rough position from the top/right of the section.",
+        "fields": [
+          {
+            "initialValue": 10,
+            "name": "top",
+            "type": "number",
+            "title": "Top (%)"
+          },
+          {
+            "initialValue": 10,
+            "name": "right",
+            "type": "number",
+            "title": "Right (%)"
+          }
+        ],
+        "name": "blobPosition",
+        "type": "object",
+        "title": "Blob Position (%)"
+      },
+      {
+        "initialValue": -25,
+        "description": "Rotate the blob for a playful angle.",
+        "name": "blobRotation",
+        "type": "number",
+        "title": "Blob Rotation (deg)"
+      },
+      {
+        "initialValue": "Subscribe",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Text shown on the submit button (e.g., “Subscribe”).",
+        "name": "buttonLabel",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Select a saved Button Style (e.g., “Primary”).",
+        "to": [
+          {
+            "type": "buttonStyle"
+          }
+        ],
+        "name": "buttonStyle",
+        "type": "reference",
+        "title": "Base Button Style"
+      },
+      {
+        "description": "Override specific button style fields for this section only.",
+        "name": "buttonOverride",
+        "type": "buttonStyleOverride",
+        "title": "Button Style Override (optional)"
+      },
+      {
+        "initialValue": 320,
+        "description": "Cap the button width (helps with centering in a column layout).",
+        "name": "buttonMaxWidth",
+        "type": "number",
+        "title": "Button Max Width (px)"
+      },
+      {
+        "initialValue": true,
+        "description": "When enabled, the button stretches to the available width (up to its max).",
+        "name": "buttonFullWidth",
+        "type": "boolean",
+        "title": "Make Button Full Width"
+      }
+    ],
+    "name": "emailSignupSection",
+    "type": "object"
+  },
+  {
+    "validation": [
+      {
+        "rules": [
+          {
+            "flag": "custom"
+          }
+        ],
+        "level": "error"
+      }
+    ],
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Text on the button (e.g., “Buy Now”, “Add to Cart”).",
+        "name": "label",
+        "type": "string",
+        "title": "Button Label"
+      },
+      {
+        "options": {
+          "list": [
+            "buyNow",
+            "addToCart",
+            "linkToPDP",
+            "customLink"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "linkToPDP",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "buyNow",
+                  "addToCart",
+                  "linkToPDP",
+                  "customLink"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "• buyNow: go straight to checkout (your frontend decides behavior) • addToCart: add item to cart • linkToPDP: go to product page • customLink: choose a link below.",
+        "name": "action",
+        "type": "string",
+        "title": "Button Action"
+      },
+      {
+        "description": "Pick the Link Type (External URL, Internal Page, or Home Section anchor).",
+        "hidden": "conditional",
+        "name": "link",
+        "type": "link",
+        "title": "Custom Link"
+      },
+      {
+        "description": "Pick a saved Button Style (e.g., “Primary”).",
+        "to": [
+          {
+            "type": "buttonStyle"
+          }
+        ],
+        "name": "style",
+        "type": "reference",
+        "title": "Base Button Style"
+      },
+      {
+        "description": "Only fill fields you want to override (e.g., background color).",
+        "name": "override",
+        "type": "buttonStyleOverride",
+        "title": "Button Style Override"
+      },
+      {
+        "initialValue": true,
+        "name": "fullWidth",
+        "type": "boolean",
+        "title": "Full Width Button"
+      },
+      {
+        "initialValue": 320,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 120
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "maxWidth",
+        "type": "number",
+        "title": "Button Max Width (px)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 120
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Accessibility label for screen readers.",
+        "name": "ariaLabel",
+        "type": "string",
+        "title": "ARIA Label (optional)"
+      }
+    ],
+    "name": "featuredButton",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Featured Item",
+        "name": "heading",
+        "type": "string",
+        "title": "Section Heading"
+      },
+      {
+        "rows": 2,
+        "name": "subheading",
+        "type": "text",
+        "title": "Subheading (optional)"
+      },
+      {
+        "name": "eyebrow",
+        "type": "string",
+        "title": "Eyebrow (optional)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "product"
+          }
+        ],
+        "name": "product",
+        "type": "reference"
+      },
+      {
+        "name": "disclaimer",
+        "type": "string",
+        "title": "Disclaimer (optional)"
+      }
+    ],
+    "name": "fiContent",
+    "type": "object",
+    "title": "Featured Content"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            "left",
+            "center",
+            "right"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "center",
+        "description": "Aligns text, price and buttons inside the card.",
+        "name": "alignment",
+        "type": "string",
+        "title": "Content Alignment"
+      },
+      {
+        "initialValue": 800,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 320
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Caps the overall width of this section block.",
+        "name": "maxWidth",
+        "type": "number",
+        "title": "Max Section Width (px)"
+      },
+      {
+        "initialValue": 60,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "paddingY",
+        "type": "number",
+        "title": "Vertical Padding (px)"
+      },
+      {
+        "initialValue": 20,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "paddingX",
+        "type": "number",
+        "title": "Horizontal Padding (px)"
+      },
+      {
+        "options": {
+          "list": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "md",
+        "description": "When the 2-column layout collapses to one column.",
+        "name": "stackOn",
+        "type": "string",
+        "title": "Stack Layout At"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fffbeb",
+            "#a0d2eb",
+            "#7cb342",
+            "#4fa8e0",
+            "#c0ca33",
+            "#fb8c00",
+            "#8e24aa",
+            "#ffffff"
+          ]
+        },
+        "description": "Background color of the product card. Patterns (below) overlay on top of this color.",
+        "name": "cardBg",
+        "type": "color",
+        "title": "Card Background"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121",
+            "#8e24aa",
+            "#fb8c00",
+            "#4fa8e0"
+          ]
+        },
+        "description": "Color of the card’s outer border. Set “Card Border Width” to 0 to remove the border entirely.",
+        "name": "cardBorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "cardBorderWidth",
+        "type": "number",
+        "title": "Card Border Width (px)"
+      },
+      {
+        "options": {
+          "list": [
+            "solid",
+            "dashed"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "dashed",
+        "name": "cardBorderStyle",
+        "type": "string"
+      },
+      {
+        "initialValue": 20,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "cardRadius",
+        "type": "number",
+        "title": "Card Border Radius (px)"
+      },
+      {
+        "initialValue": "6px 6px 0 rgba(0,0,0,0.12)",
+        "name": "cardShadow",
+        "type": "string"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121",
+            "#ffeb3b",
+            "#ffa726",
+            "#ff7043"
+          ]
+        },
+        "name": "titleColor",
+        "type": "color",
+        "title": "Product Title Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121",
+            "#4fa8e0",
+            "#8e24aa"
+          ]
+        },
+        "name": "subtitleColor",
+        "type": "color",
+        "title": "Subtitle/Description Color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "name": "textColor",
+        "type": "color",
+        "title": "Body Text Color"
+      },
+      {
+        "options": {
+          "list": [
+            "none",
+            "stripes",
+            "dots"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "stripes",
+        "description": "Optional subtle overlay pattern on the card background.",
+        "name": "patternStyle",
+        "type": "string",
+        "title": "Card Pattern"
+      },
+      {
+        "name": "patternColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 0.08,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "patternOpacity",
+        "type": "number",
+        "title": "Pattern Opacity (0–1)"
+      },
+      {
+        "initialValue": 45,
+        "name": "patternAngle",
+        "type": "number",
+        "title": "Pattern Angle (deg)"
+      },
+      {
+        "options": {
+          "list": [
+            "fromProduct",
+            "custom"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "fromProduct",
+        "name": "imageSource",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "hidden": "conditional",
+        "name": "image",
+        "type": "image",
+        "title": "Custom Image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "imageAlt",
+        "type": "string",
+        "title": "Custom Image Alt Text"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fffbeb",
+            "#a0d2eb",
+            "#c0ca33",
+            "#fb8c00",
+            "#8e24aa",
+            "#ffffff"
+          ]
+        },
+        "name": "imageBg",
+        "type": "color",
+        "title": "Image Background"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121",
+            "#8e24aa",
+            "#fb8c00"
+          ]
+        },
+        "name": "imageBorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "imageBorderWidth",
+        "type": "number",
+        "title": "Image Border Width (px)"
+      },
+      {
+        "initialValue": 18,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "imageRadius",
+        "type": "number",
+        "title": "Image Border Radius (px)"
+      },
+      {
+        "options": {
+          "list": [
+            "auto",
+            "1:1",
+            "4:3",
+            "16:9"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "auto",
+        "name": "imageAspect",
+        "type": "string",
+        "title": "Image Aspect Ratio"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#fb8c00",
+            "#ffa726",
+            "#ff7043",
+            "#212121"
+          ]
+        },
+        "name": "imageShadowColor",
+        "type": "color"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 6,
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "initialValue": 6,
+            "name": "y",
+            "type": "number"
+          }
+        ],
+        "name": "imageShadowOffset",
+        "type": "object",
+        "title": "Image Shadow Offset (px)"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "imageShadowBlur",
+        "type": "number",
+        "title": "Image Shadow Blur (px)"
+      },
+      {
+        "name": "stickerOutlineColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 10,
+        "name": "stickerOutlineWidth",
+        "type": "number",
+        "title": "Sticker Outline Width (px)"
+      },
+      {
+        "initialValue": -2,
+        "name": "imageTilt",
+        "type": "number",
+        "title": "Image Tilt (deg)"
+      },
+      {
+        "initialValue": true,
+        "name": "tapeEnabled",
+        "type": "boolean",
+        "title": "Show Tape Corners"
+      },
+      {
+        "name": "tapeBg",
+        "type": "color",
+        "title": "Tape Background"
+      },
+      {
+        "name": "tapeBorderColor",
+        "type": "color",
+        "title": "Tape Border"
+      },
+      {
+        "initialValue": -12,
+        "name": "tapeRotation",
+        "type": "number",
+        "title": "Tape Rotation (deg)"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 80,
+            "name": "w",
+            "type": "number",
+            "title": "Width"
+          },
+          {
+            "initialValue": 22,
+            "name": "h",
+            "type": "number",
+            "title": "Height"
+          }
+        ],
+        "name": "tapeSize",
+        "type": "object",
+        "title": "Tape Size (px)"
+      },
+      {
+        "initialValue": true,
+        "name": "showPrice",
+        "type": "boolean"
+      },
+      {
+        "options": {
+          "list": [
+            "badge",
+            "inline"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "badge",
+        "name": "priceStyle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#ffeb3b",
+            "#ffa726",
+            "#ff7043",
+            "#8e24aa",
+            "#4fa8e0",
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "hidden": "conditional",
+        "name": "priceBg",
+        "type": "color",
+        "title": "Price Badge Background"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "name": "priceTextColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121",
+            "#8e24aa",
+            "#fb8c00"
+          ]
+        },
+        "hidden": "conditional",
+        "name": "priceBorderColor",
+        "type": "color",
+        "title": "Price Badge Border Color"
+      },
+      {
+        "initialValue": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "priceBorderWidth",
+        "type": "number",
+        "title": "Price Badge Border Width (px)"
+      },
+      {
+        "initialValue": 14,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "priceRadius",
+        "type": "number",
+        "title": "Price Badge Radius (px)"
+      },
+      {
+        "initialValue": "3px 3px 0 rgba(0,0,0,0.12)",
+        "hidden": "conditional",
+        "name": "priceShadow",
+        "type": "string",
+        "title": "Price Badge Shadow"
+      },
+      {
+        "initialValue": false,
+        "name": "showCompareAt",
+        "type": "boolean",
+        "title": "Show Compare At Price"
+      },
+      {
+        "initialValue": true,
+        "name": "showCurrency",
+        "type": "boolean",
+        "title": "Show Currency Code/Symbol"
+      },
+      {
+        "options": {
+          "list": [
+            "pill",
+            "burst",
+            "tag"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "pill",
+        "name": "priceVariant",
+        "type": "string"
+      },
+      {
+        "hidden": "conditional",
+        "name": "priceAccentColor",
+        "type": "color",
+        "title": "Price Accent (tag eyelet)"
+      },
+      {
+        "initialValue": {
+          "label": "Buy Now",
+          "action": "buyNow",
+          "fullWidth": true,
+          "maxWidth": 320
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "primaryButton",
+        "type": "featuredButton",
+        "title": "Primary Button (Buy Now)"
+      },
+      {
+        "initialValue": {
+          "label": "Add to Cart",
+          "action": "addToCart",
+          "fullWidth": true,
+          "maxWidth": 320
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "secondaryButton",
+        "type": "featuredButton",
+        "title": "Secondary Button (Add to Cart)"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#a0d2eb",
+            "#c0ca33",
+            "#fb8c00",
+            "#8e24aa"
+          ]
+        },
+        "name": "blobColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "colorList": [
+            "#212121"
+          ]
+        },
+        "name": "blobBorderColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 0.7,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "blobOpacity",
+        "type": "number",
+        "title": "Blob Opacity (0–1)"
+      },
+      {
+        "initialValue": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "blobBorderWidth",
+        "type": "number",
+        "title": "Blob Border Width (px)"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 60,
+            "name": "width",
+            "type": "number"
+          },
+          {
+            "initialValue": 60,
+            "name": "height",
+            "type": "number"
+          }
+        ],
+        "name": "blobSize",
+        "type": "object",
+        "title": "Blob Size (px)"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": 10,
+            "name": "top",
+            "type": "number"
+          },
+          {
+            "initialValue": 10,
+            "name": "right",
+            "type": "number"
+          }
+        ],
+        "name": "blobPosition",
+        "type": "object",
+        "title": "Blob Position (%)"
+      },
+      {
+        "initialValue": -25,
+        "name": "blobRotation",
+        "type": "number",
+        "title": "Blob Rotation (deg)"
+      }
+    ],
+    "name": "featuredItemStyle",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Default Header",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "A name for this style preset (e.g., \"Default Header\").",
+        "name": "name",
+        "type": "string",
+        "title": "Style Name"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#8e24aa",
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "name": "backgroundColor",
+        "type": "color"
+      },
+      {
+        "initialValue": 10,
+        "name": "paddingY",
+        "type": "number",
+        "title": "Vertical Padding (px)"
+      },
+      {
+        "initialValue": 25,
+        "name": "paddingX",
+        "type": "number",
+        "title": "Horizontal Padding (px)"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#ffffff",
+            "#212121"
+          ]
+        },
+        "name": "titleColor",
+        "type": "color",
+        "title": "Site Title Color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "name": "titleStrokeColor",
+        "type": "color",
+        "title": "Site Title Stroke Color"
+      },
+      {
+        "initialValue": 1.8,
+        "name": "titleFontSize",
+        "type": "number",
+        "title": "Site Title Font Size (em)"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#ffffff",
+            "#212121"
+          ]
+        },
+        "name": "linkColor",
+        "type": "color",
+        "title": "Nav Link Color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#ffffff",
+            "#ffeb3b",
+            "#fb8c00"
+          ]
+        },
+        "name": "linkHoverColor",
+        "type": "color",
+        "title": "Nav Link Hover/Underline Color"
+      },
+      {
+        "options": {
+          "list": [
+            "Baloo 2",
+            "Lilita One",
+            "Poppins",
+            "Patrick Hand"
+          ]
+        },
+        "initialValue": "Baloo 2",
+        "name": "linkFont",
+        "type": "string",
+        "title": "Nav Link Font"
+      },
+      {
+        "initialValue": 1.1,
+        "name": "linkFontSize",
+        "type": "number",
+        "title": "Nav Link Font Size (em)"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#ffffff",
+            "#212121"
+          ]
+        },
+        "name": "cartIconColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#ffeb3b",
+            "#fb8c00",
+            "#ffffff"
+          ]
+        },
+        "name": "cartBadgeBgColor",
+        "type": "color",
+        "title": "Cart Badge Background Color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "name": "cartBadgeTextColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#212121",
+            "#ffffff"
+          ]
+        },
+        "name": "cartBadgeBorderColor",
+        "type": "color"
+      }
+    ],
+    "name": "headerStyle",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Instagram",
+              "value": "instagram"
+            },
+            {
+              "title": "Twitter / X",
+              "value": "twitter"
+            },
+            {
+              "title": "Facebook",
+              "value": "facebook"
+            },
+            {
+              "title": "TikTok",
+              "value": "tiktok"
+            },
+            {
+              "title": "YouTube",
+              "value": "youtube"
+            },
+            {
+              "title": "Pinterest",
+              "value": "pinterest"
+            }
+          ],
+          "layout": "radio"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "instagram",
+                  "twitter",
+                  "facebook",
+                  "tiktok",
+                  "youtube",
+                  "pinterest"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Select a social media platform.",
+        "name": "platform",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The full URL of the social media profile (e.g., https://instagram.com/user).",
+        "name": "url",
+        "type": "url",
+        "title": "URL"
+      }
+    ],
+    "name": "socialLink",
+    "type": "object",
+    "title": "Social Media Link"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Default Footer",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "A name for this style preset (e.g., \"Default Footer\").",
+        "name": "name",
+        "type": "string",
+        "title": "Style Name"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#212121",
+            "#8e24aa",
+            "#ffffff"
+          ]
+        },
+        "name": "backgroundColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#f0f0f0",
+            "#ffffff",
+            "#212121"
+          ]
+        },
+        "name": "textColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#f0f0f0",
+            "#ffffff",
+            "#212121"
+          ]
+        },
+        "name": "socialIconColor",
+        "type": "color"
+      },
+      {
+        "options": {
+          "disableAlpha": true,
+          "colorList": [
+            "#a0d2eb",
+            "#fb8c00",
+            "#ffeb3b"
+          ]
+        },
+        "name": "socialIconHoverColor",
+        "type": "color"
+      }
+    ],
+    "name": "footerStyle",
+    "type": "document"
+  }
+]
