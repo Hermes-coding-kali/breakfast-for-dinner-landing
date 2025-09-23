@@ -1,204 +1,84 @@
 /* src/components/HeroSection.css */
 
-.hero-section.fun-hero {
-  /* Richer blue gradient */
-  background: linear-gradient(
-      to bottom,
-      #2196F3 0%, /* Standard Material Blue 500 */
-      #42a5f5 100% /* Lighter Blue 400 for the bottom */
-    );
-
-  /* Remove bottom padding to let the line sit at the very edge */
-  padding: 50px 20px 0px 20px; /* Set padding-bottom to 0 */
-  min-height: auto;
+.hero-section {
+  background: linear-gradient(var(--hero-bg-angle, 180deg), var(--hero-bg-start), var(--hero-bg-end));
+  padding: 50px 20px 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
-  position: relative; /* Already relative, needed for pseudo-element */
+  position: relative;
   overflow: hidden;
 }
 
-/* --- Title Styles --- */
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title */
 .main-title.book-title-approx {
   font-family: 'Lilita One', cursive;
-  font-size: 5em;
+  font-size: clamp(3em, 7vw, 5em);
   line-height: 1.1;
-  -webkit-text-stroke: 3px var(--text-dark);
-  text-stroke: 3px var(--text-dark);
-  text-shadow: 5px 5px 0px rgba(0,0,0,0.2);
-  /* Add slightly more margin below title to compensate for removed bottom padding */
-  margin: 0 0 40px 0;
-  padding: 0;
+  -webkit-text-stroke: 3px var(--color-dark-text, #212121);
+  text-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+  margin: 0 0 40px;
   text-transform: uppercase;
-  z-index: 2;
-  position: relative;
 }
-
-.title-breakfast { color: var(--title-yellow); }
-.title-for { color: var(--title-orange); animation-delay: 0.15s; }
-.title-dinner { color: var(--title-red-orange); animation-delay: 0.3s; }
-
 .main-title.book-title-approx span {
   display: inline-block;
+  margin: 0 0.15em;
   opacity: 0;
-  animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+  animation: popIn 0.6s cubic-bezier(0.68,-0.55,0.27,1.55) forwards;
 }
-/* --- End Title Styles --- */
-
-
-/* --- Keyframes For Title Animation --- */
 @keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.5) translateY(20px);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.05) translateY(-5px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+  70% { opacity: 1; transform: scale(1.05) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-/* --- End Keyframes --- */
 
-
-/* --- MODIFIED Illustration Styles --- */
-/* Optional container style */
+/* Illustration */
 .hero-main-illustration-container {
-  width: 80%; /* Or as needed */
-  max-width: 450px; /* Or as needed */
-  margin-top: 35px;
-  margin-bottom: 40px; /* Increased margin below */
-  z-index: 1;
-  position: relative;
-  display: flex; /* For centering the image if it's smaller than container */
+  width: min(70%, 400px);
+  margin: 0 0 40px;
+  display: flex;
   justify-content: center;
   align-items: center;
-  /* Add any specific container styles here, e.g., aspect ratio padding-bottom trick if needed */
 }
-
-img.hero-main-illustration { /* Style the img tag directly */
-  display: block; /* Remove extra space below image */
-  max-width: 100%; /* Make image responsive within its container */
-  height: auto;   /* Maintain aspect ratio */
-  /* min-height: 200px; /* Remove or adjust if it conflicts with image aspect ratio */
-  /* background-color: #fffbeb; /* Remove background color for image */
-  border: 4px solid var(--text-dark);
+.hero-main-illustration {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 4px solid var(--color-dark-text, #212121);
   border-radius: 20px;
-  /* color: var(--text-dark); /* Remove text color */
-  box-shadow: 6px 6px 0px var(--dino-orange); /* Slightly larger orange shadow */
+  /* 👇 Use the dynamic variable, fallback to your original orange */
+  box-shadow: 6px 6px 0 var(--hero-img-shadow, #fb8c00);
   animation: rocking 2s ease-in-out infinite alternate;
-  /* padding: 20px; /* Remove padding if it's around the image itself and not desired */
-  /* font-weight: 700; /* Remove font weight */
 }
-
-img.hero-main-illustration:hover { /* Apply hover to the image */
-  transform: scale(1.03);
-  transition: transform 0.75s ease-in-out;
-}
-/* --- END Illustration Styles --- */
-
-
-/* --- Keyframes For Rocking Animation --- */
 @keyframes rocking {
-  from {
-    transform: rotate(-2deg); /* Start tilted left */
-  }
-  to {
-    transform: rotate(2deg);  /* End tilted right */
-  }
-}
-/* --- END ROCKING KEYFRAMES --- */
-
-
-/* --- CTA Button Styles --- */
-.button-orange {
-  background-color: var(--dino-orange); /* Uses updated deeper orange */
-  color: white;
-}
-.hero-cta-button {
-  margin-top: 0;
-  /* Add margin below button before the separator line */
-  margin-bottom: 60px; /* Space above the bottom line */
-  z-index: 1;
-  position: relative;
+  from { transform: rotate(-2deg); }
+  to { transform: rotate(2deg); }
 }
 
-
-/* --- UPDATED Black Line Separator --- */
-.hero-section.fun-hero::after {
-  content: ''; /* Necessary for pseudo-elements */
-  position: absolute;
-  bottom: 0; /* Position at the very bottom */
-  left: 0;
-  width: 100%; /* Full width */
-  /* Make the line thinner */
-  height: 2px; /* <<-- REDUCED from 4px */
-  background-color: var(--text-dark); /* Black color */
-  z-index: 3; /* Ensure it's above background but potentially below future elements */
-}
-/* --- END Separator --- */
-
-
-/* --- Responsive Adjustments --- */
-@media (max-width: 768px) {
-  .main-title.book-title-approx {
-    font-size: 4em;
-    -webkit-text-stroke-width: 2px;
-    text-stroke-width: 2px;
-    text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
-    margin-bottom: 30px; /* Adjusted */
-  }
-  .hero-main-illustration-container { /* Adjust container for responsive */
-    margin-bottom: 30px; /* Adjusted */
-  }
-  /* img.hero-main-illustration { /* Adjust image if needed */
-    /* min-height: 180px; /* Remove or adjust */
-  /* } */
-   .hero-section.fun-hero {
-     /* Keep padding-bottom 0 */
-     padding-top: 40px;
-     padding-left: 15px;
-     padding-right: 15px;
-   }
-   .hero-cta-button {
-     margin-bottom: 50px; /* Adjust space above line */
-   }
-   .hero-section.fun-hero::after {
-      /* Make the line thinner */
-      height: 2px; /* <<-- REDUCED from 3px (or kept same as base) */
-   }
+/* Buttons container */
+.hero-buttons-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 60px;
 }
 
-@media (max-width: 480px) {
-  .main-title.book-title-approx {
-    font-size: 3em;
-    line-height: 1.2;
-    margin-bottom: 25px; /* Adjusted */
-  }
-   .hero-section.fun-hero {
-     padding-top: 30px;
-   }
-   .hero-main-illustration-container { /* Adjust container for responsive */
-     width: 90%;
-     margin-bottom: 25px; /* Adjusted */
-     margin-top: 25px; /* Adjusted */
-   }
-   /* img.hero-main-illustration { /* Adjust image if needed */
-     /* min-height: 150px; /* Remove or adjust */
-   /* } */
-   .hero-cta-button {
-     margin-bottom: 40px; /* Adjust space above line */
-   }
-    .hero-section.fun-hero::after {
-      /* Make the line thinner */
-      height: 1px; /* <<-- REDUCED from 2px */
-   }
-   img.hero-main-illustration:hover { /* Adjust hover for image */
-      transform: scale(1.02);
-   }
+/* Alignment helpers */
+.hero-section.align-left .hero-inner { align-items: flex-start; text-align: left; }
+.hero-section.align-right .hero-inner { align-items: flex-end; text-align: right; }
+
+@media (prefers-reduced-motion: reduce) {
+  .main-title.book-title-approx { text-shadow: none; -webkit-text-stroke: 2px var(--color-dark-text, #212121); animation: none; }
+  .main-title.book-title-approx span { opacity: 1; }
+  .hero-main-illustration { animation: none; }
 }

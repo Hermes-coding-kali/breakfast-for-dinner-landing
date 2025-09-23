@@ -1,134 +1,81 @@
 /* src/App.css */
-body {
-  margin: 0;
-  font-family: 'Baloo 2', cursive, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f0f4f8; /* Use the light blue-grey from hero */
-  color: #333;
-  /* UPDATED: Base font size */
-  font-size: 18px; /* Increased from 17px */
-  line-height: 1.7;
-  /* Keep base weight normal, increase specifically on p */
-  font-weight: 400;
 
+html {
+  font-size: 18px;
+}
+@media (min-width: 768px) {
+    html {
+        font-size: 20px;
+    }
 }
 
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* --- DYNAMIC STYLES --- */
+  /* These variables are controlled by the "Body Paragraph" style in Sanity */
+  background-color: var(--color-background, #f0f4f8);
+  color: var(--color-dark-text, #333);
+  font-family: var(--font-body-paragraph-family, 'Baloo 2', sans-serif);
+  font-size: var(--font-body-paragraph-size, 1rem);
+  font-weight: var(--font-body-paragraph-weight, 400);
+  line-height: var(--font-body-paragraph-line-height, 1.7);
+  letter-spacing: var(--font-body-paragraph-letter-spacing, normal);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  /* --- DYNAMIC STYLES --- */
+  /* These variables are controlled by the "Page Heading" style in Sanity */
+  font-family: var(--font-page-heading-family, 'Lilita One', cursive);
+  font-weight: var(--font-page-heading-weight, 700);
+  line-height: var(--font-page-heading-line-height, 1.3);
+  letter-spacing: var(--font-page-heading-letter-spacing, normal);
+  color: var(--color-dark-text, #212121);
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+}
+
+/* You can still have specific overrides using dynamic variables */
+h2 {
+  font-size: var(--font-page-heading-size, 2.5em);
+  color: var(--color-brand-purple, #8e24aa);
+}
+
+p {
+  margin-bottom: 1.2em;
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- REMOVED STATIC STYLES --- */
+/* The old :root color palette has been removed. */
+/* The old .cta-button styles have been removed. */
+
+
+/* --- UTILITY & LAYOUT CLASSES (Unchanged) --- */
+.full-window-section {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
 .App {
   text-align: center;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
-/* --- NEW STYLE --- */
-/* Add padding-top to main content area to account for fixed header */
-main {
-  padding-top: 65px; /* Adjust this value if header height differs */
-}
-/* --- END NEW STYLE --- */
-
-
-/* --- Color Palette --- */
-:root {
-  --sky-blue: #a0d2eb;
-  --hill-green-light: #7cb342;
-  --hill-green-dark: #388e3c;
-  --river-blue: #4fa8e0;
-  --dino-lime: #c0ca33;
-  --dino-orange: #fb8c00;
-  --pants-blue: #1976d2;
-  --pants-purple: #8e24aa;
-  --text-dark: #212121;
-  --title-yellow: #ffeb3b;
-  --title-orange: #ffa726;
-  --title-red-orange: #ff7043;
-}
-/* --- END Palette --- */
-
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.3;
-  margin-top: 1.5em;
-  margin-bottom: 0.8em;
-  color: var(--text-dark);
-}
-
-h2 {
-  font-size: 2em; /* Base H2 size */
-  color: var(--pants-purple);
-}
-
-/* --- UPDATED Paragraph Styles --- */
-p {
-  margin-bottom: 1.2em;
-  max-width: 65ch;
-  margin-left: auto;
-  margin-right: auto;
-  /* Increase font weight for better readability */
-  font-weight: 600; /* Increased from 500 */
-  /* Add slight letter spacing */
-  letter-spacing: 0.3px;
-  /* Font size will inherit from body (18px base) */
-}
-
-/* Specific heading styles defined in component CSS */
-/* .main-title { ... } */
-
 .bordered-box {
   border: 4px solid var(--text-dark);
   border-radius: 20px;
   padding: 30px 40px;
   margin: 30px auto;
   max-width: 750px;
-  background-color: white; /* Default */
+  background-color: white;
   box-shadow: 5px 5px 0px var(--hill-green-dark);
-}
-
-button.cta-button {
-  font-family: 'Baloo 2', cursive, sans-serif;
-  font-size: 1.25em;
-  font-weight: 700;
-  padding: 15px 30px;
-  border-radius: 30px;
-  border: 4px solid var(--text-dark);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 20px;
-  box-shadow: 3px 3px 0px rgba(0,0,0,0.5);
-}
-
-button.cta-button:hover {
-  transform: scale(1.05) translateY(-2px);
-   box-shadow: 5px 5px 0px rgba(0,0,0,0.6);
-}
-
-button.cta-button:active {
-  transform: scale(1.02) translateY(1px);
-  box-shadow: 1px 1px 0px rgba(0,0,0,0.6);
-}
-
-.button-blue {
-  background-color: var(--pants-blue);
-  color: white;
-}
-
-.button-purple {
-  background-color: var(--pants-purple);
-  color: white;
-}
-
-@media (min-width: 768px) {
-    body {
-        /* UPDATED: Larger font size on desktop */
-        font-size: 20px; /* Increased from 18px */
-    }
-    /* Removed base .main-title styles as they conflict */
-    h2 {
-        font-size: 2.5em; /* Base H2 size */
-    }
-    /* Ensure paragraph max-width is still appropriate */
-    p {
-       /* max-width: 70ch; */ /* Optional: slightly wider lines allowed */
-    }
 }

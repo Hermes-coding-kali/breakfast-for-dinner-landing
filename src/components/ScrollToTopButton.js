@@ -13,7 +13,7 @@ function ScrollToTopButton() {
       setIsVisible(true);
     } else {
       setIsVisible(false);
-    }
+    } 
   };
 
   // Function to scroll smoothly to the top

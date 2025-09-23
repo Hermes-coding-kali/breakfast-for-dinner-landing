@@ -12,7 +12,10 @@
 
   # Optional: Base directory if your project isn't in the root of the repository
   # base = "/"
-
+[dev]
+  # The port that your React app is running on
+  targetPort = 3002
+  
 # Redirect rule for Single Page Applications (SPA) like React
 # This rule ensures that when a user navigates directly to a route like
 # yoursite.netlify.app/about or refreshes such a page, Netlify serves
