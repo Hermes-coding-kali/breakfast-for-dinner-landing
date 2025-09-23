@@ -21,16 +21,22 @@ exports.handler = async (event) => {
       return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
     }
 
-    const body = JSON.parse(event.body || '{}');
-    let items = Array.isArray(body.items) && body.items.length
-      ? body.items
-      : (body.productId ? [{ productId: body.productId, quantity: body.quantity || 1 }] : []);
+    // It's safer to get customerInfo from the body here as well
+    const { items, customerInfo } = JSON.parse(event.body || '{}');
 
-    if (!items.length) {
+    // Updated item validation
+    const cartItems = Array.isArray(items) && items.length ? items : [];
+
+    if (!cartItems.length) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing or invalid cart items' }) };
     }
+    
+    // Check for customer email, which is now required
+    if (!customerInfo || !customerInfo.email) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing customer email' }) };
+    }
 
-    const ids = items.map((i) => i.productId);
+    const ids = cartItems.map((i) => i.productId);
     const sanityProducts = await client.fetch(
       `*[_type == "product" && _id in $ids]{ _id, name, "priceId": stripe.stripePriceId }`,
       { ids }
@@ -38,7 +44,7 @@ exports.handler = async (event) => {
 
     const productsById = Object.fromEntries(sanityProducts.map(p => [p._id, p]));
 
-    const lineItems = items.map((i) => {
+    const lineItems = cartItems.map((i) => {
       const p = productsById[i.productId];
       if (!p || !p.priceId) throw new Error(`Invalid product in cart: ${i.productId}`);
       return {
@@ -52,19 +58,23 @@ exports.handler = async (event) => {
       line_items: lineItems,
       automatic_tax: { enabled: true },
       
-      // --- ADD THIS SECTION ---
       shipping_options: [
         {
-          shipping_rate: 'shr_1S8eOvDgMYpxoSaOrxUIVsU8', // <-- PASTE YOUR SHIPPING RATE ID HERE
+          shipping_rate: 'shr_1S8eOvDgMYpxoSaOrxUIVsU8',
         },
       ],
-      // ------------------------
-
+      
       success_url: `${process.env.URL}/success`,
       cancel_url: `${process.env.URL}/cancel`,
-      // This line was already here and is required for shipping!
       shipping_address_collection: { allowed_countries: ['CA'] },
       allow_promotion_codes: true,
+
+      // --- THE FIX: ADDED THIS SECTION ---
+      // This ensures a customer object is created in Stripe
+      customer_creation: 'always', 
+      // This explicitly provides the email for the automatic receipt
+      customer_email: customerInfo.email,
+      // ------------------------------------
     });
 
     return { statusCode: 200, body: JSON.stringify({ url: session.url }) };
