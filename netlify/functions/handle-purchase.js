@@ -55,7 +55,7 @@ exports.handler = async ({ body, headers }) => {
       // --- Email to the Owner ---
       await resend.emails.send({
         from: 'Sales <sales@breakfastfordinner.ca>',
-        to: ['mayahermeskali@gmail.com'],
+        to: ['br3akfast.f0r.dinn3r@gmail.com'],
         subject: `New Sale! Order #${session.id.substring(8)}`,
         html: `<h2>You made a new sale!</h2>
                <p><strong>Customer Email:</strong> ${customerEmail}</p>
@@ -66,7 +66,7 @@ exports.handler = async ({ body, headers }) => {
       // --- Detailed Email to the Publishing Company ---
       await resend.emails.send({
         from: 'New Order <orders@breakfastfordinner.ca>',
-        to: ['hermes.kali.music@gmail.com'],
+        to: ['br3akfast.f0r.dinn3r@gmail.com'],
         subject: `New Order Notification - Please Ship (Order #${session.id.substring(8)})`,
         html: `
           <h1>New Order to Fulfill</h1>
