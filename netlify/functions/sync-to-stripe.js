@@ -22,7 +22,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { _id, name, price } = JSON.parse(body);
+    const { _id } = JSON.parse(body);
 
     if (!_id) {
       return { statusCode: 400, body: 'Missing _id for Sanity document' };
@@ -34,6 +34,9 @@ exports.handler = async (event) => {
     if (!doc) {
       return { statusCode: 404, body: 'Sanity document not found' };
     }
+    
+    // Deconstruct all the fields you need from the Sanity doc
+    const { name, price, sku, priceCode } = doc;
 
     // Avoid loop: if this update was triggered by our own sync
     if (doc.syncedFrom === 'stripe') {
@@ -48,27 +51,31 @@ exports.handler = async (event) => {
 
     let product;
     let stripePrice;
+    
+    // --- Prepare the data payload for Stripe ---
+    const productData = {
+      name,
+      metadata: {
+        sku: sku || null,                 // NEW: Pass SKU to metadata
+        priceCode: priceCode || null,     // NEW: Pass Price Code to metadata
+        sanityId: _id                      // Good practice to store this too
+      }
+    };
 
     // --- Product sync logic ---
     if (!doc.stripeProductId) {
       // Create product if it doesn't exist
       product = await stripe.products.create(
-        { name },
-        { idempotencyKey: _id } // Prevent duplicate creation
+        productData, // Use the new data object
+        { idempotencyKey: `product-${_id}` } 
       );
     } else {
-      // Fetch existing product
-      product = await stripe.products.retrieve(doc.stripeProductId);
-
-      // Update name if different
-      if (product.name !== name) {
-        product = await stripe.products.update(doc.stripeProductId, { name });
-      }
+      // Update the existing product
+      product = await stripe.products.update(doc.stripeProductId, productData);
     }
 
-    // --- Price sync logic ---
-    const needsNewPrice =
-      !doc.stripePriceId || doc.price !== price;
+    // --- Price sync logic (no changes needed here) ---
+    const needsNewPrice = !doc.stripePriceId || doc.price !== price;
 
     if (needsNewPrice) {
       stripePrice = await stripe.prices.create({
@@ -80,14 +87,14 @@ exports.handler = async (event) => {
       stripePrice = { id: doc.stripePriceId };
     }
 
-    // --- Update Sanity ---
+    // --- Update Sanity (no changes needed here) ---
     await sanityClient
       .patch(_id)
       .set({
         stripeProductId: product.id,
         stripePriceId: stripePrice.id,
-        price, // Ensure local price matches
-        syncedFrom: 'stripe', // Prevent loop on next webhook
+        price,
+        syncedFrom: 'stripe',
       })
       .commit({ autoGenerateArrayKeys: true });
 
