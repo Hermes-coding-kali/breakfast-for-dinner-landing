@@ -36,7 +36,7 @@ exports.handler = async (event) => {
     }
     
     // Deconstruct all the fields you need from the Sanity doc
-    const { name, price, sku, priceCode } = doc;
+    const { name, sku, priceCode } = doc;
 
     // Avoid loop: if this update was triggered by our own sync
     if (doc.syncedFrom === 'stripe') {
@@ -44,57 +44,37 @@ exports.handler = async (event) => {
       return { statusCode: 200, body: 'No action needed.' };
     }
 
-    // Validate price
-    if (typeof price !== 'number' || price <= 0) {
-      return { statusCode: 400, body: 'Invalid price value' };
-    }
-
     let product;
-    let stripePrice;
     
     // --- Prepare the data payload for Stripe ---
     const productData = {
       name,
       metadata: {
-        sku: sku || null,                 // NEW: Pass SKU to metadata
-        priceCode: priceCode || null,     // NEW: Pass Price Code to metadata
-        sanityId: _id                      // Good practice to store this too
+        sku: sku || null,
+        priceCode: priceCode || null,
+        sanityId: _id
       }
     };
 
     // --- Product sync logic ---
-    if (!doc.stripeProductId) {
+    // Use the nested stripeProductId from your schema
+    if (!doc.stripe?.stripeProductId) {
       // Create product if it doesn't exist
       product = await stripe.products.create(
-        productData, // Use the new data object
+        productData,
         { idempotencyKey: `product-${_id}` } 
       );
     } else {
       // Update the existing product
-      product = await stripe.products.update(doc.stripeProductId, productData);
+      product = await stripe.products.update(doc.stripe.stripeProductId, productData);
     }
 
-    // --- Price sync logic (no changes needed here) ---
-    const needsNewPrice = !doc.stripePriceId || doc.price !== price;
-
-    if (needsNewPrice) {
-      stripePrice = await stripe.prices.create({
-        product: product.id,
-        unit_amount: Math.round(price * 100),
-        currency: 'cad',
-      });
-    } else {
-      stripePrice = { id: doc.stripePriceId };
-    }
-
-    // --- Update Sanity (no changes needed here) ---
+    // --- Update Sanity with the Stripe Product ID ---
     await sanityClient
       .patch(_id)
       .set({
-        stripeProductId: product.id,
-        stripePriceId: stripePrice.id,
-        price,
-        syncedFrom: 'stripe',
+        'stripe.stripeProductId': product.id,
+        syncedFrom: 'stripe', // Prevents re-triggering this function
       })
       .commit({ autoGenerateArrayKeys: true });
 
@@ -102,9 +82,8 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message: 'Product synced with Stripe successfully!',
+        message: 'Product metadata synced with Stripe successfully!',
         productId: product.id,
-        priceId: stripePrice.id
       })
     };
   } catch (error) {
