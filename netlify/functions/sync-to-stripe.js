@@ -10,7 +10,7 @@ const REQUIRED_ENV = [
   'SANITY_PROJECT_ID',
   'SANITY_DATASET',
   'SANITY_API_TOKEN',
-  // 'SANITY_API_VERSION',
+  'SANITY_API_VERSION',
   'SANITY_WEBHOOK_SECRET',
 ];
 const missing = REQUIRED_ENV.filter((k) => !process.env[k]);
