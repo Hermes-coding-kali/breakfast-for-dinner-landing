@@ -14,30 +14,44 @@ const sanity = createClient({
   token: process.env.SANITY_API_TOKEN,
 });
 
+/**
+ * Derives SKU and Price Code from a Stripe line item.
+ * It first checks the Stripe Product's metadata. If the data is missing,
+ * it uses the sanityId from the metadata to fall back and fetch directly from Sanity.
+ */
 async function deriveSkuAndPriceCode(item) {
-  const pMeta = item?.price?.product?.metadata || {};
-  const priceMeta = item?.price?.metadata || {};
+  const productMetadata = item?.price?.product?.metadata || {};
 
-  let sku = pMeta.sku || pMeta.isbn || priceMeta.sku || priceMeta.isbn;
-  let priceCode = pMeta.priceCode || priceMeta.priceCode;
+  // 1. Try to get values directly from Stripe product metadata
+  let sku = productMetadata.sku;
+  let priceCode = productMetadata.priceCode;
 
-  if (sku && priceCode) return { sku, priceCode };
-
-  const sanityId = pMeta.sanityId || priceMeta.sanityId;
-  if (sanityId) {
-    try {
-      const doc = await sanity.getDocument(sanityId);
-      if (doc) {
-        sku = sku || doc.sku || doc.isbn;
-        priceCode = priceCode || doc.priceCode;
+  // 2. If they are missing, try the Sanity fallback
+  if (!sku || !priceCode) {
+    const sanityId = productMetadata.sanityId;
+    if (sanityId) {
+      try {
+        console.log(`Fallback: metadata missing, fetching Sanity doc ${sanityId}`);
+        const doc = await sanity.getDocument(sanityId);
+        if (doc) {
+          // Only fill in the values that were missing
+          sku = sku || doc.sku;
+          priceCode = priceCode || doc.priceCode;
+        } else {
+           console.warn(`Sanity doc ${sanityId} not found during fallback.`);
+        }
+      } catch (e) {
+        console.error('Sanity fallback query failed for', sanityId, e.message);
       }
-    } catch (e) {
-      console.warn('Sanity fallback failed for', sanityId, e.message);
+    } else {
+        console.warn('Cannot fall back to Sanity: sanityId is missing from Stripe metadata for product:', item?.price?.product?.id);
     }
   }
 
+  // 3. Return what we found, or 'N/A' as the final default
   return { sku: sku || 'N/A', priceCode: priceCode || 'N/A' };
 }
+
 
 exports.handler = async (event) => {
   const sig = event.headers['stripe-signature'];
@@ -53,21 +67,21 @@ exports.handler = async (event) => {
   if (stripeEvent.type === 'checkout.session.completed') {
     const session = stripeEvent.data.object;
 
-    // Expand both price and product
+    // Expand both price and product to get metadata
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
       expand: ['data.price', 'data.price.product'],
     });
-
-    // TEMP DEBUG: see what metadata is available
+    
+    // For debugging: check your Netlify function logs for this output
     console.log(
       'LineItem metadata snapshot:',
       lineItems.data.map((li) => ({
+        productName: li.description,
         productId: li?.price?.product?.id,
-        priceId: li?.price?.id,
         productMeta: li?.price?.product?.metadata,
-        priceMeta: li?.price?.metadata,
       }))
     );
+
 
     const details = session.shipping_details || session.customer_details;
     if (!details || !details.address) {
