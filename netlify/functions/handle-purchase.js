@@ -4,14 +4,13 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { Resend } = require('resend');
 const { createClient } = require('@sanity/client');
 
-// ---------- Required envs (fail fast in dev) ----------
+// ---------- Env & setup ----------
 const REQUIRED_ENV = [
   'STRIPE_SECRET_KEY',
   'STRIPE_WEBHOOK_SECRET',
   'RESEND_API_KEY',
   'SANITY_PROJECT_ID',
   'SANITY_DATASET',
-  // SANITY_API_TOKEN optional if your fields are public; used for fallback
 ];
 const missing = REQUIRED_ENV.filter((k) => !process.env[k]);
 if (missing.length) {
@@ -21,9 +20,24 @@ if (missing.length) {
 const resend = new Resend(process.env.RESEND_API_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-// Optional envs for recipients + Sanity
-const OWNER_EMAIL = process.env.OWNER_EMAIL || 'sales@breakfastfordinner.ca';
-const FULFILLMENT_EMAIL = process.env.FULFILLMENT_EMAIL || 'orders@breakfastfordinner.ca';
+// FROM (must be a verified Resend domain/address)
+const RESEND_FROM_OWNER = process.env.RESEND_FROM_OWNER || 'Sales <sales@breakfastfordinner.ca>';
+const RESEND_FROM_FULFILLMENT =
+  process.env.RESEND_FROM_FULFILLMENT || 'New Order <orders@breakfastfordinner.ca>';
+
+// TO (comma-separated lists)
+function list(val) {
+  return (val || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+const OWNER_TO = list(process.env.OWNER_TO || 'hermes.kali.music@gmail.com'); // internal notify list
+const FULFILLMENT_TO = list(process.env.FULFILLMENT_TO || 'mayahermeskali@gmail.com'); // warehouse/partner
+
+// Optional reply-to (e.g., your support inbox)
+const REPLY_TO = list(process.env.REPLY_TO || 'support@breakfastfordinner.ca');
+
 const SANITY_API_VERSION = process.env.SANITY_API_VERSION || '2024-08-14';
 const sanity = createClient({
   projectId: process.env.SANITY_PROJECT_ID,
@@ -35,14 +49,12 @@ const sanity = createClient({
 
 // ---------- Helpers ----------
 function getRawBody(event) {
-  // Netlify passes string; for Stripe verification we must use the *raw* body.
-  // If isBase64Encoded, decode to a Buffer and then back to UTF-8 string.
   return event.isBase64Encoded
     ? Buffer.from(event.body, 'base64').toString('utf8')
     : event.body;
 }
 
-function usd(amount, currency = 'usd', locale = 'en-CA') {
+function money(amount, currency = 'usd', locale = 'en-CA') {
   try {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
@@ -51,7 +63,6 @@ function usd(amount, currency = 'usd', locale = 'en-CA') {
       minimumFractionDigits: 2,
     }).format((amount || 0) / 100);
   } catch {
-    // Fallback
     return `$${((amount || 0) / 100).toFixed(2)} ${currency.toUpperCase()}`;
   }
 }
@@ -71,24 +82,25 @@ function formatDateFromUnix(unix, tz = 'America/Vancouver', locale = 'en-CA') {
 function formatAddress(details) {
   if (!details?.address) return 'Address not provided';
   const a = details.address;
-  const lines = [
+  const line3 =
+    [a.city, a.state, a.postal_code].filter(Boolean).join(' ') || '';
+  return [
     details.name,
     a.line1,
     a.line2,
-    `${a.city || ''}${a.city && (a.state || a.postal_code) ? ',' : ''} ${a.state || ''} ${a.postal_code || ''}`.trim(),
+    line3,
     a.country,
-  ].filter(Boolean);
-  return lines.join('<br>');
+  ]
+    .filter(Boolean)
+    .join('<br>');
 }
 
 // Prefer Product metadata; fallback to Price; fallback to Sanity via backref; last resort "N/A"
 async function deriveSkuAndPriceCode(item) {
   const pMeta = item?.price?.product?.metadata || {};
   const priceMeta = item?.price?.metadata || {};
-
   let sku = pMeta.sku || pMeta.isbn || priceMeta.sku || priceMeta.isbn;
   let priceCode = pMeta.priceCode || priceMeta.priceCode;
-
   if (sku && priceCode) return { sku, priceCode, source: 'stripe' };
 
   const sanityId = pMeta.sanityId || priceMeta.sanityId;
@@ -104,11 +116,9 @@ async function deriveSkuAndPriceCode(item) {
       console.warn('Sanity fallback failed', { sanityId, message: e.message });
     }
   }
-
   return { sku: sku || 'N/A', priceCode: priceCode || 'N/A', source: 'none' };
 }
 
-// Build HTML rows for items
 async function buildItemsTableRows(lineItems) {
   const rows = await Promise.all(
     lineItems.data.map(async (item) => {
@@ -129,7 +139,7 @@ async function buildItemsTableRows(lineItems) {
 
 // ---------- Handler ----------
 exports.handler = async (event) => {
-  // Stripe requires the exact raw body string for signature verification
+  // Stripe signature verification needs the raw body
   const rawBody = getRawBody(event);
   const sig = event.headers['stripe-signature'] || event.headers['Stripe-Signature'];
 
@@ -138,13 +148,9 @@ exports.handler = async (event) => {
     stripeEvent = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
   } catch (err) {
     console.error('Stripe signature verification failed:', err.message);
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: `Webhook Error: ${err.message}` }),
-    };
+    return { statusCode: 400, body: JSON.stringify({ error: `Webhook Error: ${err.message}` }) };
   }
 
-  // We only care about completed checkouts
   if (stripeEvent.type !== 'checkout.session.completed') {
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
   }
@@ -152,7 +158,7 @@ exports.handler = async (event) => {
   const session = stripeEvent.data.object;
 
   try {
-    // Expand BOTH price and product so metadata is always accessible
+    // Expand both price and product so metadata is always available
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
       expand: ['data.price', 'data.price.product'],
     });
@@ -160,7 +166,6 @@ exports.handler = async (event) => {
     const details = session.shipping_details || session.customer_details;
     if (!details?.address) {
       console.error('Missing shipping/customer address on session:', { sessionId: session.id });
-      // Acknowledge to Stripe to avoid retries; log for manual follow-up.
       return { statusCode: 200, body: JSON.stringify({ received: true, warning: 'Missing address' }) };
     }
 
@@ -170,12 +175,12 @@ exports.handler = async (event) => {
     const shippingMethod = session.shipping_details?.shipping_rate?.display_name || 'Standard Shipping';
     const orderDate = formatDateFromUnix(stripeEvent.created);
     const currency = (session.currency || 'usd').toUpperCase();
-    const totalFormatted = usd(session.amount_total, currency);
-    const subtotalFormatted = usd(session.amount_subtotal, currency);
+    const totalFormatted = money(session.amount_total, currency);
+    const subtotalFormatted = money(session.amount_subtotal, currency);
     const shippingTotal = session.total_details?.amount_shipping || 0;
-    const shippingFormatted = usd(shippingTotal, currency);
+    const shippingFormatted = money(shippingTotal, currency);
     const taxTotal = session.total_details?.amount_tax || 0;
-    const taxFormatted = usd(taxTotal, currency);
+    const taxFormatted = money(taxTotal, currency);
 
     const itemsTable = await buildItemsTableRows(lineItems);
 
@@ -194,7 +199,7 @@ exports.handler = async (event) => {
     `;
     const ownerText = `New sale\nOrder: ${session.id}\nTotal: ${totalFormatted}\nCustomer: ${customerEmail}\nDate: ${orderDate}`;
 
-    // 2) Fulfillment details (SKU / Price Code guaranteed via fallback)
+    // 2) Fulfillment details
     const fulfillSubject = `New Fulfillment • ${session.id.slice(-8)} • ${totalFormatted}`;
     const fulfillHtml = `
       <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6">
@@ -256,15 +261,14 @@ exports.handler = async (event) => {
       `Customer: ${customerEmail} (${customerPhone})`,
       `Shipping Method: ${shippingMethod}`,
       `Items: see HTML version for table`,
-    ]
-      .filter(Boolean)
-      .join('\n');
+    ].filter(Boolean).join('\n');
 
-    // Fire & forget email sends; webhook should still 200 even if email fails
+    // Send emails (note: FROM is your verified Resend sender; TO are your recipients)
     try {
       await resend.emails.send({
-        from: `Sales <${OWNER_EMAIL}>`,
-        to: [OWNER_EMAIL],
+        from: RESEND_FROM_OWNER,
+        to: OWNER_TO,
+        reply_to: REPLY_TO,
         subject: ownerSubject,
         html: ownerHtml,
         text: ownerText,
@@ -275,8 +279,9 @@ exports.handler = async (event) => {
 
     try {
       await resend.emails.send({
-        from: `New Order <${FULFILLMENT_EMAIL}>`,
-        to: [FULFILLMENT_EMAIL],
+        from: RESEND_FROM_FULFILLMENT,
+        to: FULFILLMENT_TO,
+        reply_to: REPLY_TO,
         subject: fulfillSubject,
         html: fulfillHtml,
         text: fulfillText,
@@ -285,16 +290,17 @@ exports.handler = async (event) => {
       console.error('Fulfillment email failed:', e?.message || e);
     }
 
-    // Helpful debug (visible in Netlify logs)
+    // Debug snapshot
     console.log(
       JSON.stringify(
         {
           msg: 'checkout.session.completed processed',
           sessionId: session.id,
+          ownerTo: OWNER_TO,
+          fulfillmentTo: FULFILLMENT_TO,
           lineItems: lineItems.data.map((li) => ({
             productId: li?.price?.product?.id,
             priceId: li?.price?.id,
-            // Show a snapshot of metadata presence for troubleshooting
             hasProductMeta: !!Object.keys(li?.price?.product?.metadata || {}).length,
             hasPriceMeta: !!Object.keys(li?.price?.metadata || {}).length,
           })),
@@ -304,15 +310,14 @@ exports.handler = async (event) => {
       )
     );
   } catch (err) {
-    // Don’t cause Stripe retries unless you *need* them.
     console.error('Webhook handling error:', {
       message: err?.message,
       code: err?.code,
       stack: err?.stack?.split('\n')?.[0],
     });
+    // Return 200 so Stripe doesn't retry unless you want retries.
     return { statusCode: 200, body: JSON.stringify({ received: true, warning: 'Handler error logged' }) };
   }
 
-  // Always acknowledge to Stripe
   return { statusCode: 200, body: JSON.stringify({ received: true }) };
 };
