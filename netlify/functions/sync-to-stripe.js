@@ -25,7 +25,7 @@ const sanityClient = createClient({
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,
   apiVersion: process.env.SANITY_API_VERSION,
-});
+}); 
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return cors(204);
