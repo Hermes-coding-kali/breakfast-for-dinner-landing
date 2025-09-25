@@ -81,7 +81,7 @@ exports.handler = async ({ body, headers }) => {
       // --- Email to the Owner (unchanged) ---
       await resend.emails.send({
         from: 'Sales <sales@breakfastfordinner.ca>',
-        to: ['br3akfast.f0r.dinn3r@gmail.com'], // Replace with actual owner email if different
+        to: ['hermes.kali.music@gmail.com'], // Replace with actual owner email if different
         subject: `New Sale! Order #${session.id.substring(8)}`,
         html: `<h2>You made a new sale!</h2>
                <p><strong>Customer Email:</strong> ${customerEmail}</p>
@@ -92,7 +92,7 @@ exports.handler = async ({ body, headers }) => {
       // --- DETAILED FULFILLMENT EMAIL TO THE PUBLISHING COMPANY ---
       await resend.emails.send({
         from: 'New Order <orders@breakfastfordinner.ca>',
-        to: ['br3akfast.f0r.dinn3r@gmail.com'], // IMPORTANT: Replace with the publisher's fulfillment email address
+        to: ['mayahermeskali@gmail.com'], // IMPORTANT: Replace with the publisher's fulfillment email address
         subject: `New Fulfillment Request - Order #${session.id.substring(8)}`,
         html: `
           <div style="font-family: sans-serif; line-height: 1.6;">
