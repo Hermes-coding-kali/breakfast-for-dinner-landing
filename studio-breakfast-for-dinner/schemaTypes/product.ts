@@ -1,6 +1,6 @@
 // studio-breakfast-for-dinner/schemaTypes/product.ts
 import { defineField, defineType } from 'sanity'
-import { BookIcon } from '@sanity/icons' // Example icon
+import { BookIcon } from '@sanity/icons'
 
 export default defineType({
     name: 'product',
@@ -15,12 +15,27 @@ export default defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            name: 'sku',
+            title: 'SKU or ISBN', // You can rename this for clarity
+            type: 'string',
+            description: 'A unique identifier for this product (e.g., the ISBN).',
+        }),
+        // --- ADD THIS NEW PRICE CODE FIELD ---
+        defineField({
+            name: 'priceCode',
+            title: 'Publisher Price Code',
+            type: 'string',
+            description: 'Internal code used by the publisher (e.g., 62400).',
+        }),
+        // ------------------------------------
+        defineField({
             name: 'slug',
             title: 'Slug',
             type: 'slug',
             options: { source: 'name', maxLength: 96 },
             validation: (Rule) => Rule.required(),
         }),
+        // ... rest of your fields are unchanged
         defineField({
             name: 'images',
             title: 'Product Images',
@@ -68,7 +83,6 @@ export default defineType({
                     description: 'Copy the Price ID from Stripe (e.g., price_1M...)',
                     validation: (Rule) => Rule.required(),
                 }),
-                // ADD THIS FIELD
                 defineField({
                     name: 'taxCode',
                     title: 'Stripe Tax Code',
@@ -84,12 +98,13 @@ export default defineType({
             title: 'name',
             media: 'images.0.asset',
             category: 'category.title',
+            sku: 'sku',
         },
-        prepare({ title, media, category }) {
+        prepare({ title, media, category, sku }) {
             return {
                 title,
                 media,
-                subtitle: category ? `Category: ${category}` : 'Uncategorized',
+                subtitle: sku || (category ? `Category: ${category}` : 'Uncategorized'),
             }
         },
     },
