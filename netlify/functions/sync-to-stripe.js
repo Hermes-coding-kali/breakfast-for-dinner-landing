@@ -20,14 +20,19 @@ if (missing.length) {
 }
 
 const sanityClient = createClient({
-  projectId: process.env.SANITY_PROJECT_ID, 
-  dataset: process.env.SANITY_DATASET, 
+  projectId: process.env.SANITY_PROJECT_ID,
+  dataset: process.env.SANITY_DATASET,
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,
   apiVersion: process.env.SANITY_API_VERSION,
-});  
+});
 
 exports.handler = async (event) => {
+  // ⭐️ --- START DEBUG LOGGING --- ⭐️
+  console.log('[DEBUG] Incoming request headers:', JSON.stringify(event.headers, null, 2));
+  console.log(`[DEBUG] Is SANITY_WEBHOOK_SECRET set? ${!!process.env.SANITY_WEBHOOK_SECRET ? 'Yes' : 'No'}`);
+  // ⭐️ --- END DEBUG LOGGING --- ⭐️
+
   if (event.httpMethod === 'OPTIONS') return cors(204);
   if (event.httpMethod !== 'POST') return json(405, { error: 'Method Not Allowed' });
 
@@ -56,7 +61,7 @@ exports.handler = async (event) => {
   if (!_id) {
     return json(400, { error: 'Missing Sanity document _id' });
   }
-  
+
   console.log(`[SYNC-INFO] Received webhook for Sanity document: ${_id}`);
 
   try {
@@ -65,7 +70,7 @@ exports.handler = async (event) => {
       console.error(`[SYNC-ERROR] Sanity document with ID ${_id} not found.`);
       return json(404, { error: `Sanity document not found: ${_id}` });
     }
-    
+
     console.log(`[SYNC-INFO] Fetched Sanity document data:`, { name: doc.name, sku: doc.sku, priceCode: doc.priceCode, stripePriceId: doc.stripe?.stripePriceId });
 
     const { name, sku, priceCode, stripe: stripeBlock } = doc;
@@ -99,7 +104,7 @@ exports.handler = async (event) => {
       ...(name && { name }), // Only update name if it exists
       metadata,
     };
-    
+
     console.log(`[SYNC-INFO] Preparing to update Stripe Product ${stripeProductId} with data:`, JSON.stringify(productData, null, 2));
 
     const idempotencyKey = `sanity:${_id}:${_rev || Date.now()}`;
