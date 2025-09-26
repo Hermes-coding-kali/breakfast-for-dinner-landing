@@ -22,14 +22,11 @@ exports.handler = async (event) => {
     }
 
     const body = JSON.parse(event.body || '{}');
-
-    // --- Pull email from the request (used for Stripe receipts) ---
     const email =
       typeof body.email === 'string' && body.email.trim().length > 3
         ? body.email.trim()
         : undefined;
 
-    // Build items from cart or single product
     let items = Array.isArray(body.items) && body.items.length
       ? body.items
       : (body.productId ? [{ productId: body.productId, quantity: body.quantity || 1 }] : []);
@@ -55,32 +52,21 @@ exports.handler = async (event) => {
       };
     });
 
-    // --- Create Checkout Session and include an email so Stripe can send receipts ---
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
       automatic_tax: { enabled: true },
-
-      // If you already collected the email in your UI, pass it here.
-      // Stripe will attach it to the Customer/PaymentIntent and email the receipt.
-      customer_email: email, // ok to be undefined if not provided
-      customer_creation: 'always', // ensures a Customer is created for future orders
+      customer_email: email,
+      customer_creation: 'always',
       billing_address_collection: 'auto',
-
-      // (Optional but robust) also set receipt_email on the PaymentIntent.
-      // Checkout will ignore this if `email` is undefined.
       payment_intent_data: email ? { receipt_email: email } : undefined,
-
-      // Shipping options already present
       shipping_options: [
         {
-          shipping_rate: 'shr_1S8eOvDgMYpxoSaOrxUIVsU8', // <-- your Shipping Rate ID
+          shipping_rate: 'shr_1S8eOvDgMYpxoSaOrxUIVsU8',
         },
       ],
-
-      // This line was already here and is required for shipping!
       shipping_address_collection: { allowed_countries: ['CA'] },
-
+      phone_number_collection: { enabled: true }, // ⭐️ ADD THIS LINE
       allow_promotion_codes: true,
       success_url: `${process.env.URL}/success`,
       cancel_url: `${process.env.URL}/cancel`,
