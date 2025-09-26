@@ -55,6 +55,7 @@ exports.handler = async (event) => {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
+      currency: 'cad', // ⭐️ ADD THIS LINE
       automatic_tax: { enabled: true },
       customer_email: email,
       customer_creation: 'always',
@@ -66,7 +67,7 @@ exports.handler = async (event) => {
         },
       ],
       shipping_address_collection: { allowed_countries: ['CA'] },
-      phone_number_collection: { enabled: true }, // ⭐️ ADD THIS LINE
+      phone_number_collection: { enabled: true },
       allow_promotion_codes: true,
       success_url: `${process.env.URL}/success`,
       cancel_url: `${process.env.URL}/cancel`,

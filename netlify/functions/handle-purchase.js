@@ -32,8 +32,8 @@ function list(val) {
     .map((s) => s.trim())
     .filter(Boolean);
 }
-const OWNER_TO = list(process.env.OWNER_TO || 'br3akfast.f0r.dinn3r@gmail.com'); // internal notify list
-const FULFILLMENT_TO = list(process.env.FULFILLMENT_TO || 'br3akfast.f0r.dinn3r@gmail.com'); // warehouse/partner
+const OWNER_TO = list(process.env.OWNER_TO || 'hermes.kali.music@gmail.com'); // internal notify list
+const FULFILLMENT_TO = list(process.env.FULFILLMENT_TO || 'mayahermeskali@gmail.com'); // warehouse/partner
 
 // Optional reply-to (e.g., your support inbox)
 const REPLY_TO = list(process.env.REPLY_TO || 'support@breakfastfordinner.ca');
@@ -54,7 +54,7 @@ function getRawBody(event) {
     : event.body;
 }
 
-function money(amount, currency = 'usd', locale = 'en-CA') {
+function money(amount, currency = 'cad', locale = 'en-CA') { // ⭐️ UPDATED DEFAULT
   try {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
@@ -100,7 +100,7 @@ async function deriveSkuAndPriceCode(item) {
   const pMeta = item?.price?.product?.metadata || {};
   const priceMeta = item?.price?.metadata || {};
   let sku = pMeta.sku || pMeta.isbn || priceMeta.sku || priceMeta.isbn;
-  let priceCode = pMeta.priceCode || priceMeta.priceCode;
+  let priceCode = pMeta.priceCode || pMeta.priceCode;
   if (sku && priceCode) return { sku, priceCode, source: 'stripe' };
 
   const sanityId = pMeta.sanityId || priceMeta.sanityId;
@@ -174,7 +174,7 @@ exports.handler = async (event) => {
     const customerPhone = session.customer_details?.phone || 'Not provided';
     const shippingMethod = session.shipping_details?.shipping_rate?.display_name || 'Standard Shipping';
     const orderDate = formatDateFromUnix(stripeEvent.created);
-    const currency = (session.currency || 'usd').toUpperCase();
+    const currency = (session.currency || 'cad').toUpperCase(); // ⭐️ UPDATED DEFAULT
     const totalFormatted = money(session.amount_total, currency);
     const subtotalFormatted = money(session.amount_subtotal, currency);
     const shippingTotal = session.total_details?.amount_shipping || 0;
@@ -184,26 +184,11 @@ exports.handler = async (event) => {
 
     const itemsTable = await buildItemsTableRows(lineItems);
 
-    // ---------- Emails ----------
-    // 1) Owner notification (concise)
-    const ownerSubject = `New Sale • ${session.id.slice(-8)} • ${totalFormatted}`;
-    const ownerHtml = `
-      <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.5">
-        <h2 style="margin:0 0 8px">You made a new sale!</h2>
-        <p><strong>Order:</strong> ${session.id}</p>
-        <p><strong>Total:</strong> ${totalFormatted}</p>
-        <p><strong>Customer:</strong> ${customerEmail}</p>
-        <hr style="margin:16px 0">
-        <p style="color:#6b7280;font-size:12px">Stripe Checkout • ${orderDate}</p>
-      </div>
-    `;
-    const ownerText = `New sale\nOrder: ${session.id}\nTotal: ${totalFormatted}\nCustomer: ${customerEmail}\nDate: ${orderDate}`;
-
-    // 2) Fulfillment details
-    const fulfillSubject = `New Fulfillment • ${session.id.slice(-8)} • ${totalFormatted}`;
-    const fulfillHtml = `
+    // ---------- Email Content ----------
+    const fullDetailSubject = `New Order • ${session.id.slice(-8)} • ${totalFormatted}`;
+    const fullDetailHtml = `
       <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6">
-        <h1 style="margin:0 0 12px">New Order to Fulfill</h1>
+        <h1 style="margin:0 0 12px">New Order Received</h1>
         <p>Please ship the following items.</p>
 
         <h2 style="margin:16px 0 8px">Order Details</h2>
@@ -244,7 +229,7 @@ exports.handler = async (event) => {
         </p>
       </div>
     `;
-    const fulfillText = [
+    const fullDetailText = [
       `New Order to Fulfill`,
       `Order: ${session.id}`,
       `Date: ${orderDate}`,
@@ -263,15 +248,15 @@ exports.handler = async (event) => {
       `Items: see HTML version for table`,
     ].filter(Boolean).join('\n');
 
-    // Send emails (note: FROM is your verified Resend sender; TO are your recipients)
+    // --- Send emails ---
     try {
       await resend.emails.send({
         from: RESEND_FROM_OWNER,
         to: OWNER_TO,
         reply_to: REPLY_TO,
-        subject: ownerSubject,
-        html: ownerHtml,
-        text: ownerText,
+        subject: fullDetailSubject,
+        html: fullDetailHtml,
+        text: fullDetailText,
       });
     } catch (e) {
       console.error('Owner email failed:', e?.message || e);
@@ -282,9 +267,9 @@ exports.handler = async (event) => {
         from: RESEND_FROM_FULFILLMENT,
         to: FULFILLMENT_TO,
         reply_to: REPLY_TO,
-        subject: fulfillSubject,
-        html: fulfillHtml,
-        text: fulfillText,
+        subject: fullDetailSubject,
+        html: fullDetailHtml,
+        text: fullDetailText,
       });
     } catch (e) {
       console.error('Fulfillment email failed:', e?.message || e);
@@ -315,9 +300,8 @@ exports.handler = async (event) => {
       code: err?.code,
       stack: err?.stack?.split('\n')?.[0],
     });
-    // Return 200 so Stripe doesn't retry unless you want retries.
     return { statusCode: 200, body: JSON.stringify({ received: true, warning: 'Handler error logged' }) };
   }
 
-  return { statusCode: 200, body: JSON.stringify({ received: true }) }; 
+  return { statusCode: 200, body: JSON.stringify({ received: true }) };
 };
