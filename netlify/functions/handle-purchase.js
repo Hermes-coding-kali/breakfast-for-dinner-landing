@@ -32,8 +32,8 @@ function list(val) {
     .map((s) => s.trim())
     .filter(Boolean);
 }
-const OWNER_TO = list(process.env.OWNER_TO || 'hermes.kali.music@gmail.com'); // internal notify list
-const FULFILLMENT_TO = list(process.env.FULFILLMENT_TO || 'mayahermeskali@gmail.com'); // warehouse/partner
+const OWNER_TO = list(process.env.OWNER_TO || 'br3akfast.f0r.dinn3r@gmail.com'); // internal notify list
+const FULFILLMENT_TO = list(process.env.FULFILLMENT_TO || 'shipments@iapcbooks.com'); // warehouse/partner
 
 // Optional reply-to (e.g., your support inbox)
 const REPLY_TO = list(process.env.REPLY_TO || 'support@breakfastfordinner.ca');
