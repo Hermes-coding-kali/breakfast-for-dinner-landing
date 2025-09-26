@@ -32,6 +32,7 @@ exports.handler = async (event) => {
         _id,
         name,
         description,
+        details, 
         "slug": slug.current,
         images,
         "stripePriceId": stripe.stripePriceId
@@ -58,7 +59,7 @@ exports.handler = async (event) => {
       slug: sanityProduct.slug,
       mainImage: sanityProduct.images?.[0] || null, // Get the first image
       stripePriceId: sanityProduct.stripePriceId,
-      // Get price and currency from the Stripe object
+      details: sanityProduct.details, 
       price: stripePrice ? stripePrice.unit_amount / 100 : null,
       currency: stripePrice ? stripePrice.currency.toUpperCase() : null,
     };

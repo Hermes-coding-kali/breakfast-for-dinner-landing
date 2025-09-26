@@ -1,4 +1,5 @@
-// studio-breakfast-for-dinner/schemaTypes/product.ts
+// schemaTypes/product.ts
+
 import { defineField, defineType } from 'sanity'
 import { BookIcon } from '@sanity/icons'
 
@@ -16,18 +17,16 @@ export default defineType({
         }),
         defineField({
             name: 'sku',
-            title: 'SKU or ISBN', // You can rename this for clarity
+            title: 'SKU or ISBN',
             type: 'string',
             description: 'A unique identifier for this product (e.g., the ISBN).',
         }),
-        // --- ADD THIS NEW PRICE CODE FIELD ---
         defineField({
             name: 'priceCode',
             title: 'Publisher Price Code',
             type: 'string',
             description: 'Internal code used by the publisher (e.g., 62400).',
         }),
-        // ------------------------------------
         defineField({
             name: 'slug',
             title: 'Slug',
@@ -35,7 +34,6 @@ export default defineType({
             options: { source: 'name', maxLength: 96 },
             validation: (Rule) => Rule.required(),
         }),
-        // ... rest of your fields are unchanged
         defineField({
             name: 'images',
             title: 'Product Images',
@@ -56,6 +54,41 @@ export default defineType({
             type: 'array',
             of: [{ type: 'block' }],
         }),
+        // ⭐️ START: ADD THIS NEW FIELD ⭐️
+        defineField({
+            name: 'details',
+            title: 'Product Details',
+            type: 'object',
+            options: { collapsible: true, collapsed: false },
+            fields: [
+                defineField({
+                    name: 'format',
+                    title: 'Format',
+                    type: 'string',
+                    options: { list: ['Hardcover', 'Paperback', 'E-Book'] },
+                    initialValue: 'Hardcover',
+                }),
+                defineField({
+                    name: 'pages',
+                    title: 'Page Count',
+                    type: 'number',
+                    validation: (Rule) => Rule.integer().positive(),
+                }),
+                defineField({
+                    name: 'dimensions',
+                    title: 'Dimensions',
+                    type: 'string',
+                    description: 'e.g., "8.5 x 11 inches"',
+                }),
+                 defineField({
+                    name: 'language',
+                    title: 'Language',
+                    type: 'string',
+                    initialValue: 'English',
+                }),
+            ]
+        }),
+        // ⭐️ END: ADD THIS NEW FIELD ⭐️
         defineField({
             name: 'inventory',
             title: 'Inventory',

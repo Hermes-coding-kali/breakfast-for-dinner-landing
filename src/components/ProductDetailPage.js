@@ -1,3 +1,5 @@
+// src/components/ProductDetailPage.js
+
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { PortableText } from "@portabletext/react";
@@ -11,10 +13,9 @@ function ProductDetailPage() {
   const { addToCart, toggleCart } = useCartStore();
 
   const [product, setProduct] = useState(null);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
 
-  // pricing (lazy enrichment like featured item)
   const [pricing, setPricing] = useState({
     price: null,
     currency: "CAD",
@@ -91,7 +92,6 @@ function ProductDetailPage() {
 
   const onAddToCart = async () => {
     if (!product) return;
-
     let currentPricing = pricing;
     if (currentPricing.price == null) {
       currentPricing = await fetchPricing(product._id, {
@@ -100,15 +100,7 @@ function ProductDetailPage() {
         stripePriceId: product.stripePriceId ?? null,
       });
     }
-
-    const enriched = {
-      ...product,
-      price: currentPricing.price ?? product.price ?? null,
-      currency: currentPricing.currency ?? product.currency ?? "CAD",
-      stripePriceId:
-        currentPricing.stripePriceId ?? product.stripePriceId ?? null,
-    };
-
+    const enriched = { ...product, ...currentPricing };
     addToCart(enriched);
     toggleCart();
   };
@@ -136,15 +128,13 @@ function ProductDetailPage() {
   const title = product.title || product.name || "Untitled";
   const mainImage = product.mainImage || product.images?.[0] || null;
   const imgUrl = mainImage ? urlFor(mainImage).width(1200).auto("format").url() : null;
-
   const displayPrice = (pricing.price ?? product.price);
   const currency = (pricing.currency ?? product.currency ?? "CAD");
+  const details = product.details || null; // ⭐️ GET DETAILS OBJECT
 
   return (
     <section className="pdp">
       <div className="pdp__container">
-
-        {/* Left: image */}
         <div className="pdp__media">
           <div className="pdp__imgFrame">
             {imgUrl ? (
@@ -154,8 +144,6 @@ function ProductDetailPage() {
             )}
           </div>
         </div>
-
-        {/* Right: content */}
         <div className="pdp__info">
           <h1 className="pdp__title">{title}</h1>
 
@@ -166,10 +154,6 @@ function ProductDetailPage() {
                 <span className="pdp__currency">{currency}</span>
               </div>
             )}
-            {/* Optional compare-at if you add product.compareAtPrice later
-            {product.compareAtPrice && (
-              <span className="pdp__priceCompare">${product.compareAtPrice.toFixed(2)}</span>
-            )} */}
           </div>
 
           {product.subtitle && <div className="pdp__subtitle">{product.subtitle}</div>}
@@ -179,6 +163,17 @@ function ProductDetailPage() {
               <PortableText value={product.description} />
             </div>
           )}
+
+          {/* ⭐️ START: RENDER DETAILS ⭐️ */}
+          {details && (
+            <ul className="pdp__detailsList">
+              {details.format && <li><strong>Format:</strong> {details.format}</li>}
+              {details.pages && <li><strong>Pages:</strong> {details.pages}</li>}
+              {details.dimensions && <li><strong>Dimensions:</strong> {details.dimensions}</li>}
+              {details.language && <li><strong>Language:</strong> {details.language}</li>}
+            </ul>
+          )}
+          {/* ⭐️ END: RENDER DETAILS ⭐️ */}
 
           <div className="pdp__actions">
             <button
@@ -190,8 +185,6 @@ function ProductDetailPage() {
             >
               {pricingLoading ? "Adding…" : "Add to Cart"}
             </button>
-
-            {/* Styled wrapper; we style whatever element CheckoutButton renders */}
             <div className="pdp__checkout">
               <CheckoutButton productId={product._id} />
             </div>
