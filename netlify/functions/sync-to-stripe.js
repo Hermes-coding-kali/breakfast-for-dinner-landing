@@ -27,7 +27,7 @@ const sanityClient = createClient({
   apiVersion: process.env.SANITY_API_VERSION,
 });
 
-// --- Updated Verification Function ---
+// --- Final, Corrected Verification Function ---
 function verifySanitySignature({ body, secret, signatureHeader, isBase64Encoded }) {
   if (!signatureHeader) {
     throw new Error('Missing Sanity-Webhook-Signature header');
@@ -47,7 +47,6 @@ function verifySanitySignature({ body, secret, signatureHeader, isBase64Encoded 
     throw new Error('Invalid signature header format. Expected "t=...,v1=..."');
   }
 
-  // Prevent replay attacks by checking if the timestamp is recent
   const fiveMinutesInSeconds = 5 * 60;
   const nowInSeconds = Math.floor(Date.now() / 1000);
   if (nowInSeconds - parseInt(timestamp, 10) > fiveMinutesInSeconds) {
@@ -57,7 +56,8 @@ function verifySanitySignature({ body, secret, signatureHeader, isBase64Encoded 
   const rawBody = isBase64Encoded ? Buffer.from(body, 'base64').toString('utf8') : body;
   const payload = `${timestamp}.${rawBody}`;
 
-  const hmac = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  // ⭐️ FIX: Use 'base64url' digest to match Sanity's signature encoding ⭐️
+  const hmac = crypto.createHmac('sha256', secret).update(payload).digest('base64url');
 
   if (!crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(signature))) {
     throw new Error('Signature mismatch');
@@ -80,7 +80,7 @@ exports.handler = async (event) => {
     return json(401, { error: `Unauthorized: ${err.message}` });
   }
 
-  // ... (The rest of your function remains the same)
+  // ... The rest of your function remains the same
 
   let payload;
   try {
