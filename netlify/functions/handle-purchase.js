@@ -319,5 +319,5 @@ exports.handler = async (event) => {
     return { statusCode: 200, body: JSON.stringify({ received: true, warning: 'Handler error logged' }) };
   }
 
-  return { statusCode: 200, body: JSON.stringify({ received: true }) };
+  return { statusCode: 200, body: JSON.stringify({ received: true }) }; 
 };
