@@ -131,3 +131,17 @@
 @keyframes stroke { 100% { stroke-dashoffset: 0; } }
 @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
 @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 60px #558b2f; } } /* Replaced var(--hill-green-dark) */
+
+/* Add this to src/components/SuccessPage.css */
+
+.success-note {
+  font-size: 0.9em;
+  opacity: 0.9;
+  margin-top: -20px;
+  margin-bottom: 35px;
+}
+
+.success-note a {
+  color: #8e24aa; /* Uses your brand's purple color */
+  text-decoration: underline;
+}

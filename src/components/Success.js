@@ -13,7 +13,6 @@ function Success() {
 
   return (
     <div className="success-page-container">
-      {/* 1. Added more confetti elements */}
       <div className="confetti-container">
         <span>🎉</span><span>🥳</span><span>🎊</span><span>🎈</span><span>✨</span>
         <span>🎉</span><span>🥳</span><span>🎊</span><span>🎈</span><span>✨</span>
@@ -27,7 +26,9 @@ function Success() {
         </div>
         <h2 className="success-title">Success!</h2>
         <p className="success-message">Your order is confirmed! A receipt is on its way to your inbox.</p>
-        {/* 2. Changed button to a more vibrant variant */}
+        <p className="success-note">
+          If you don't see a receipt, please contact <a href="mailto:br3akfast.f0r.dinn3r@gmail.com">br3akfast.f0r.dinn3r@gmail.com</a>.
+        </p>
         <Button
           to="/"
           styleTokens={{ backgroundColor: '#fb8c00', textColor: '#212121' }}
